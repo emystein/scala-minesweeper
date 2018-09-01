@@ -10,21 +10,21 @@ class GameTest extends FunSuite with Matchers with MockitoFixture {
   test("Question Cell") {
     val game = GameFactory.createGame(3, 3, 2)
 
-    game.board.getCell(1, 1).value shouldBe CellValue.NONE
+    game.board.getCell(1, 1).value shouldBe CellValue.empty
 
     game.questionCell(1, 1)
 
-    game.board.getCell(1, 1).value shouldBe CellValue.QUESTION
+    game.board.getCell(1, 1).value shouldBe CellValue.question
   }
 
   test("Flag Cell") {
     val game = GameFactory.createGame(3, 3, 2)
 
-    game.board.getCell(1, 1).value shouldBe CellValue.NONE
+    game.board.getCell(1, 1).value shouldBe CellValue.empty
 
     game.flagCell(1, 1)
 
-    game.board.getCell(1, 1).value shouldBe CellValue.FLAG
+    game.board.getCell(1, 1).value shouldBe CellValue.flag
   }
 
   test("Reveal Cell should mark it as revealed") {
@@ -39,15 +39,17 @@ class GameTest extends FunSuite with Matchers with MockitoFixture {
 
   test("Revealing an empty cell and having remaining empty cells should keep the game playing") {
     val board = mock[Board]
+    val newBoard = mock[Board]
+
     val game = new Game(UUID.randomUUID().toString, new Date(), board)
 
-    doNothing.when(board).revealCell(1, 1)
+    when(board.revealCell(1, 1)).thenReturn(newBoard)
     val cell1 = new Cell(1, 1, false, 0, true)
     val cell2 = new Cell(1, 2, false, 0, true)
-    when(board.getCell(1, 1)).thenReturn(cell1)
+    when(newBoard.getCell(1, 1)).thenReturn(cell1)
     val allEmptyCells = Set(cell1, cell2)
-    when(board.revealedEmptyCells).thenReturn(Set(cell1))
-    when(board.emptyCells).thenReturn(allEmptyCells)
+    when(newBoard.revealedEmptyCells).thenReturn(Set(cell1))
+    when(newBoard.emptyCells).thenReturn(allEmptyCells)
 
     game.revealCell(1, 1)
 
@@ -56,11 +58,13 @@ class GameTest extends FunSuite with Matchers with MockitoFixture {
 
   test("Revealing a cell containing a bomb should finish the game as lost") {
     val board = mock[Board]
+    val newBoard = mock[Board]
+
     val game = new Game(UUID.randomUUID().toString, new Date(), board)
 
-    doNothing.when(board).revealCell(1, 1)
+    when(board.revealCell(1, 1)).thenReturn(newBoard)
     val bombCell = new Cell(1, 1, true, 0, true)
-    when(board.getCell(1, 1)).thenReturn(bombCell)
+    when(newBoard.getCell(1, 1)).thenReturn(bombCell)
 
     game.revealCell(1, 1)
 
@@ -70,14 +74,15 @@ class GameTest extends FunSuite with Matchers with MockitoFixture {
 
   test("Revealing last empty cell should finish the game as won") {
     val board = mock[Board]
+    val newBoard = mock[Board]
     val game = new Game(UUID.randomUUID().toString, new Date(), board)
 
-    doNothing.when(board).revealCell(1, 1)
+    when(board.revealCell(1, 1)).thenReturn(newBoard)
     val cell = new Cell(1, 1, false, 0, true)
     val allEmptyCells = Set(cell)
-    when(board.getCell(1, 1)).thenReturn(cell)
-    when(board.revealedEmptyCells).thenReturn(allEmptyCells)
-    when(board.emptyCells).thenReturn(allEmptyCells)
+    when(newBoard.getCell(1, 1)).thenReturn(cell)
+    when(newBoard.revealedEmptyCells).thenReturn(allEmptyCells)
+    when(newBoard.emptyCells).thenReturn(allEmptyCells)
 
     game.revealCell(1, 1)
 
