@@ -22,7 +22,7 @@ object BoardFactory {
         column <- 1 to totalColumns
       } yield {
         val hasBomb = bombCoordinates.contains(row, column)
-        val adjacentBombs = neighboursOf(row, column).count(bombCoordinates.contains)
+        val adjacentBombs = neighboursOf(row, column, totalRows, totalColumns).count(bombCoordinates.contains)
         new Cell(row, column, hasBomb, adjacentBombs)
       }
 
@@ -32,11 +32,11 @@ object BoardFactory {
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 
-  def neighboursOf(row: Int, column: Int): Seq[(Int, Int)] = {
+  def neighboursOf(row: Int, column: Int, totalRows: Int, totalColumns: Int): Seq[(Int, Int)] = {
     for {
       x <- row - 1 to row + 1
       y <- column - 1 to column + 1
-      if x != row || y != column
+      if (x > 0 && x <= totalRows) && (y > 0 && y <= totalColumns) && (x != row || y != column)
     } yield (x, y)
   }
 }

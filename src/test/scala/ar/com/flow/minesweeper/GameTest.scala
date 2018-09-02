@@ -7,8 +7,6 @@ class GameTest extends FunSuite with Matchers {
   test("Question Cell") {
     val game = GameFactory.createGame(3, 3, 2)
 
-    game.board.getCell(1, 1).value shouldBe CellValue.empty
-
     game.questionCell(1, 1)
 
     game.board.getCell(1, 1).value shouldBe CellValue.question
@@ -16,8 +14,6 @@ class GameTest extends FunSuite with Matchers {
 
   test("Flag Cell") {
     val game = GameFactory.createGame(3, 3, 2)
-
-    game.board.getCell(1, 1).value shouldBe CellValue.empty
 
     game.flagCell(1, 1)
 
@@ -42,6 +38,7 @@ class GameTest extends FunSuite with Matchers {
     game.revealCell(emptyCell.row, emptyCell.column)
 
     game.state shouldBe GameState.playing
+    game.result shouldBe GameResult.pending
   }
 
   test("Revealing a cell containing a bomb should finish the game as lost") {
@@ -63,4 +60,14 @@ class GameTest extends FunSuite with Matchers {
     game.state shouldBe GameState.finished
     game.result shouldBe GameResult.won
   }
+
+//  test("Revealing empty cell with adjacent empty cells should should reveal the adjacent empty cells as well") {
+//    val game = GameFactory.createGame(3, 3, 2)
+//
+//    game.board.emptyCells.filter(_.numberOfAdjacentBombs > 0).map(game.board.adjacentsOf(_.row, _.column)).filter(!_.hasBomb)
+//      game.revealCell(emptyCell.row, emptyCell.column)
+//
+//    game.state shouldBe GameState.finished
+//    game.result shouldBe GameResult.won
+//  }
 }

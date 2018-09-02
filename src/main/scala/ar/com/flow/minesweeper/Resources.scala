@@ -13,7 +13,7 @@ object GameResource {
 }
 case class GameResource(id: String, createdAt: Date, board: BoardResource, state: String, result: String)
 case class BoardResource(totalRows: Int, totalColumns: Int, totalBombs: Int, cells: ArrayBuffer[ArrayBuffer[Cell]])
-case class Cell(row: Int, column: Int, hasBomb: Boolean = false, numberOfAdjacentBombs: Int, isRevealed: Boolean = false, value: String = "")
+case class Cell(row: Int, column: Int, hasBomb: Boolean = false, numberOfAdjacentBombs: Int = 0, isRevealed: Boolean = false, value: String = "")
 
 object CellValue {
   val empty: String = ""

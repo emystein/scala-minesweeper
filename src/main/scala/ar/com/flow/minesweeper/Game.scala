@@ -22,17 +22,11 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
     board = board.revealCell(row, column)
   }
 
-  def result =
-    if (!board.revealedBombCells.isEmpty)
-      GameResult.lost
-    else if (board.remainingEmptyCells.isEmpty)
-      GameResult.won
-    else
-      GameResult.pending
+  def result = GameResult.of(board)
 
   def state = result match {
     case GameResult.pending => GameState.playing
-    case GameResult.won | GameResult.lost => GameState.finished
+    case _ => GameState.finished
   }
 }
 
@@ -45,4 +39,13 @@ object GameResult {
   val pending = "pending"
   val won = "won"
   val lost = "lost"
+
+  def of(board: Board): String = {
+    if (!board.revealedBombCells.isEmpty)
+      lost
+    else if (board.remainingEmptyCells.isEmpty)
+      won
+    else
+      pending
+  }
 }
