@@ -23,7 +23,7 @@ object BoardFactory {
       } yield {
         val hasBomb = bombCoordinates.contains(row, column)
         val adjacentBombs = neighboursOf(row, column).count(bombCoordinates.contains)
-        new Cell(row, column, hasBomb, adjacentBombs, false)
+        new Cell(row, column, hasBomb, adjacentBombs)
       }
 
       cells.map(_.to[ArrayBuffer]).to[ArrayBuffer]

@@ -30,4 +30,10 @@ class BoardFactoryTest extends FunSuite with Matchers {
       board.getCell(x + 1, y + 1).numberOfAdjacentBombs shouldBe adjacentBombs
     }
   }
+
+  test("New board should have all empty cells as remaining") {
+    val board = BoardFactory(3, 3, 2)
+
+    board.remainingEmptyCells shouldBe board.emptyCells
+  }
 }

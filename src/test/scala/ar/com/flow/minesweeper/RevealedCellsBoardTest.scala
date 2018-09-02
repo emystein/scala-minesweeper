@@ -66,4 +66,18 @@ class RevealedCellsBoardTest extends FunSpec with Matchers {
       }
     }
   }
+
+  describe("Remaining empty cells") {
+    describe("when revealed empty cell") {
+      it("should be removed from remaining empty cells") {
+        val board = BoardFactory(3, 3, 2)
+
+        val emptyCell = board.emptyCells.head
+
+        val newBoard = board.revealCell(emptyCell.row, emptyCell.column)
+
+        newBoard.remainingEmptyCells shouldBe board.remainingEmptyCells - emptyCell
+      }
+    }
+  }
 }

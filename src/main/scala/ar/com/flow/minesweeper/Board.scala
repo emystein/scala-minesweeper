@@ -4,6 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 
 
 class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var cells: ArrayBuffer[ArrayBuffer[Cell]]) {
+
   private def cellsSet: Set[Cell] = cells.flatten.toSet
 
   def bombCells: Set[Cell] = cellsSet.filter(_.hasBomb)
@@ -12,7 +13,11 @@ class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var 
 
   def revealedCells: Set[Cell] = cellsSet.filter(_.isRevealed)
 
-  def revealedEmptyCells: Set[Cell] = revealedCells.filter(!_.hasBomb)
+  def revealedBombCells: Set[Cell] = revealedCells.filter(_.hasBomb)
+
+  def revealedEmptyCells: Set[Cell] = revealedCells -- revealedBombCells
+
+  def remainingEmptyCells = emptyCells -- revealedEmptyCells
 
   def setCellValue(row: Int, column: Int, value: String): Board = {
     cells(row - 1)(column - 1) = cells(row - 1)(column - 1).copy(value = value)

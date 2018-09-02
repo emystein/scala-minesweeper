@@ -11,10 +11,9 @@ object GameResource {
     GameResource(game.id, game.createdAt, BoardResource(game.board.totalRows, game.board.totalColumns, game.board.totalBombs, game.board.cells), game.state, game.result)
   }
 }
-case class GameResource(val id: String, val createdAt: Date, val board: BoardResource, val state: String, val result: String)
-case class BoardResource(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, val cells: ArrayBuffer[ArrayBuffer[Cell]])
-// TODO make numberOfAdjacentBombs a val
-case class Cell(val row: Int, val column: Int, val hasBomb: Boolean = false, numberOfAdjacentBombs: Int, isRevealed: Boolean = false, value: String = "")
+case class GameResource(id: String, createdAt: Date, board: BoardResource, state: String, result: String)
+case class BoardResource(totalRows: Int, totalColumns: Int, totalBombs: Int, cells: ArrayBuffer[ArrayBuffer[Cell]])
+case class Cell(row: Int, column: Int, hasBomb: Boolean = false, numberOfAdjacentBombs: Int, isRevealed: Boolean = false, value: String = "")
 
 object CellValue {
   val empty: String = ""
