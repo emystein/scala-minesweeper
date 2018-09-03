@@ -33,7 +33,7 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
     if (alreadyTraversedCells.contains((row, column))) {
       board = board.revealCell(row, column)
     } else {
-      (adjacentCells -- alreadyTraversedCells).foreach(coordinates =>
+      adjacentCells.foreach(coordinates =>
         revealAdjacentCellsRecursive(coordinates._1, coordinates._2, alreadyTraversedCells ++ adjacentCells ++ Set((row, column)))
       )
     }
