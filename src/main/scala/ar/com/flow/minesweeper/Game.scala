@@ -24,7 +24,7 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
     revealAdjacentCellsRecursive(row, column, Set((row, column)))
   }
 
-  def revealAdjacentCellsRecursive(row: Int, column: Int, alreadyTraversedCells: Set[(Int, Int)]): Unit = {
+  def revealAdjacentCellsRecursive(row: Int, column: Int, alreadyTraversedCells: Set[(Int, Int)]): Set[(Int, Int)] = {
     if (board.getCell(row, column).hasBomb) {
       Set()
     } else {
