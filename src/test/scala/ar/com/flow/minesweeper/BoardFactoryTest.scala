@@ -20,14 +20,14 @@ class BoardFactoryTest extends FunSuite with Matchers {
   test("Adjacent bombs") {
     val board = BoardFactory(3, 3, 2)
 
-    val bombCoordinates = board.cells.flatten.filter(_.hasBomb).map(c => (c.row - 1, c.column - 1))
+    val bombCoordinates = board.cells.flatten.filter(_.hasBomb).map(c => (c.row, c.column))
 
     for {
-      x <- 0 until board.totalRows
-      y <- 0 until board.totalColumns
+      x <- 1 to board.totalRows
+      y <- 1 to board.totalColumns
     } yield {
       val adjacentBombs = board.neighboursOf(x, y).count(bombCoordinates.contains)
-      board.getCell(x + 1, y + 1).numberOfAdjacentBombs shouldBe adjacentBombs
+      board.getCell(x, y).numberOfAdjacentBombs shouldBe adjacentBombs
     }
   }
 

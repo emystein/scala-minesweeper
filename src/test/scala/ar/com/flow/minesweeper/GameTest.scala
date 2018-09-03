@@ -37,8 +37,14 @@ class GameTest extends FunSuite with Matchers {
 
     game.revealCell(emptyCell.row, emptyCell.column)
 
-    game.state shouldBe GameState.playing
-    game.result shouldBe GameResult.pending
+    if (game.board.remainingEmptyCells.isEmpty) {
+      // if recursive cell reveal won the game
+      game.state shouldBe GameState.finished
+      game.result shouldBe GameResult.won
+    } else {
+      game.state shouldBe  GameState.playing
+      game.result shouldBe GameResult.pending
+    }
   }
 
   test("Revealing a cell containing a bomb should finish the game as lost") {
