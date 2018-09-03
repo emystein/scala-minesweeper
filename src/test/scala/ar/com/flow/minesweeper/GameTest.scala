@@ -61,13 +61,5 @@ class GameTest extends FunSuite with Matchers {
     game.result shouldBe GameResult.won
   }
 
-//  test("Revealing empty cell with adjacent empty cells should should reveal the adjacent empty cells as well") {
-//    val game = GameFactory.createGame(3, 3, 2)
-//
-//    game.board.emptyCells.filter(_.numberOfAdjacentBombs > 0).map(game.board.adjacentsOf(_.row, _.column)).filter(!_.hasBomb)
-//      game.revealCell(emptyCell.row, emptyCell.column)
-//
-//    game.state shouldBe GameState.finished
-//    game.result shouldBe GameResult.won
-//  }
+
 }

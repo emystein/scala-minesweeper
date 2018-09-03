@@ -18,8 +18,25 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
     board = board.setCellValue(row, column, CellValue.question)
   }
 
-  def revealCell(row: Int, column: Int) = {
+  def revealCell(row: Int, column: Int): Unit = {
     board = board.revealCell(row, column)
+
+    revealAdjacentCellsRecursive(row, column, Set())
+  }
+
+  def revealAdjacentCellsRecursive(row: Int, column: Int, alreadyTraversedCells: Set[(Int, Int)]): Unit = {
+    val adjacentCells = board.adjacentCellsOf(row, column)
+      .filter(cell => !cell.hasBomb)
+      .map(cell => (cell.row, cell.column))
+      .toSet
+
+    if (alreadyTraversedCells.contains((row, column))) {
+      board = board.revealCell(row, column)
+    } else {
+      (adjacentCells -- alreadyTraversedCells).foreach(coordinates =>
+        revealAdjacentCellsRecursive(coordinates._1, coordinates._2, alreadyTraversedCells ++ adjacentCells ++ Set((row, column)))
+      )
+    }
   }
 
   def result = GameResult.of(board)
