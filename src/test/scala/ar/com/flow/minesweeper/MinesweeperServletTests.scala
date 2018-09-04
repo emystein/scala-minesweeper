@@ -1,10 +1,14 @@
 package ar.com.flow.minesweeper
 
+import slick.jdbc.H2Profile.api._
+import com.mchange.v2.c3p0.ComboPooledDataSource
 import org.scalatra.test.scalatest._
 
 class MinesweeperServletTests extends ScalatraFunSuite {
+  val cpds = new ComboPooledDataSource
+  val database = Database.forDataSource(cpds, None)
 
-  addServlet(classOf[MinesweeperServlet], "/*")
+  addServlet(new MinesweeperServlet(database), "/*")
 
   test("GET / on MinesweeperServlet should return status 200") {
     get("/") {

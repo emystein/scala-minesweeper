@@ -1,5 +1,6 @@
 package ar.com.flow.minesweeper
 
+import slick.jdbc.H2Profile.api._
 import org.scalatra._
 import org.scalatra.json.JacksonJsonSupport
 
@@ -8,7 +9,11 @@ import scala.collection.mutable
 // JSON-related libraries
 import org.json4s.{DefaultFormats, Formats}
 
-class MinesweeperServlet extends ScalatraServlet with JacksonJsonSupport {
+class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJsonSupport with FutureSupport with SlickRoutes {
+  val gameRepository = new GameRepository(db)
+
+  protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
+
   // Sets up automatic case class to JSON output serialization, required by the JValueResult trait.
   protected implicit lazy val jsonFormats: Formats = DefaultFormats
   // Before every action runs, set the content type to be in JSON format.
@@ -24,7 +29,8 @@ class MinesweeperServlet extends ScalatraServlet with JacksonJsonSupport {
   }
 
   get("/games") {
-    games.values.map(GameResource.from)
+    // games.values.map(GameResource.from)
+    gameRepository.findAll.map(GameResource.from)
   }
 
   post("/games") {
@@ -32,6 +38,8 @@ class MinesweeperServlet extends ScalatraServlet with JacksonJsonSupport {
     val game = GameFactory.createGame(parameters.rows, parameters.columns, parameters.bombs)
     // TODO: move game id generation from GameFactory.createGame to games repository
     games(game.id) = game
+
+    gameRepository.save(game)
 
     GameResource.from(game)
   }
@@ -42,6 +50,8 @@ class MinesweeperServlet extends ScalatraServlet with JacksonJsonSupport {
     val y = params("column").toInt
     game.questionCell(x, y)
 
+    gameRepository.save(game)
+
     GameResource.from(game)
   }
 
@@ -51,6 +61,8 @@ class MinesweeperServlet extends ScalatraServlet with JacksonJsonSupport {
     val y = params("column").toInt
     game.flagCell(x, y)
 
+    gameRepository.save(game)
+
     GameResource.from(game)
   }
 
@@ -59,6 +71,8 @@ class MinesweeperServlet extends ScalatraServlet with JacksonJsonSupport {
     val x = params("row").toInt
     val y = params("column").toInt
     game.revealCell(x, y)
+
+    gameRepository.save(game)
 
     GameResource.from(game)
   }
