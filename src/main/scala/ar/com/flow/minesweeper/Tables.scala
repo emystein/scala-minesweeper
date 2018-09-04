@@ -4,6 +4,8 @@ import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 
 object Tables {
+  type CellTuple = (String, Int, Int, Boolean, Int, Boolean, String)
+
   class Games(tag: Tag) extends Table[(String, String)](tag, "game") {
     def id = column[String]("id", O.PrimaryKey)
     def createdAt = column[String]("created_at")
@@ -41,7 +43,11 @@ object Tables {
 
   val dropSchemaAction = (games.schema ++ boards.schema ++ cells.schema).drop
 
-  def mapToCell(cellTuple: (String, Int, Int, Boolean, Int, Boolean, String)): Cell = {
+  def mapFromCell(gameId: String, cell: Cell): CellTuple = {
+    (gameId, cell.row, cell.column, cell.hasBomb, cell.numberOfAdjacentBombs, cell.isRevealed, cell.value)
+  }
+
+  def mapToCell(cellTuple: CellTuple) : Cell = {
     Cell(cellTuple._2, cellTuple._3, cellTuple._4, cellTuple._5, cellTuple._6, cellTuple._7)
   }
 }

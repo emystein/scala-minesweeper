@@ -10,11 +10,11 @@ class BoardTest extends FunSuite with Matchers {
   }
 
   test("Trying to get a cell in a row outside the board boundaries should throw an exception") {
-    an [IndexOutOfBoundsException] should be thrownBy board.getCell(board.totalRows + 1, 1)
+    an [NoSuchElementException] should be thrownBy board.getCell(board.totalRows + 1, 1)
   }
 
   test("Trying to get a cell in a column outside the board boundaries should throw an exception") {
-    an [IndexOutOfBoundsException] should be thrownBy board.getCell(1, board.totalColumns + 1)
+    an [NoSuchElementException] should be thrownBy board.getCell(1, board.totalColumns + 1)
   }
 
   test("Set cell value") {
@@ -26,6 +26,6 @@ class BoardTest extends FunSuite with Matchers {
   test("Empty cells should be equal to all cells minus bomb cells") {
     val board = BoardFactory(3, 3, 2)
 
-    board.emptyCells shouldBe board.cells.flatten.toSet -- board.bombCells
+    board.emptyCells shouldBe board.cells.values.toSet -- board.bombCells
   }
 }

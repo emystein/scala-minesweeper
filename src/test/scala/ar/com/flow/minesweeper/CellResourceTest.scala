@@ -8,7 +8,7 @@ class CellResourceTest extends FunSuite with Matchers {
 
     val cellResources = CellResourceFactory.from(board.cells)
 
-    cellResources.flatten.foreach(cr => cr.mapsTo(board.getCell(cr.row, cr.column)) shouldBe true)
+    cellResources.foreach(cr => cr.mapsTo(board.getCell(cr.row, cr.column)) shouldBe true)
   }
 
   test("Map Cell to CellResource") {

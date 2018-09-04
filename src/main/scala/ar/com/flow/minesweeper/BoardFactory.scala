@@ -1,11 +1,13 @@
 package ar.com.flow.minesweeper
 
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
+import scala.collection.mutable.Map
 
 object BoardFactory {
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Board = {
-    val cells: ArrayBuffer[ArrayBuffer[Cell]] = {
+    val cells: Map[(Int, Int), Cell] = {
       val allCoordinates = for {
         rowNumber <- 1 to totalRows
         columnNumber <- 1 to totalColumns
@@ -18,7 +20,6 @@ object BoardFactory {
 
       val cells = for {
         row <- 1 to totalRows
-      } yield for {
         column <- 1 to totalColumns
       } yield {
         val hasBomb = bombCoordinates.contains(row, column)
@@ -26,27 +27,16 @@ object BoardFactory {
         new Cell(row, column, hasBomb, adjacentBombs)
       }
 
-      cells.map(_.to[ArrayBuffer]).to[ArrayBuffer]
+      val builder = mutable.HashMap.newBuilder ++= cells.map(c => (c.row, c.column) -> c)
+      builder.result()
     }
 
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int, cellSeq: Seq[Cell]): Board = {
-    val cellMap = cellSeq.map(c => (c.row, c.column) -> c).toMap
-
-    val cells: ArrayBuffer[ArrayBuffer[Cell]] = {
-      val cells = for {
-        row <- 1 to totalRows
-      } yield for {
-        column <- 1 to totalColumns
-      } yield {
-        cellMap(row, column)
-      }
-
-      cells.map(_.to[ArrayBuffer]).to[ArrayBuffer]
-    }
-
+    val builder = mutable.HashMap.newBuilder ++= cellSeq.map(c => (c.row, c.column) -> c)
+    val cells = builder.result()
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 

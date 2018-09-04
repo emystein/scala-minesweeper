@@ -1,10 +1,8 @@
 package ar.com.flow.minesweeper
 
-import scala.collection.mutable.ArrayBuffer
 
-
-class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var cells: ArrayBuffer[ArrayBuffer[Cell]]) {
-  private def cellsSet = cells.flatten.toSet
+class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var cells: scala.collection.mutable.Map[(Int, Int), Cell]) {
+  private def cellsSet = cells.values.toSet
 
   def bombCells = cellsSet.filter(_.hasBomb)
 
@@ -19,12 +17,12 @@ class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var 
   def remainingEmptyCells = emptyCells -- revealedEmptyCells
 
   def setCellValue(row: Int, column: Int, value: String): Board = {
-    cells(row - 1)(column - 1) = cells(row - 1)(column - 1).copy(value = value)
+    cells((row, column)) = cells((row, column)).copy(value = value)
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 
   def getCell(row: Int, column: Int): Cell = {
-    cells(row - 1)(column - 1)
+    cells((row, column))
   }
 
   def adjacentCellsOf(row: Int, column: Int): Seq[Cell] = {
@@ -32,7 +30,7 @@ class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var 
   }
 
   def revealCell(row: Int, column: Int) = {
-    cells(row - 1)(column - 1) = cells(row - 1)(column - 1).copy(isRevealed = true)
+    cells((row, column)) = cells((row, column)).copy(isRevealed = true)
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 
