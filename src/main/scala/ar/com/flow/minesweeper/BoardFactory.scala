@@ -32,6 +32,24 @@ object BoardFactory {
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 
+  def apply(totalRows: Int, totalColumns: Int, totalBombs: Int, cellSeq: Seq[Cell]): Board = {
+    val cellMap = cellSeq.map(c => (c.row, c.column) -> c).toMap
+
+    val cells: ArrayBuffer[ArrayBuffer[Cell]] = {
+      val cells = for {
+        row <- 1 to totalRows
+      } yield for {
+        column <- 1 to totalColumns
+      } yield {
+        cellMap(row, column)
+      }
+
+      cells.map(_.to[ArrayBuffer]).to[ArrayBuffer]
+    }
+
+    new Board(totalRows, totalColumns, totalBombs, cells)
+  }
+
   def neighboursOf(row: Int, column: Int, totalRows: Int, totalColumns: Int): Seq[(Int, Int)] = {
     for {
       x <- row - 1 to row + 1

@@ -36,12 +36,12 @@ object Tables {
   val boards = TableQuery[Boards]
   val cells = TableQuery[Cells]
 
-  // DBIO Action which creates the schema
   val createSchemaAction = (games.schema ++ boards.schema ++ cells.schema).create
+  val createDatabase = DBIO.seq(createSchemaAction)
 
-  // DBIO Action which drops the schema
   val dropSchemaAction = (games.schema ++ boards.schema ++ cells.schema).drop
 
-  // Create database, composing create schema and insert sample data actions
-  val createDatabase = DBIO.seq(createSchemaAction)
+  def mapToCell(cellTuple: (String, Int, Int, Boolean, Int, Boolean, String)): Cell = {
+    Cell(cellTuple._2, cellTuple._3, cellTuple._4, cellTuple._5, cellTuple._6, cellTuple._7)
+  }
 }

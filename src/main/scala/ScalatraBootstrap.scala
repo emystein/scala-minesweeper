@@ -15,7 +15,7 @@ class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
     val db = Database.forDataSource(cpds, None)
 
-    // TODO: move
+    // TODO: move out
     db.run(Tables.createDatabase)
 
     context.mount(new MinesweeperServlet(db), "/*")
