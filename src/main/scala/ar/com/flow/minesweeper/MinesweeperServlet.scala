@@ -39,9 +39,7 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
     // TODO: move game id generation from GameFactory.createGame to games repository
     games(game.id) = game
 
-    gameRepository.save(game)
-
-    GameResource.from(game)
+    saveAndReturn(game)
   }
 
   post("/games/:gameId/cell/:row/:column/question") {
@@ -50,9 +48,7 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
     val y = params("column").toInt
     game.questionCell(x, y)
 
-    gameRepository.save(game)
-
-    GameResource.from(game)
+    saveAndReturn(game)
   }
 
   post("/games/:gameId/cell/:row/:column/flag") {
@@ -61,9 +57,7 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
     val y = params("column").toInt
     game.flagCell(x, y)
 
-    gameRepository.save(game)
-
-    GameResource.from(game)
+    saveAndReturn(game)
   }
 
   post("/games/:gameId/cell/:row/:column/reveal") {
@@ -72,8 +66,11 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
     val y = params("column").toInt
     game.revealCell(x, y)
 
-    gameRepository.save(game)
+    saveAndReturn(game)
+  }
 
+  private def saveAndReturn(game: Game) = {
+    gameRepository.save(game)
     GameResource.from(game)
   }
 }

@@ -26,7 +26,8 @@ class BoardFactoryTest extends FunSuite with Matchers {
       x <- 1 to board.totalRows
       y <- 1 to board.totalColumns
     } yield {
-      val adjacentBombs = board.neighboursOf(x, y).count(bombCoordinates.contains)
+      val cellLocationContext = new CellLocationContext(board.totalRows, board.totalColumns)
+      val adjacentBombs = cellLocationContext.neighboursOf(x, y).count(bombCoordinates.contains)
       board.getCell(x, y).numberOfAdjacentBombs shouldBe adjacentBombs
     }
   }

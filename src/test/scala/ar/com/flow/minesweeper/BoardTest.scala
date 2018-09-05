@@ -10,22 +10,16 @@ class BoardTest extends FunSuite with Matchers {
   }
 
   test("Trying to get a cell in a row outside the board boundaries should throw an exception") {
-    an [NoSuchElementException] should be thrownBy board.getCell(board.totalRows + 1, 1)
+    an[NoSuchElementException] should be thrownBy board.getCell(board.totalRows + 1, 1)
   }
 
   test("Trying to get a cell in a column outside the board boundaries should throw an exception") {
-    an [NoSuchElementException] should be thrownBy board.getCell(1, board.totalColumns + 1)
+    an[NoSuchElementException] should be thrownBy board.getCell(1, board.totalColumns + 1)
   }
 
   test("Set cell value") {
     board.setCellValue(1, 1, CellValue.flag)
 
     board.getCell(1, 1).value shouldBe CellValue.flag
-  }
-
-  test("Empty cells should be equal to all cells minus bomb cells") {
-    val board = BoardFactory(3, 3, 2)
-
-    board.emptyCells shouldBe board.cells.values.toSet -- board.bombCells
   }
 }

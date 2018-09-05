@@ -8,11 +8,17 @@ case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
 object GameResource {
   def from(game: Game): GameResource = {
-    GameResource(game.id, game.createdAt, BoardResource(game.board.totalRows, game.board.totalColumns, game.board.totalBombs, CellResourceFactory.from(game.board.cells)), game.state, game.result)
+    GameResource(game.id, game.createdAt, BoardResource(game.board), game.state, game.result)
   }
 }
 
 case class GameResource(id: String, createdAt: Date, board: BoardResource, state: String, result: String)
+
+object BoardResource {
+  def apply(board: Board): BoardResource = {
+    BoardResource(board.totalRows, board.totalColumns, board.totalBombs, CellResourceFactory.from(board.cells))
+  }
+}
 
 case class BoardResource(totalRows: Int, totalColumns: Int, totalBombs: Int, cells: Seq[CellResource])
 
