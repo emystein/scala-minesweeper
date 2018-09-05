@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
 class GameRepository(val db: Database) {
@@ -27,7 +27,7 @@ class GameRepository(val db: Database) {
     ))
   }
 
-  def findById(id: String): Game = {
+  def findById(id: String): Future[Game] = {
     val sdf = new SimpleDateFormat(dateFormat)
 
     val query = Tables.games
@@ -36,15 +36,12 @@ class GameRepository(val db: Database) {
       .join(Tables.cells).on(_._2.id === _.id)
       .result.map(r => r.groupBy(_._1._1))
 
-    // TODO: remove Await
-    Await.result(
-      db.run(query).map(results => results.map(result =>
-        new Game(result._1._1, sdf.parse(result._1._2),
-          BoardFactory(result._2.head._1._2._2, result._2.head._1._2._3, result._2.head._1._2._4, result._2.map(c => Tables.mapToCell(c._2))))).toSeq.head)
-      , Duration.Inf)
+    db.run(query).map(results => results.map(result =>
+      new Game(result._1._1, sdf.parse(result._1._2),
+        BoardFactory(result._2.head._1._2._2, result._2.head._1._2._3, result._2.head._1._2._4, result._2.map(c => Tables.mapToCell(c._2))))).toSeq.head)
   }
 
-  def findAll: Seq[Game] = {
+  def findAll: Future[Seq[Game]] = {
     val sdf = new SimpleDateFormat(dateFormat)
 
     val query = Tables.games
@@ -52,11 +49,8 @@ class GameRepository(val db: Database) {
       .join(Tables.cells).on(_._2.id === _.id)
       .result.map(r => r.groupBy(_._1._1))
 
-    // TODO: remove Await
-    Await.result(
-      db.run(query).map(results => results.map(result =>
-        new Game(result._1._1, sdf.parse(result._1._2),
-          BoardFactory(result._2.head._1._2._2, result._2.head._1._2._3, result._2.head._1._2._4, result._2.map(c => Tables.mapToCell(c._2))))).toSeq)
-      , Duration.Inf)
+    db.run(query).map(results => results.map(result =>
+      new Game(result._1._1, sdf.parse(result._1._2),
+        BoardFactory(result._2.head._1._2._2, result._2.head._1._2._3, result._2.head._1._2._4, result._2.map(c => Tables.mapToCell(c._2))))).toSeq)
   }
 }

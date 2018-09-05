@@ -27,10 +27,12 @@ class GameRepositoryTest extends FunSuite with BeforeAndAfter with Matchers {
 
     gameRepository.save(game)
 
-    val retrievedGame = gameRepository.findById(game.id)
+    val result = gameRepository.findById(game.id)
 
-    retrievedGame.id shouldBe game.id
-    retrievedGame.createdAt shouldBe game.createdAt
-    retrievedGame.board shouldBe game.board
+    result.map { retrievedGame =>
+      retrievedGame.id shouldBe game.id
+      retrievedGame.createdAt shouldBe game.createdAt
+      retrievedGame.board shouldBe game.board
+    }
   }
 }

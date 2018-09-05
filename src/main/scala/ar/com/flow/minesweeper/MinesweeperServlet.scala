@@ -22,8 +22,7 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
   }
 
   get("/games") {
-    // games.values.map(GameResource.from)
-    gameRepository.findAll.map(GameResource.from)
+    gameRepository.findAll.map(f => f.map(GameResource.from(_)))
   }
 
   post("/games") {
@@ -34,30 +33,33 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
   }
 
   post("/games/:gameId/cell/:row/:column/question") {
-    val game = gameRepository.findById(params("gameId"))
     val x = params("row").toInt
     val y = params("column").toInt
-    game.questionCell(x, y)
 
-    saveAndReturn(game)
+    gameRepository.findById(params("gameId")).map{game =>
+      game.questionCell(x, y)
+      saveAndReturn(game)
+    }
   }
 
   post("/games/:gameId/cell/:row/:column/flag") {
-    val game = gameRepository.findById(params("gameId"))
     val x = params("row").toInt
     val y = params("column").toInt
-    game.flagCell(x, y)
 
-    saveAndReturn(game)
+    gameRepository.findById(params("gameId")).map{game =>
+      game.flagCell(x, y)
+      saveAndReturn(game)
+    }
   }
 
   post("/games/:gameId/cell/:row/:column/reveal") {
-    val game = gameRepository.findById(params("gameId"))
     val x = params("row").toInt
     val y = params("column").toInt
-    game.revealCell(x, y)
 
-    saveAndReturn(game)
+    gameRepository.findById(params("gameId")).map{game =>
+      game.revealCell(x, y)
+      saveAndReturn(game)
+    }
   }
 
   private def saveAndReturn(game: Game) = {
