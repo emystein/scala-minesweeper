@@ -26,6 +26,11 @@ class GameRepository(val db: Database) {
     ))
   }
 
+  def findById(id: String): Game = {
+    // TODO: Use Slick query instead of retrieving all in memory and then filtering
+    findAll.filter(_.id == id).head
+  }
+
   def findAll: Seq[Game] = {
     val sdf = new SimpleDateFormat(dateFormat)
 

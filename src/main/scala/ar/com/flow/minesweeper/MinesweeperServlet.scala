@@ -1,13 +1,9 @@
 package ar.com.flow.minesweeper
 
-import slick.jdbc.H2Profile.api._
+import org.json4s.{DefaultFormats, Formats}
 import org.scalatra._
 import org.scalatra.json.JacksonJsonSupport
-
-import scala.collection.mutable
-
-// JSON-related libraries
-import org.json4s.{DefaultFormats, Formats}
+import slick.jdbc.H2Profile.api._
 
 class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJsonSupport with FutureSupport with SlickRoutes {
   val gameRepository = new GameRepository(db)
@@ -21,9 +17,6 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
     contentType = formats("json")
   }
 
-  // TODO: Implement repository
-  val games = new mutable.HashMap[String, Game]()
-
   get("/") {
     views.html.hello()
   }
@@ -36,14 +29,12 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
   post("/games") {
     val parameters = parsedBody.extract[NewGameRequestBody]
     val game = GameFactory.createGame(parameters.rows, parameters.columns, parameters.bombs)
-    // TODO: move game id generation from GameFactory.createGame to games repository
-    games(game.id) = game
 
     saveAndReturn(game)
   }
 
   post("/games/:gameId/cell/:row/:column/question") {
-    val game = games(params("gameId"))
+    val game = gameRepository.findById(params("gameId"))
     val x = params("row").toInt
     val y = params("column").toInt
     game.questionCell(x, y)
@@ -52,7 +43,7 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
   }
 
   post("/games/:gameId/cell/:row/:column/flag") {
-    val game = games(params("gameId"))
+    val game = gameRepository.findById(params("gameId"))
     val x = params("row").toInt
     val y = params("column").toInt
     game.flagCell(x, y)
@@ -61,7 +52,7 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
   }
 
   post("/games/:gameId/cell/:row/:column/reveal") {
-    val game = games(params("gameId"))
+    val game = gameRepository.findById(params("gameId"))
     val x = params("row").toInt
     val y = params("column").toInt
     game.revealCell(x, y)

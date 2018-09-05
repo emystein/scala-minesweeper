@@ -1,12 +1,14 @@
 # Minesweeper #
 
+Using Scalatra for RESTful services, Slick for persistence.
+
 ## Build & Run ##
 
-```sh
-$ cd minesweeper
+```
 $ sbt
 > jetty:start
-> browse
 ```
 
-If `browse` doesn't launch your browser, manually open [http://localhost:8080/](http://localhost:8080/) in your browser.
+App root is http://localhost:8080
+
+Endpoints are defined in `ar.com.flow.minesweeper.MinesweeperServlet`
