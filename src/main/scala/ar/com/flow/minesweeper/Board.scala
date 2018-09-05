@@ -37,4 +37,16 @@ class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var 
   def adjacentCellsOf(row: Int, column: Int): Seq[Cell] = {
     cellLocationContext.neighboursOf(row, column).map(cells)
   }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Board]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Board => (that canEqual this) && hashCode == that.hashCode
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(totalRows, totalColumns, totalBombs, cells)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
 }

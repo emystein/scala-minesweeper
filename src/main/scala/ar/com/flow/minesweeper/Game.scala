@@ -50,6 +50,18 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
     case GameResult.pending => GameState.playing
     case _ => GameState.finished
   }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[Game]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: Game => (that canEqual this) && hashCode == that.hashCode
+    case _ => false
+  }
+
+  override def hashCode(): Int = {
+    val state = Seq(createdAt, board)
+    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+  }
 }
 
 object GameState {

@@ -9,7 +9,8 @@ import scala.concurrent.duration.Duration
 
 class GameRepository(val db: Database) {
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
-  private val dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+  private val dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
 
   def save(game: Game): Unit = {
     val simpleDateFormat = new SimpleDateFormat(dateFormat)
@@ -27,8 +28,20 @@ class GameRepository(val db: Database) {
   }
 
   def findById(id: String): Game = {
-    // TODO: Use Slick query instead of retrieving all in memory and then filtering
-    findAll.filter(_.id == id).head
+    val sdf = new SimpleDateFormat(dateFormat)
+
+    val query = Tables.games
+      .filter(_.id === id)
+      .join(Tables.boards).on(_.id === _.id)
+      .join(Tables.cells).on(_._2.id === _.id)
+      .result.map(r => r.groupBy(_._1._1))
+
+    // TODO: remove Await
+    Await.result(
+      db.run(query).map(results => results.map(result =>
+        new Game(result._1._1, sdf.parse(result._1._2),
+          BoardFactory(result._2.head._1._2._2, result._2.head._1._2._3, result._2.head._1._2._4, result._2.map(c => Tables.mapToCell(c._2))))).toSeq.head)
+      , Duration.Inf)
   }
 
   def findAll: Seq[Game] = {
@@ -44,6 +57,6 @@ class GameRepository(val db: Database) {
       db.run(query).map(results => results.map(result =>
         new Game(result._1._1, sdf.parse(result._1._2),
           BoardFactory(result._2.head._1._2._2, result._2.head._1._2._3, result._2.head._1._2._4, result._2.map(c => Tables.mapToCell(c._2))))).toSeq)
-    , Duration.Inf)
+      , Duration.Inf)
   }
 }
