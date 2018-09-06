@@ -5,6 +5,8 @@ import scala.util.Random
 
 object BoardFactory {
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Board = {
+    val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
+
     val cells = {
       val allCoordinates = for {
         rowNumber <- 1 to totalRows
@@ -21,7 +23,7 @@ object BoardFactory {
         column <- 1 to totalColumns
       } yield {
         val hasBomb = bombCoordinates.contains(row, column)
-        val adjacentBombs = neighboursOf(row, column, totalRows, totalColumns).count(bombCoordinates.contains)
+        val adjacentBombs = cellLocationContext.neighboursOf(row, column).count(bombCoordinates.contains)
         new Cell(row, column, hasBomb, adjacentBombs)
       }
     }
@@ -29,16 +31,7 @@ object BoardFactory {
     apply(totalRows, totalColumns, totalBombs, cells)
   }
 
-  def apply(totalRows: Int, totalColumns: Int, totalBombs: Int, cellSeq: Seq[Cell]): Board = {
-    val cells = cellSeq.map(c => (c.row, c.column) -> c)
-    new Board(totalRows, totalColumns, totalBombs, HashMap(cells: _*))
-  }
-
-  def neighboursOf(row: Int, column: Int, totalRows: Int, totalColumns: Int): Seq[(Int, Int)] = {
-    for {
-      x <- row - 1 to row + 1
-      y <- column - 1 to column + 1
-      if (x > 0 && x <= totalRows) && (y > 0 && y <= totalColumns) && (x != row || y != column)
-    } yield (x, y)
+  def apply(totalRows: Int, totalColumns: Int, totalBombs: Int, cells: Seq[Cell]): Board = {
+    new Board(totalRows, totalColumns, totalBombs, cells)
   }
 }

@@ -22,4 +22,5 @@ class BoardTest extends FunSuite with Matchers {
 
     board.getCell(1, 1).value shouldBe CellValue.flag
   }
+
 }

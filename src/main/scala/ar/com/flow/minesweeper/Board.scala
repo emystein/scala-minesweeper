@@ -1,12 +1,14 @@
 package ar.com.flow.minesweeper
 
 import scala.collection.mutable
+import scala.collection.mutable.HashMap
 
-
-class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var cells: mutable.Map[(Int, Int), Cell]) {
+class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, initialCells: Seq[Cell]) {
+  private val cellMap: mutable.Map[(Int, Int), Cell] = HashMap(initialCells.map(c => (c.row, c.column) -> c): _*)
   private val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
+  private def cellsSet = cellMap.values.toSet
 
-  private def cellsSet = cells.values.toSet
+  def cells: Seq[Cell] = cellMap.values.toSeq
 
   def bombCells = cellsSet.filter(_.hasBomb)
 
@@ -21,21 +23,21 @@ class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, var 
   def remainingEmptyCells = emptyCells -- revealedEmptyCells
 
   def getCell(row: Int, column: Int): Cell = {
-    cells((row, column))
+    cellMap((row, column))
   }
 
   def setCellValue(row: Int, column: Int, value: String): Board = {
-    cells((row, column)) = cells((row, column)).copy(value = value)
+    cellMap((row, column)) = cellMap((row, column)).copy(value = value)
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 
   def revealCell(row: Int, column: Int) = {
-    cells((row, column)) = cells((row, column)).copy(isRevealed = true)
+    cellMap((row, column)) = cellMap((row, column)).copy(isRevealed = true)
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 
   def adjacentCellsOf(row: Int, column: Int): Seq[Cell] = {
-    cellLocationContext.neighboursOf(row, column).map(cells)
+    cellLocationContext.neighboursOf(row, column).map(cellMap)
   }
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Board]

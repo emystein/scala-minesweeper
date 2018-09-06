@@ -9,26 +9,23 @@ class BoardFactoryTest extends FunSuite with Matchers {
 
     board.totalRows shouldBe 3
     board.totalColumns shouldBe 3
+    board.cells.size shouldBe 9
   }
 
   test("Create board with 2 bombs") {
     val board = BoardFactory(3, 3, 2)
 
-    board.cells.values.count(_.hasBomb) shouldBe 2
+    board.bombCells.size shouldBe 2
   }
 
   test("Adjacent bombs") {
     val board = BoardFactory(3, 3, 2)
 
-    val bombCoordinates = board.cells.values.filter(_.hasBomb).map(c => (c.row, c.column)).toSeq
-
     for {
-      x <- 1 to board.totalRows
-      y <- 1 to board.totalColumns
+      cell <- board.cells
     } yield {
-      val cellLocationContext = new CellLocationContext(board.totalRows, board.totalColumns)
-      val adjacentBombs = cellLocationContext.neighboursOf(x, y).count(bombCoordinates.contains)
-      board.getCell(x, y).numberOfAdjacentBombs shouldBe adjacentBombs
+      val adjacentBombs = board.adjacentCellsOf(cell.row, cell.column).count(board.bombCells.contains)
+      cell.numberOfAdjacentBombs shouldBe adjacentBombs
     }
   }
 

@@ -15,7 +15,7 @@ class GameRepository(val db: Database) {
   def save(game: Game): Unit = {
     val simpleDateFormat = new SimpleDateFormat(dateFormat)
 
-    val cells = game.board.cells.values.map(c => (game.id, c.row, c.column, c.hasBomb, c.numberOfAdjacentBombs, c.isRevealed, c.value)).toSeq
+    val cells = game.board.cells.map(c => (game.id, c.row, c.column, c.hasBomb, c.numberOfAdjacentBombs, c.isRevealed, c.value)).toSeq
 
     val cellsToBeInsertedOrUpdated = cells.map(cell => Tables.cells.insertOrUpdate(cell))
 

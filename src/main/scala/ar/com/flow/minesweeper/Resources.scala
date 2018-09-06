@@ -23,8 +23,8 @@ object BoardResource {
 case class BoardResource(totalRows: Int, totalColumns: Int, totalBombs: Int, cells: Seq[CellResource])
 
 object CellResourceFactory {
-  def from(cells: Map[(Int, Int), Cell]): Seq[CellResource] = {
-    cells.values.map(from(_)).toSeq.sorted
+  def from(cells: Seq[Cell]): Seq[CellResource] = {
+    cells.map(from(_)).sorted
   }
 
   def from(cell: Cell): CellResource = {
