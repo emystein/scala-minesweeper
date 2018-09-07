@@ -23,36 +23,29 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
   def revealCell(row: Int, column: Int): Unit = {
     board = board.revealCell(row, column)
 
-    revealAdjacentCellsRecursive(row, column, Set((row, column)))
+    val revealedCell = board.getCell(row, column)
+
+    revealAdjacentCellsRecursive(revealedCell, Set(revealedCell))
   }
 
-  // TODO: refactor to store Cells instead of coordinates in alreadyTraversedCells ?
-  def revealAdjacentCellsRecursive(row: Int, column: Int, alreadyTraversedCells: Set[(Int, Int)]): Set[(Int, Int)] = {
-    if (board.getCell(row, column).hasBomb) {
+  def revealAdjacentCellsRecursive(cell: Cell, alreadyTraversedCells: Set[Cell]): Set[Cell] = {
+    if (cell.hasBomb) {
       Set()
     } else {
-      board = board.revealCell(row, column)
+      board = board.revealCell(cell.row, cell.column)
 
-      val adjacentCells = adjacentCellsOf(row, column)
-        .map(cell => (cell.row, cell.column))
-        .toSet -- alreadyTraversedCells
+      val adjacentCells = adjacentCellsOf(cell).toSet -- alreadyTraversedCells
 
-      val newTraversed = alreadyTraversedCells ++ adjacentCells ++ Set((row, column))
+      val newTraversed = alreadyTraversedCells ++ adjacentCells ++ Set(cell)
 
-      adjacentCells.foreach(coordinates =>
-        revealAdjacentCellsRecursive(coordinates._1, coordinates._2, newTraversed)
-      )
+      adjacentCells.foreach(cells => revealAdjacentCellsRecursive(cells, newTraversed))
 
       newTraversed
     }
   }
 
   private def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    adjacentCellsOf(cell.row, cell.column)
-  }
-
-  private def adjacentCellsOf(row: Int, column: Int): Seq[Cell] = {
-    cellLocationContext.neighboursOf(row, column).map(board.getCell)
+    cellLocationContext.neighboursOf(cell.row, cell.column).map(board.getCell)
   }
 
   def result = GameResult.of(board)

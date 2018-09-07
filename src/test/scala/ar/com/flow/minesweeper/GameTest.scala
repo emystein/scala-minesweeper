@@ -66,6 +66,4 @@ class GameTest extends FunSuite with Matchers {
     game.state shouldBe GameState.finished
     game.result shouldBe GameResult.won
   }
-
-
 }
