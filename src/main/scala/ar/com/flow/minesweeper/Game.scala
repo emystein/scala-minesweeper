@@ -10,6 +10,8 @@ object GameFactory {
 
 // TODO: Make board a val
 class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
+  private val cellLocationContext = new CellLocationContext(board.totalRows, board.totalColumns)
+
   def flagCell(row: Int, column: Int) = {
     board = board.setCellValue(row, column, CellValue.flag)
   }
@@ -24,13 +26,14 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
     revealAdjacentCellsRecursive(row, column, Set((row, column)))
   }
 
+  // TODO: refactor to store Cells instead of coordinates in alreadyTraversedCells ?
   def revealAdjacentCellsRecursive(row: Int, column: Int, alreadyTraversedCells: Set[(Int, Int)]): Set[(Int, Int)] = {
     if (board.getCell(row, column).hasBomb) {
       Set()
     } else {
       board = board.revealCell(row, column)
 
-      val adjacentCells = board.adjacentCellsOf(row, column)
+      val adjacentCells = adjacentCellsOf(row, column)
         .map(cell => (cell.row, cell.column))
         .toSet -- alreadyTraversedCells
 
@@ -42,6 +45,14 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
 
       newTraversed
     }
+  }
+
+  private def adjacentCellsOf(cell: Cell): Seq[Cell] = {
+    adjacentCellsOf(cell.row, cell.column)
+  }
+
+  private def adjacentCellsOf(row: Int, column: Int): Seq[Cell] = {
+    cellLocationContext.neighboursOf(row, column).map(board.getCell)
   }
 
   def result = GameResult.of(board)
@@ -64,11 +75,13 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
   }
 }
 
+// TODO: model using something different than Strings
 object GameState {
   val playing = "playing"
   val finished = "finished"
 }
 
+// TODO: model using something different than Strings
 object GameResult {
   val pending = "pending"
   val won = "won"

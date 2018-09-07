@@ -1,6 +1,5 @@
 package ar.com.flow.minesweeper
 
-import scala.collection.mutable.HashMap
 import scala.util.Random
 
 object BoardFactory {

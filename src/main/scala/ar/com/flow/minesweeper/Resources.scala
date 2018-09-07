@@ -2,8 +2,6 @@ package ar.com.flow.minesweeper
 
 import java.util.Date
 
-import scala.collection.mutable.Map
-
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
 object GameResource {

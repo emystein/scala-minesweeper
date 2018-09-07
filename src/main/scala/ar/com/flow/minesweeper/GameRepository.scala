@@ -4,8 +4,7 @@ import java.text.SimpleDateFormat
 
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
+import scala.concurrent.Future
 
 class GameRepository(val db: Database) {
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
