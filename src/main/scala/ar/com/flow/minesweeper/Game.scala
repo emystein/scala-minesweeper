@@ -23,25 +23,15 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
   def revealCell(row: Int, column: Int): Unit = {
     val cell = board.getCell(row, column)
 
-    board = board.revealCell(cell)
-
-    revealAdjacentCellsRecursive(cell, Set(cell))
+    revealAdjacentCellsRecursive(cell)
   }
 
-  def revealAdjacentCellsRecursive(cell: Cell, alreadyTraversedCells: Set[Cell]): Set[Cell] = {
-    if (cell.hasBomb) {
-      Set()
-    } else {
+  def revealAdjacentCellsRecursive(cell: Cell, alreadyTraversedCells: Set[Cell] = Set.empty): Set[Cell] = {
       board = board.revealCell(cell)
 
-      val adjacentCells = adjacentCellsOf(cell).toSet -- alreadyTraversedCells
+      val adjacentCells = (adjacentCellsOf(cell).toSet -- alreadyTraversedCells).filter(!_.hasBomb)
 
-      val newTraversed = alreadyTraversedCells ++ adjacentCells ++ Set(cell)
-
-      adjacentCells.foreach(cells => revealAdjacentCellsRecursive(cells, newTraversed))
-
-      newTraversed
-    }
+      adjacentCells.foldLeft(alreadyTraversedCells ++ Set(cell))((traversed, adjacent) => revealAdjacentCellsRecursive(adjacent, traversed))
   }
 
   private def adjacentCellsOf(cell: Cell): Seq[Cell] = {
