@@ -7,26 +7,26 @@ class GameTest extends FunSuite with Matchers {
   test("Question Cell") {
     val game = GameFactory.createGame(3, 3, 2)
 
-    game.questionCell(1, 1)
+    game.questionCell((1, 1))
 
-    game.board.getCell(1, 1).value shouldBe CellValue.question
+    game.board.getCell((1, 1)).value shouldBe CellValue.question
   }
 
   test("Flag Cell") {
     val game = GameFactory.createGame(3, 3, 2)
 
-    game.flagCell(1, 1)
+    game.flagCell((1, 1))
 
-    game.board.getCell(1, 1).value shouldBe CellValue.flag
+    game.board.getCell((1, 1)).value shouldBe CellValue.flag
   }
 
   test("Reveal Cell should mark it as revealed") {
     val game = GameFactory.createGame(3, 3, 2)
 
-    game.board.getCell(1, 1).isRevealed shouldBe false
+    game.board.getCell((1, 1)).isRevealed shouldBe false
 
-    game.revealCell(1, 1)
+    game.revealCell((1, 1))
 
-    game.board.getCell(1, 1).isRevealed shouldBe true
+    game.board.getCell((1, 1)).isRevealed shouldBe true
   }
 }

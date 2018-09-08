@@ -13,27 +13,15 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
   private val cellLocationContext = new CellLocationContext(board.totalRows, board.totalColumns)
 
   def flagCell(coordinates: (Int, Int)): Unit = {
-    flagCell(coordinates._1, coordinates._2)
-  }
-
-  def flagCell(row: Int, column: Int): Unit = {
-    board = board.setCellValue(row, column, CellValue.flag)
+    board = board.setCellValue(coordinates, CellValue.flag)
   }
 
   def questionCell(coordinates: (Int, Int)): Unit = {
-    questionCell(coordinates._1, coordinates._2)
-  }
-
-  def questionCell(row: Int, column: Int): Unit = {
-    board = board.setCellValue(row, column, CellValue.question)
+    board = board.setCellValue(coordinates, CellValue.question)
   }
 
   def revealCell(coordinates: (Int, Int)): Unit = {
-    revealCell(coordinates._1, coordinates._2)
-  }
-
-  def revealCell(row: Int, column: Int): Unit = {
-    val cell = board.getCell(row, column)
+    val cell = board.getCell(coordinates)
 
     revealEmptyAdjacentCells(cell)
   }

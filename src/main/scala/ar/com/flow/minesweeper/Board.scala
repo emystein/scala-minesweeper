@@ -28,9 +28,12 @@ class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, init
     cellMap(coordinates._1, coordinates._2)
   }
 
-  def setCellValue(row: Int, column: Int, value: String): Board = {
-    cellMap((row, column)) = cellMap((row, column)).copy(value = value)
+  def setCellValue(coordinates: (Int, Int), value: String): Board = {
+    cellMap(coordinates) = cellMap(coordinates).copy(value = value)
     new Board(totalRows, totalColumns, totalBombs, cells)
+  }
+  def setCellValue(row: Int, column: Int, value: String): Board = {
+    setCellValue((row, column), value)
   }
 
   def revealCell(cell: Cell): Board = {
