@@ -1,14 +1,22 @@
 package ar.com.flow.minesweeper
 
+import java.sql.Timestamp
+import java.time.LocalDateTime
+
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 
 object Tables {
+  implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Timestamp](
+    localDateTime => Timestamp.valueOf(localDateTime),
+    sqlTimestamp => sqlTimestamp.toLocalDateTime
+  )
+
   type CellTuple = (String, Int, Int, Boolean, Int, Boolean, String)
 
-  class Games(tag: Tag) extends Table[(String, String)](tag, "game") {
+  class Games(tag: Tag) extends Table[(String, LocalDateTime)](tag, "game") {
     def id = column[String]("id", O.PrimaryKey)
-    def createdAt = column[String]("created_at")
+    def createdAt = column[LocalDateTime]("created_at")
     // Every table needs a * projection with the same type as the table's type parameter
     def * = (id, createdAt)
     def board = foreignKey("board", id, boards)(_.id)

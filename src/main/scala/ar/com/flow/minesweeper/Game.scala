@@ -1,15 +1,16 @@
 package ar.com.flow.minesweeper
 
-import java.util.{Date, UUID}
+import java.time.LocalDateTime
+import java.util.UUID
 
 object GameFactory {
   def createGame(totalRows: Int, totalColumns: Int, totalBombs: Int): Game = {
-    new Game(UUID.randomUUID().toString, new Date(), BoardFactory(totalRows, totalColumns, totalBombs))
+    new Game(UUID.randomUUID().toString, LocalDateTime.now, BoardFactory(totalRows, totalColumns, totalBombs))
   }
 }
 
 // TODO: Make board a val
-class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
+class Game(val id: String, val createdAt: LocalDateTime, var board: Board) {
   private val cellLocationContext = new CellLocationContext(board.totalRows, board.totalColumns)
 
   def flagCell(coordinates: (Int, Int)): Unit = {
@@ -31,12 +32,12 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
   }
 
   def revealEmptyAdjacentCells(cell: Cell, previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
-      board = board.revealCell(cell)
+    board = board.revealCell(cell)
 
-      val adjacentCells = adjacentCellsOf(cell).toSet -- previouslyTraversed
+    val adjacentCells = adjacentCellsOf(cell).toSet -- previouslyTraversed
 
-      adjacentCells.filter(!_.hasBomb)
-        .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => revealEmptyAdjacentCells(adjacent, traversed))
+    adjacentCells.filter(!_.hasBomb)
+      .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => revealEmptyAdjacentCells(adjacent, traversed))
   }
 
   private def adjacentCellsOf(cell: Cell): Seq[Cell] = {

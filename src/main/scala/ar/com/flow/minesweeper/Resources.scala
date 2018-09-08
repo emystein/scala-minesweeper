@@ -1,16 +1,16 @@
 package ar.com.flow.minesweeper
 
-import java.util.Date
+import java.time.format.DateTimeFormatter
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
 object GameResource {
   def from(game: Game): GameResource = {
-    GameResource(game.id, game.createdAt, BoardResource(game.board), game.state.playStatus, game.state.result)
+    GameResource(game.id, game.createdAt.format(DateTimeFormatter.ISO_DATE_TIME), BoardResource(game.board), game.state.playStatus, game.state.result)
   }
 }
 
-case class GameResource(id: String, createdAt: Date, board: BoardResource, state: String, result: String)
+case class GameResource(id: String, createdAt: String, board: BoardResource, state: String, result: String)
 
 object BoardResource {
   def apply(board: Board): BoardResource = {
