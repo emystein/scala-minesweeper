@@ -34,10 +34,14 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board) {
   def revealEmptyAdjacentCells(cell: Cell, previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
     board = board.revealCell(cell)
 
-    val adjacentCells = adjacentCellsOf(cell).toSet -- previouslyTraversed
+    if (cell.hasBomb) {
+      Set.empty
+    } else {
+      val adjacentCells = adjacentCellsOf(cell).toSet -- previouslyTraversed
 
-    adjacentCells.filter(!_.hasBomb)
-      .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => revealEmptyAdjacentCells(adjacent, traversed))
+      adjacentCells.filter(!_.hasBomb)
+        .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => revealEmptyAdjacentCells(adjacent, traversed))
+    }
   }
 
   private def adjacentCellsOf(cell: Cell): Seq[Cell] = {
