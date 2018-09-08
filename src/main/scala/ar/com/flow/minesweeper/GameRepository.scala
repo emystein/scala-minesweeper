@@ -22,24 +22,20 @@ class GameRepository(val db: Database) {
 
   def findById(id: String): Future[Game] = {
     val query = Tables.games
-      .filter(_.id === id)
-      .join(Tables.boards).on(_.id === _.id)
-      .join(Tables.cells).on(_._2.id === _.id)
-      .result.map(r => r.groupBy(_._1._1))
+      .filter(game => game.id === id)
+      .join(Tables.boards)
+      .join(Tables.cells).on{case ((game, board), cell) => game.id === board.id && board.id === cell.id}
+      .result.map(r => r.groupBy(_._1._1)) // group by game id
 
-    db.run(query).map(results => results.map(result =>
-      new Game(result._1._1, result._1._2,
-        BoardFactory(result._2.head._1._2._2, result._2.head._1._2._3, result._2.head._1._2._4, result._2.map(c => Tables.mapToCell(c._2))))).toSeq.head)
+    db.run(query).map(results => results.map(result => new Game(result._1._1, result._1._2, Tables.mapToBoard(result._2))).toSeq.head)
   }
 
   def findAll: Future[Seq[Game]] = {
     val query = Tables.games
-      .join(Tables.boards).on(_.id === _.id)
-      .join(Tables.cells).on(_._2.id === _.id)
-      .result.map(r => r.groupBy(_._1._1))
+      .join(Tables.boards)
+      .join(Tables.cells).on{case ((game, board), cell) => game.id === board.id && board.id === cell.id}
+      .result.map(r => r.groupBy(_._1._1)) // group by game id
 
-    db.run(query).map(results => results.map(result =>
-      new Game(result._1._1, result._1._2,
-        BoardFactory(result._2.head._1._2._2, result._2.head._1._2._3, result._2.head._1._2._4, result._2.map(c => Tables.mapToCell(c._2))))).toSeq)
+    db.run(query).map(results => results.map(result => new Game(result._1._1, result._1._2, Tables.mapToBoard(result._2))).toSeq)
   }
 }

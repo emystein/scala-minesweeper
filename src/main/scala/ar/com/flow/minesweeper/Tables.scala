@@ -12,9 +12,9 @@ object Tables {
     sqlTimestamp => sqlTimestamp.toLocalDateTime
   )
 
-  type CellTuple = (String, Int, Int, Boolean, Int, Boolean, String)
+  type GameTuple = (String, LocalDateTime)
 
-  class Games(tag: Tag) extends Table[(String, LocalDateTime)](tag, "game") {
+  class Games(tag: Tag) extends Table[GameTuple](tag, "game") {
     def id = column[String]("id", O.PrimaryKey)
     def createdAt = column[LocalDateTime]("created_at")
     // Every table needs a * projection with the same type as the table's type parameter
@@ -22,7 +22,9 @@ object Tables {
     def board = foreignKey("board", id, boards)(_.id)
   }
 
-  class Boards(tag: Tag) extends Table[(String, Int, Int, Int)](tag, "board") {
+  type BoardTuple = (String, Int, Int, Int)
+
+  class Boards(tag: Tag) extends Table[BoardTuple](tag, "board") {
     def id = column[String]("id", O.PrimaryKey)
     def rows = column[Int]("rows")
     def columns = column[Int]("columns")
@@ -30,7 +32,9 @@ object Tables {
     def * = (id, rows, columns, bombs)
   }
 
-  class Cells(tag: Tag) extends Table[(String, Int, Int, Boolean, Int, Boolean, String)](tag, "cell") {
+  type CellTuple = (String, Int, Int, Boolean, Int, Boolean, String)
+
+  class Cells(tag: Tag) extends Table[CellTuple](tag, "cell") {
     def id = column[String]("id")
     def row = column[Int]("row")
     def col = column[Int]("column")
@@ -43,13 +47,17 @@ object Tables {
   }
 
   val games = TableQuery[Games]
+
   val boards = TableQuery[Boards]
   val cells = TableQuery[Cells]
-
   val createSchemaAction = (games.schema ++ boards.schema ++ cells.schema).create
-  val createDatabase = DBIO.seq(createSchemaAction)
 
+  val createDatabase = DBIO.seq(createSchemaAction)
   val dropSchemaAction = (games.schema ++ boards.schema ++ cells.schema).drop
+
+  def mapToBoard(result: Seq[((GameTuple, BoardTuple), CellTuple)]): Board = {
+    BoardFactory(result.head._1._2._2, result.head._1._2._3, result.head._1._2._4, result.map(c => Tables.mapToCell(c._2)))
+  }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
     (gameId, cell.row, cell.column, cell.hasBomb, cell.numberOfAdjacentBombs, cell.isRevealed, cell.value)
