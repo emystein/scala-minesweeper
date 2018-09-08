@@ -31,6 +31,6 @@ object BoardFactory {
   }
 
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int, cells: Seq[Cell]): Board = {
-    new Board(totalRows, totalColumns, totalBombs, cells)
+    Board(totalRows, totalColumns, totalBombs, cells)
   }
 }

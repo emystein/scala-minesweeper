@@ -18,9 +18,8 @@ class BoardTest extends FunSuite with Matchers {
   }
 
   test("Set cell value") {
-    board.setCellValue(1, 1, CellValue.flag)
+    board.setCellValue((1, 1), CellValue.flag)
 
     board.getCell(1, 1).value shouldBe CellValue.flag
   }
-
 }
