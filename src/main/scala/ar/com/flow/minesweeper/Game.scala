@@ -12,12 +12,24 @@ object GameFactory {
 class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
   private val cellLocationContext = new CellLocationContext(board.totalRows, board.totalColumns)
 
-  def flagCell(row: Int, column: Int) = {
+  def flagCell(coordinates: (Int, Int)): Unit = {
+    flagCell(coordinates._1, coordinates._2)
+  }
+
+  def flagCell(row: Int, column: Int): Unit = {
     board = board.setCellValue(row, column, CellValue.flag)
   }
 
-  def questionCell(row: Int, column: Int) = {
+  def questionCell(coordinates: (Int, Int)): Unit = {
+    questionCell(coordinates._1, coordinates._2)
+  }
+
+  def questionCell(row: Int, column: Int): Unit = {
     board = board.setCellValue(row, column, CellValue.question)
+  }
+
+  def revealCell(coordinates: (Int, Int)): Unit = {
+    revealCell(coordinates._1, coordinates._2)
   }
 
   def revealCell(row: Int, column: Int): Unit = {
@@ -39,6 +51,7 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
     cellLocationContext.neighboursOf(cell.row, cell.column).map(board.getCell)
   }
 
+  // TODO: Merge result and state into a single class
   def result = GameResult.of(board)
 
   def state = result match {

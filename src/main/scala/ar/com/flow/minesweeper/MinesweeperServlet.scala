@@ -33,33 +33,30 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
   }
 
   post("/games/:gameId/cell/:row/:column/question") {
-    val x = params("row").toInt
-    val y = params("column").toInt
-
     gameRepository.findById(params("gameId")).map{game =>
-      game.questionCell(x, y)
+      game.questionCell(cellCoordinates)
       saveAndReturn(game)
     }
   }
 
   post("/games/:gameId/cell/:row/:column/flag") {
-    val x = params("row").toInt
-    val y = params("column").toInt
-
     gameRepository.findById(params("gameId")).map{game =>
-      game.flagCell(x, y)
+      game.flagCell(cellCoordinates)
       saveAndReturn(game)
     }
   }
 
   post("/games/:gameId/cell/:row/:column/reveal") {
-    val x = params("row").toInt
-    val y = params("column").toInt
-
     gameRepository.findById(params("gameId")).map{game =>
-      game.revealCell(x, y)
+      game.revealCell(cellCoordinates)
       saveAndReturn(game)
     }
+  }
+
+  private def cellCoordinates(): (Int, Int) = {
+    val x = params("row").toInt
+    val y = params("column").toInt
+    (x, y)
   }
 
   private def saveAndReturn(game: Game) = {
