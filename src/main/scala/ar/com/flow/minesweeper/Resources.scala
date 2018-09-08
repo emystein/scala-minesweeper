@@ -6,7 +6,7 @@ case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
 object GameResource {
   def from(game: Game): GameResource = {
-    GameResource(game.id, game.createdAt, BoardResource(game.board), game.state, game.result)
+    GameResource(game.id, game.createdAt, BoardResource(game.board), game.state.playStatus, game.state.result)
   }
 }
 

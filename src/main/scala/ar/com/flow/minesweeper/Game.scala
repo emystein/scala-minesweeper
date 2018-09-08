@@ -51,13 +51,7 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
     cellLocationContext.neighboursOf(cell.row, cell.column).map(board.getCell)
   }
 
-  // TODO: Merge result and state into a single class
-  def result = GameResult.of(board)
-
-  def state = result match {
-    case GameResult.pending => GameState.playing
-    case _ => GameState.finished
-  }
+  def state: GameState = GameState(board)
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Game]
 
@@ -69,27 +63,5 @@ class Game(val id: String, val createdAt: java.util.Date, var board: Board) {
   override def hashCode(): Int = {
     val state = Seq(createdAt, board)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
-  }
-}
-
-// TODO: model using something different than Strings
-object GameState {
-  val playing = "playing"
-  val finished = "finished"
-}
-
-// TODO: model using something different than Strings
-object GameResult {
-  val pending = "pending"
-  val won = "won"
-  val lost = "lost"
-
-  def of(board: Board): String = {
-    if (!board.revealedBombCells.isEmpty)
-      lost
-    else if (board.remainingEmptyCells.isEmpty)
-      won
-    else
-      pending
   }
 }
