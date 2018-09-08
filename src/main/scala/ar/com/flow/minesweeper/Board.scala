@@ -8,6 +8,7 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCell
 
   def cells: Seq[Cell] = cellMap.values.toSeq.sorted
 
+  // TODO: Remove unneeded methods
   def bombCells = cellsSet.filter(_.hasBomb)
 
   def emptyCells = cellsSet -- bombCells
@@ -33,8 +34,8 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCell
     revealCell(cell.row, cell.column)
   }
 
-  def revealCell(row: Int, column: Int): Board = {
-    cellMap((row, column)) = cellMap((row, column)).copy(isRevealed = true)
+  def revealCell(coordinates: (Int, Int)): Board = {
+    cellMap(coordinates) = cellMap(coordinates).copy(isRevealed = true)
     Board(totalRows, totalColumns, totalBombs, cells)
   }
 }

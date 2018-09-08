@@ -1,26 +1,14 @@
 package ar.com.flow.minesweeper
 
 import com.mchange.v2.c3p0.ComboPooledDataSource
-import org.scalatest.{BeforeAndAfter, FunSuite, Matchers}
+import org.scalatest.{FunSuite, Matchers}
 import slick.jdbc.H2Profile.api._
 
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-
-class GameRepositoryTest extends FunSuite with BeforeAndAfter with Matchers {
+class GameRepositoryTest extends FunSuite with DbSchemaSetup with Matchers {
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
 
-  val cpds = new ComboPooledDataSource
-  val db = Database.forDataSource(cpds, None)
+  val db = Database.forDataSource(new ComboPooledDataSource, None)
   val gameRepository = new GameRepository(db)
-
-  before {
-    Await.result(db.run(Tables.createDatabase), Duration.Inf)
-  }
-
-  after {
-    Await.result(db.run(Tables.dropSchemaAction), Duration.Inf)
-  }
 
   test("Save new Game") {
     val game: Game = GameFactory.createGame(2, 2, 2)
@@ -30,9 +18,7 @@ class GameRepositoryTest extends FunSuite with BeforeAndAfter with Matchers {
     val result = gameRepository.findById(game.id)
 
     result.map { retrievedGame =>
-      retrievedGame.id shouldBe game.id
-      retrievedGame.createdAt shouldBe game.createdAt
-      retrievedGame.board shouldBe game.board
+      retrievedGame shouldBe game
     }
   }
 }
