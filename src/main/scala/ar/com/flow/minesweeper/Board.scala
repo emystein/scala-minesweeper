@@ -33,7 +33,11 @@ class Board(val totalRows: Int, val totalColumns: Int, val totalBombs: Int, init
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
 
-  def revealCell(row: Int, column: Int) = {
+  def revealCell(cell: Cell): Board = {
+    revealCell(cell.row, cell.column)
+  }
+
+  def revealCell(row: Int, column: Int): Board = {
     cellMap((row, column)) = cellMap((row, column)).copy(isRevealed = true)
     new Board(totalRows, totalColumns, totalBombs, cells)
   }
