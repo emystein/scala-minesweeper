@@ -11,7 +11,7 @@ object GameFactory {
 
 // TODO: Make board a val
 class Game(val id: String, val createdAt: LocalDateTime, var board: Board) {
-  private val cellLocationContext = new CellLocationContext(board.totalRows, board.totalColumns)
+  private val emptyCellFinder = new AdjacentEmptyCellFinder(board)
 
   def flagCell(coordinates: (Int, Int)): Unit = {
     setCellValue(coordinates, CellValue.flag)
@@ -28,24 +28,11 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board) {
   def revealCell(coordinates: (Int, Int)): Unit = {
     val cell = board.getCell(coordinates)
 
-    revealEmptyAdjacentCells(cell)
-  }
-
-  def revealEmptyAdjacentCells(cell: Cell, previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
     board = board.revealCell(cell)
 
-    if (cell.hasBomb) {
-      Set.empty
-    } else {
-      val adjacentCells = adjacentCellsOf(cell).toSet -- previouslyTraversed
-
-      adjacentCells.filter(!_.hasBomb)
-        .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => revealEmptyAdjacentCells(adjacent, traversed))
+    if (!cell.hasBomb) {
+      emptyCellFinder.traverseEmptyAdjacentCells(cell).foreach(cell => board = board.revealCell(cell))
     }
-  }
-
-  private def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    cellLocationContext.neighboursOf(cell.row, cell.column).map(board.getCell)
   }
 
   def state: GameState = GameState(board)
