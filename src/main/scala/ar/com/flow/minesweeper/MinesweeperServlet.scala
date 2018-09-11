@@ -53,6 +53,20 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
     }
   }
 
+  post("/games/:gameId/pause") {
+    gameRepository.findById(params("gameId")).map{game =>
+      game.pause
+      saveAndReturn(game)
+    }
+  }
+
+  post("/games/:gameId/resume") {
+    gameRepository.findById(params("gameId")).map{game =>
+      game.resume
+      saveAndReturn(game)
+    }
+  }
+
   private def cellCoordinates(): (Int, Int) = {
     val x = params("row").toInt
     val y = params("column").toInt

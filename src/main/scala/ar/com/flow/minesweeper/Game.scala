@@ -9,8 +9,9 @@ object GameFactory {
   }
 }
 
-// TODO: Make board a val
-class Game(val id: String, val createdAt: LocalDateTime, var board: Board) {
+// TODO: Make board, state a val
+class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var state: GameState = GameState(GamePlayStatus.playing, GameResult.pending)) {
+
   private val emptyCellFinder = new AdjacentEmptyCellFinder(board)
 
   def flagCell(coordinates: (Int, Int)): Unit = {
@@ -30,12 +31,29 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board) {
 
     board = board.revealCell(cell)
 
+    // TODO: Use EmptyCell / BombCell polymorphism to remove this if
     if (!cell.hasBomb) {
       emptyCellFinder.traverseEmptyAdjacentCells(cell).foreach(cell => board = board.revealCell(cell))
     }
+
+    state = GameState(board)
   }
 
-  def state: GameState = GameState(board)
+  def pause = {
+    state = switchPlayStatusTo(GamePlayStatus.paused)
+  }
+
+  def resume = {
+    state = switchPlayStatusTo(GamePlayStatus.playing)
+  }
+
+  // TODO: implement State pattern ?
+  private def switchPlayStatusTo(status: String): GameState = {
+    state match {
+      case GameState(GamePlayStatus.finished, _) => state
+      case _ => GameState(status, state.result)
+    }
+  }
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Game]
 

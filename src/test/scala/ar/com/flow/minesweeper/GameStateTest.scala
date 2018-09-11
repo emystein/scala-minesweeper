@@ -35,4 +35,5 @@ class GameStateTest extends FunSuite with Matchers {
 
     game.state shouldBe GameState(GamePlayStatus.finished, GameResult.won)
   }
+
 }

@@ -3,6 +3,7 @@ package ar.com.flow.minesweeper
 // TODO: model using something different than Strings
 object GamePlayStatus {
   val playing = "playing"
+  val paused = "paused"
   val finished = "finished"
 }
 
