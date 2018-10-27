@@ -3,7 +3,7 @@ package ar.com.flow.minesweeper
 import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.prop.TableDrivenPropertyChecks
 
-class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChecks with Matchers  {
+class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChecks with Matchers with CellsAssertions {
   val data = Table(
     ("rows", "columns", "bombs"),
     (1, 1, 0),
@@ -16,7 +16,7 @@ class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChe
 
   test("Revealing empty cell with adjacent empty cells should reveal the adjacent empty cells as well") {
     forAll(data)((rows: Int, columns: Int, bombs: Int) => {
-      val game = Game(rows, columns, bombs)
+      implicit val game = Game(rows, columns, bombs)
       val cellLocationContext = new CellLocationContext(rows, columns)
 
       val emptyCell = game.board.emptyCells.head
@@ -27,13 +27,13 @@ class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChe
 
       game.revealCell(emptyCell.row, emptyCell.column)
 
-      adjacentEmptyCells.foreach(cell => game.board.getCell(cell.row, cell.column).isRevealed shouldBe true)
+      allCellsShouldBeRevealed(adjacentEmptyCells)
     })
   }
 
   test("Revealing bomb cell should not reveal adjacent cells") {
     forAll(data.filter(_._3 > 0))((rows: Int, columns: Int, bombs: Int) => {
-      val game = Game(rows, columns, bombs)
+      implicit val game = Game(rows, columns, bombs)
       val cellLocationContext = new CellLocationContext(rows, columns)
 
       val bombCell = game.board.bombCells.head
@@ -43,7 +43,9 @@ class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChe
 
       game.revealCell(bombCell.row, bombCell.column)
 
-      adjacent.foreach(cell => game.board.getCell(cell.row, cell.column).isRevealed shouldBe false)
+      allCellsShouldBeHidden(adjacent)
     })
   }
+
+
 }
