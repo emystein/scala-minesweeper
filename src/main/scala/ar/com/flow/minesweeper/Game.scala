@@ -3,8 +3,8 @@ package ar.com.flow.minesweeper
 import java.time.LocalDateTime
 import java.util.UUID
 
-object GameFactory {
-  def createGame(totalRows: Int, totalColumns: Int, totalBombs: Int): Game = {
+object Game {
+  def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Game = {
     new Game(UUID.randomUUID().toString, LocalDateTime.now, BoardFactory(totalRows, totalColumns, totalBombs))
   }
 }

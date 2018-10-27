@@ -18,7 +18,7 @@ class GameRepositoryTest extends FunSuite with DbSchemaSetup with Matchers {
   test("Save new Game") {
     val dateTime: java.time.LocalDateTime = LocalDateTime.now
 
-    val game: Game = GameFactory.createGame(2, 2, 2)
+    val game: Game = Game(2, 2, 2)
 
     gameRepository.save(game)
 

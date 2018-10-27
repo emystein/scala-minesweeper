@@ -27,7 +27,7 @@ class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJ
 
   post("/games") {
     val parameters = parsedBody.extract[NewGameRequestBody]
-    val game = GameFactory.createGame(parameters.rows, parameters.columns, parameters.bombs)
+    val game = Game(parameters.rows, parameters.columns, parameters.bombs)
 
     saveAndReturn(game)
   }

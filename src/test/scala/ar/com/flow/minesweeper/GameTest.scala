@@ -5,7 +5,7 @@ import org.scalatest.{FunSuite, Matchers}
 // TODO: Add precondition for board with at least 1 more empty cell than bombs
 class GameTest extends FunSuite with Matchers {
   test("Question Cell") {
-    val game = GameFactory.createGame(3, 3, 2)
+    val game = Game(3, 3, 2)
 
     game.questionCell((1, 1))
 
@@ -13,7 +13,7 @@ class GameTest extends FunSuite with Matchers {
   }
 
   test("Flag Cell") {
-    val game = GameFactory.createGame(3, 3, 2)
+    val game = Game(3, 3, 2)
 
     game.flagCell((1, 1))
 
@@ -21,7 +21,7 @@ class GameTest extends FunSuite with Matchers {
   }
 
   test("Reveal Cell should mark it as revealed") {
-    val game = GameFactory.createGame(3, 3, 2)
+    val game = Game(3, 3, 2)
 
     game.board.getCell((1, 1)).isRevealed shouldBe false
 

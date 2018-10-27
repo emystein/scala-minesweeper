@@ -4,7 +4,7 @@ import org.scalatest.{FunSuite, Matchers}
 
 class GameStateTest extends FunSuite with Matchers {
   test("Revealing an empty cell and having remaining empty cells should keep the game playing") {
-    val game = GameFactory.createGame(3, 3, 2)
+    val game = Game(3, 3, 2)
 
     val emptyCell = game.board.emptyCells.head
 
@@ -19,7 +19,7 @@ class GameStateTest extends FunSuite with Matchers {
   }
 
   test("Revealing a cell containing a bomb should finish the game as lost") {
-    val game = GameFactory.createGame(3, 3, 2)
+    val game = Game(3, 3, 2)
 
     val bombCell = game.board.bombCells.head
 
@@ -29,7 +29,7 @@ class GameStateTest extends FunSuite with Matchers {
   }
 
   test("Revealing last empty cell should finish the game as won") {
-    val game = GameFactory.createGame(3, 3, 2)
+    val game = Game(3, 3, 2)
 
     game.board.emptyCells.foreach(emptyCell => game.revealCell(emptyCell.row, emptyCell.column))
 

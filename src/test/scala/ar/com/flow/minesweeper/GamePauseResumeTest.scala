@@ -7,7 +7,7 @@ class GamePauseResumeTest extends FunSpec with Matchers {
   describe("New Game") {
     describe("when pausing the game") {
       it("should pause the game") {
-        val game = GameFactory.createGame(3, 3, 2)
+        val game = Game(3, 3, 2)
 
         game.pause
 
@@ -16,7 +16,7 @@ class GamePauseResumeTest extends FunSpec with Matchers {
     }
     describe("when resuming the game") {
       it("should resume the game") {
-        val game = GameFactory.createGame(3, 3, 2)
+        val game = Game(3, 3, 2)
 
         game.resume
 
@@ -28,7 +28,7 @@ class GamePauseResumeTest extends FunSpec with Matchers {
   describe("Paused Game") {
     describe("when pausing the game") {
       it("should pause the game") {
-        val game = GameFactory.createGame(3, 3, 2)
+        val game = Game(3, 3, 2)
 
         game.pause
         game.pause
@@ -38,7 +38,7 @@ class GamePauseResumeTest extends FunSpec with Matchers {
     }
     describe("when resuming the game") {
       it("should resume the game") {
-        val game = GameFactory.createGame(3, 3, 2)
+        val game = Game(3, 3, 2)
 
         game.pause
         game.resume

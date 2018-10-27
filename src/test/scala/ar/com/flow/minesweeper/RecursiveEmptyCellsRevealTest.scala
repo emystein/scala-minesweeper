@@ -16,7 +16,7 @@ class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChe
 
   test("Revealing empty cell with adjacent empty cells should reveal the adjacent empty cells as well") {
     forAll(data)((rows: Int, columns: Int, bombs: Int) => {
-      val game = GameFactory.createGame(rows, columns, bombs)
+      val game = Game(rows, columns, bombs)
       val cellLocationContext = new CellLocationContext(rows, columns)
 
       val emptyCell = game.board.emptyCells.head
@@ -33,7 +33,7 @@ class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChe
 
   test("Revealing bomb cell should not reveal adjacent cells") {
     forAll(data.filter(_._3 > 0))((rows: Int, columns: Int, bombs: Int) => {
-      val game = GameFactory.createGame(rows, columns, bombs)
+      val game = Game(rows, columns, bombs)
       val cellLocationContext = new CellLocationContext(rows, columns)
 
       val bombCell = game.board.bombCells.head
