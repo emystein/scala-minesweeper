@@ -25,7 +25,7 @@ class BoardFactoryTest extends FunSuite with Matchers {
     for {
       cell <- board.cells
     } yield {
-      val adjacentBombs = cellLocationContext.neighboursOf(cell.row, cell.column)
+      val adjacentBombs = cellLocationContext.neighboursOf(cell)
         .map(board.getCell)
         .count(board.bombCells.contains)
 

@@ -11,6 +11,6 @@ class AdjacentEmptyCellFinder(board: Board) {
   }
 
   private def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    cellLocationContext.neighboursOf(cell.row, cell.column).map(board.getCell)
+    cellLocationContext.neighboursOf(cell).map(board.getCell)
   }
 }

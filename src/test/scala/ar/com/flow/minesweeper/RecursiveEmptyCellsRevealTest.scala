@@ -21,7 +21,7 @@ class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChe
 
       val emptyCell = game.board.emptyCells.head
 
-      val adjacentEmptyCells = cellLocationContext.neighboursOf(emptyCell.row, emptyCell.column)
+      val adjacentEmptyCells = cellLocationContext.neighboursOf(emptyCell)
         .map(game.board.getCell)
         .filter(!_.hasBomb)
 
@@ -38,7 +38,7 @@ class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChe
 
       val bombCell = game.board.bombCells.head
 
-      val adjacent = cellLocationContext.neighboursOf(bombCell.row, bombCell.column)
+      val adjacent = cellLocationContext.neighboursOf(bombCell)
         .map(game.board.getCell)
 
       game.revealCell(bombCell.row, bombCell.column)
