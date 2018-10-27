@@ -6,6 +6,8 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCell
   private val cellMap = HashMap(initialCells.map(c => (c.row, c.column) -> c): _*)
   private def cellsSet = cellMap.values.toSet
 
+  val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
+
   def cells: Seq[Cell] = cellMap.values.toSeq.sorted
 
   // TODO: Remove unneeded methods
@@ -20,6 +22,7 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCell
   def revealedEmptyCells = revealedCells -- revealedBombCells
 
   def remainingEmptyCells = emptyCells -- revealedEmptyCells
+
 
   def getCell(coordinates: (Int, Int)): Cell = {
     cellMap(coordinates)

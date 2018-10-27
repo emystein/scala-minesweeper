@@ -1,8 +1,6 @@
 package ar.com.flow.minesweeper
 
 class AdjacentEmptyCellFinder(board: Board) {
-  private val cellLocationContext = new CellLocationContext(board)
-
   def traverseEmptyAdjacentCells(cell: Cell, previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
     val adjacentCells = adjacentCellsOf(cell).toSet -- previouslyTraversed
 
@@ -11,6 +9,6 @@ class AdjacentEmptyCellFinder(board: Board) {
   }
 
   private def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    cellLocationContext.neighboursOf(cell).map(board.getCell)
+    board.cellLocationContext.neighboursOf(cell).map(board.getCell)
   }
 }
