@@ -41,4 +41,8 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCell
     cellMap(coordinates) = cellMap(coordinates).copy(isRevealed = true)
     Board(totalRows, totalColumns, totalBombs, cells)
   }
+
+  def adjacentCellsOf(cell: Cell): Seq[Cell] = {
+    cellLocationContext.neighboursOf(cell).map(getCell)
+  }
 }
