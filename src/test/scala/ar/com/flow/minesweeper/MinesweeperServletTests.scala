@@ -7,8 +7,9 @@ import org.scalatra.test.scalatest._
 class MinesweeperServletTests extends ScalatraFunSuite {
   val cpds = new ComboPooledDataSource
   val database = Database.forDataSource(cpds, None)
+  implicit val swagger = new MinesweeperSwagger
 
-  addServlet(new MinesweeperServlet(database), "/*")
+  addServlet(new MinesweeperServlet(database, swagger), "/*")
 
   test("GET / on MinesweeperServlet should return status 200") {
     get("/") {

@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory
 class ScalatraBootstrap extends LifeCycle {
   val logger = LoggerFactory.getLogger(getClass)
 
+  implicit val swagger = new MinesweeperSwagger
+
   val cpds = new ComboPooledDataSource
 
   logger.info("Created c3p0 connection pool")
@@ -18,7 +20,8 @@ class ScalatraBootstrap extends LifeCycle {
     // TODO: move out
     db.run(Tables.createDatabase)
 
-    context.mount(new MinesweeperServlet(db), "/*")
+    context.mount(new MinesweeperServlet(db, swagger), "/*")
+    context.mount(new SwaggerServlet(), "/api-docs")
   }
 
   private def closeDbConnection() {

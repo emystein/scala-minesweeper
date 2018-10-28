@@ -2,16 +2,20 @@ package ar.com.flow.minesweeper
 
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra._
-import org.scalatra.json.JacksonJsonSupport
+import org.scalatra.json.NativeJsonSupport
+import org.scalatra.swagger._
 import slick.jdbc.H2Profile.api._
 
-class MinesweeperServlet(val db: Database) extends ScalatraServlet with JacksonJsonSupport with FutureSupport with SlickRoutes {
+class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extends MyScalatraWebAppStack with NativeJsonSupport with SwaggerSupport with FutureSupport with SlickRoutes {
   val gameRepository = new GameRepository(db)
 
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
 
   // Sets up automatic case class to JSON output serialization, required by the JValueResult trait.
   protected implicit lazy val jsonFormats: Formats = DefaultFormats
+
+  protected val applicationDescription = "The Minesweeper API"
+
   // Before every action runs, set the content type to be in JSON format.
   before() {
     contentType = formats("json")
