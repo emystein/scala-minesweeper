@@ -3,7 +3,7 @@ package ar.com.flow.minesweeper
 import org.scalatest.{FunSuite, Matchers}
 
 class BoardTest extends FunSuite with Matchers {
-  val board = BoardFactory(3, 3, 2)
+  val board = Board(3, 3, 2)
 
   test("Get cell inside boundaries") {
     board.getCell(1, 1).value shouldBe CellValue.empty

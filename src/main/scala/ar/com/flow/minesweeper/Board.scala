@@ -1,6 +1,36 @@
 package ar.com.flow.minesweeper
 
 import scala.collection.mutable.HashMap
+import scala.util.Random
+
+object Board {
+  def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Board = {
+    val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
+
+    val cells = {
+      val allCoordinates = for {
+        rowNumber <- 1 to totalRows
+        columnNumber <- 1 to totalColumns
+      } yield {
+        (rowNumber, columnNumber)
+      }
+
+      val randomCoordinates = Random.shuffle(allCoordinates)
+      val bombCoordinates = randomCoordinates.take(totalBombs)
+
+      for {
+        row <- 1 to totalRows
+        column <- 1 to totalColumns
+      } yield {
+        val hasBomb = bombCoordinates.contains(row, column)
+        val adjacentBombs = cellLocationContext.neighboursOf(row, column).count(bombCoordinates.contains)
+        new Cell(row, column, hasBomb, adjacentBombs)
+      }
+    }
+
+    Board(totalRows, totalColumns, totalBombs, cells)
+  }
+}
 
 case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCells: Seq[Cell]) {
   private val cellMap = HashMap(initialCells.map(c => (c.row, c.column) -> c): _*)

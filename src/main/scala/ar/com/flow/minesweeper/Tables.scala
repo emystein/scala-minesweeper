@@ -56,7 +56,7 @@ object Tables {
   val dropSchemaAction = (games.schema ++ boards.schema ++ cells.schema).drop
 
   def mapToBoard(result: Seq[((GameTuple, BoardTuple), CellTuple)]): Board = {
-    BoardFactory(result.head._1._2._2, result.head._1._2._3, result.head._1._2._4, result.map(c => Tables.mapToCell(c._2)))
+    Board(result.head._1._2._2, result.head._1._2._3, result.head._1._2._4, result.map(c => Tables.mapToCell(c._2)))
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {

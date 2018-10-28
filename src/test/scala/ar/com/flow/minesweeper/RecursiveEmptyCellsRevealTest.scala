@@ -41,6 +41,4 @@ class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChe
       allCellsShouldBeHidden(adjacent)
     })
   }
-
-
 }

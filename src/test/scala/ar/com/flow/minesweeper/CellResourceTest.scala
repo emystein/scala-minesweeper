@@ -4,7 +4,7 @@ import org.scalatest.{FunSuite, Matchers}
 
 class CellResourceTest extends FunSuite with Matchers {
   test("Create CellResources from Cells") {
-    val board = BoardFactory(2, 2, 2)
+    val board = Board(2, 2, 2)
 
     val cellResources = CellResourceFactory.from(board.cells)
 
