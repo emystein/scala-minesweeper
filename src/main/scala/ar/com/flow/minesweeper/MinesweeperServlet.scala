@@ -21,10 +21,6 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
     contentType = formats("json")
   }
 
-  get("/") {
-    views.html.hello()
-  }
-
   get("/games") {
     gameRepository.findAll.map(f => f.map(GameResource.from(_)))
   }
