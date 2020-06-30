@@ -1,12 +1,9 @@
 package ar.com.flow.minesweeper
 
-import com.mchange.v2.c3p0.ComboPooledDataSource
 import org.scalatra.test.scalatest._
 import slick.jdbc.H2Profile.api._
 
-class MinesweeperServletTests extends ScalatraFunSuite {
-  val cpds = new ComboPooledDataSource
-  val database = Database.forDataSource(cpds, None)
+class MinesweeperServletTests extends ScalatraFunSuite with Persistence {
   implicit val swagger = new MinesweeperSwagger
 
   addServlet(new MinesweeperServlet(database, swagger), "/*")

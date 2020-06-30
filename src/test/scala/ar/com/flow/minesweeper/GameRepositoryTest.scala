@@ -2,18 +2,16 @@ package ar.com.flow.minesweeper
 
 import java.time.LocalDateTime
 
-import com.mchange.v2.c3p0.ComboPooledDataSource
-import org.scalatest.{FunSuite, Matchers}
-import slick.jdbc.H2Profile.api._
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
-class GameRepositoryTest extends FunSuite with DbSchemaSetup with Matchers {
+class GameRepositoryTest extends AnyFunSuite with DbSchemaSetup with Persistence with Matchers {
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
 
-  val db = Database.forDataSource(new ComboPooledDataSource, None)
-  val gameRepository = new GameRepository(db)
+  val gameRepository = new GameRepository(database)
 
   test("Save new Game") {
     val dateTime: java.time.LocalDateTime = LocalDateTime.now

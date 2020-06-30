@@ -7,13 +7,13 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 trait DbSchemaSetup extends TestSuite with BeforeAndAfter {
-  def db: Database
+  def database: Database
 
   before {
-    Await.result(db.run(Tables.createDatabase), Duration.Inf)
+    Await.result(database.run(Tables.createDatabase), Duration.Inf)
   }
 
   after {
-    Await.result(db.run(Tables.dropSchemaAction), Duration.Inf)
+    Await.result(database.run(Tables.dropSchemaAction), Duration.Inf)
   }
 }

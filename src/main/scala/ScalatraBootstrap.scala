@@ -1,21 +1,18 @@
 import ar.com.flow.minesweeper._
-import com.mchange.v2.c3p0.ComboPooledDataSource
-import org.scalatra._
-import slick.jdbc.H2Profile.api._
 import javax.servlet.ServletContext
+import org.scalatra._
 import org.slf4j.LoggerFactory
+import slick.jdbc.H2Profile.api._
 
-class ScalatraBootstrap extends LifeCycle {
+class ScalatraBootstrap extends LifeCycle with Persistence {
   val logger = LoggerFactory.getLogger(getClass)
 
   implicit val swagger = new MinesweeperSwagger
 
-  val cpds = new ComboPooledDataSource
-
-  logger.info("Created c3p0 connection pool")
+  logger.info("Created DB connection pool")
 
   override def init(context: ServletContext) {
-    val db = Database.forDataSource(cpds, None)
+    val db = Database.forDataSource(dataSource, None)
 
     // TODO: move out
     db.run(Tables.createDatabase)
@@ -26,7 +23,7 @@ class ScalatraBootstrap extends LifeCycle {
 
   private def closeDbConnection() {
     logger.info("Closing c3po connection pool")
-    cpds.close
+    dataSource.close
   }
 
   override def destroy(context: ServletContext) {

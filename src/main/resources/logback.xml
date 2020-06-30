@@ -7,9 +7,9 @@
     </encoder>
   </appender>
 
-  <root level="info">
+  <root level="INFO">
     <appender-ref ref="STDOUT" />
   </root>
 
-  <logger name="slick.jdbc" level="DEBUG"/>
+  <logger name="slick.jdbc" level="WARN"/>
 </configuration>
