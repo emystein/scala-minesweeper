@@ -21,7 +21,7 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
     contentType = formats("json")
   }
 
-  val getGames = (apiOperation[List[GameResource]]("getGames") summary "Show all flowers")
+  val getGames = (apiOperation[List[GameResource]]("getGames") summary "Show all games")
 
   get("/games", operation(getGames)) {
     gameRepository.findAll.map(f => f.map(GameResource.from(_)))
