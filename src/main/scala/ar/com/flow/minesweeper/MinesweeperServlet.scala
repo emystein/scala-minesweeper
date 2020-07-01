@@ -30,42 +30,41 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
   post("/games") {
     val parameters = parsedBody.extract[NewGameRequestBody]
     val game = Game(parameters.rows, parameters.columns, parameters.bombs)
-
-    saveAndReturn(game)
+    save(game)
   }
 
   post("/games/:gameId/cell/:row/:column/question") {
     gameRepository.findById(params("gameId")).map{game =>
       game.questionCell(cellCoordinates)
-      saveAndReturn(game)
+      save(game)
     }
   }
 
   post("/games/:gameId/cell/:row/:column/flag") {
     gameRepository.findById(params("gameId")).map{game =>
       game.flagCell(cellCoordinates)
-      saveAndReturn(game)
+      save(game)
     }
   }
 
   post("/games/:gameId/cell/:row/:column/reveal") {
     gameRepository.findById(params("gameId")).map{game =>
       game.revealCell(cellCoordinates)
-      saveAndReturn(game)
+      save(game)
     }
   }
 
   post("/games/:gameId/pause") {
     gameRepository.findById(params("gameId")).map{game =>
       game.pause
-      saveAndReturn(game)
+      save(game)
     }
   }
 
   post("/games/:gameId/resume") {
     gameRepository.findById(params("gameId")).map{game =>
       game.resume
-      saveAndReturn(game)
+      save(game)
     }
   }
 
@@ -75,7 +74,7 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
     (x, y)
   }
 
-  private def saveAndReturn(game: Game) = {
+  private def save(game: Game) = {
     gameRepository.save(game)
     GameResource.from(game)
   }
