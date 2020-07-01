@@ -1,8 +1,9 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.persistence
 
 import java.sql.Timestamp
 import java.time.LocalDateTime
 
+import ar.com.flow.minesweeper.{Board, Cell}
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 

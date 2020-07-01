@@ -13,4 +13,4 @@ $ sbt
 
 App root is http://localhost:8080
 
-Endpoints are defined in `ar.com.flow.minesweeper.MinesweeperServlet`
+Endpoints are defined in `ar.com.flow.minesweeper.rest.MinesweeperServlet`

@@ -1,7 +1,7 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.persistence
 
 import org.scalatest.{BeforeAndAfter, TestSuite}
-import slick.jdbc.H2Profile.api._
+import slick.jdbc.JdbcBackend.Database
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration

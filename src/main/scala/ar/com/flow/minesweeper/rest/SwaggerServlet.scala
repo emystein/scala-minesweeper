@@ -1,7 +1,7 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.rest
 
 import org.scalatra.ScalatraServlet
-import org.scalatra.swagger.{ApiInfo, ContactInfo, LicenseInfo, NativeSwaggerBase, Swagger}
+import org.scalatra.swagger._
 
 class SwaggerServlet(implicit val swagger: Swagger) extends ScalatraServlet with NativeSwaggerBase
 

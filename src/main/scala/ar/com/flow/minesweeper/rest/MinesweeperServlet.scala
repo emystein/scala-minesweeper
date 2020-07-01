@@ -1,12 +1,14 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.rest
 
+import ar.com.flow.minesweeper._
+import ar.com.flow.minesweeper.persistence.GameRepository
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra._
 import org.scalatra.json.NativeJsonSupport
 import org.scalatra.swagger._
 import slick.jdbc.H2Profile.api._
 
-class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extends MyScalatraWebAppStack with NativeJsonSupport with SwaggerSupport with FutureSupport with SlickRoutes {
+class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extends SwaggerUiRoute with NativeJsonSupport with SwaggerSupport with FutureSupport with DbRoutes {
   val gameRepository = new GameRepository(db)
 
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global

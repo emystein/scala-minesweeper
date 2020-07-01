@@ -1,7 +1,7 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.rest
 
+import ar.com.flow.minesweeper.persistence.Persistence
 import org.scalatra.test.scalatest._
-import slick.jdbc.H2Profile.api._
 
 class MinesweeperServletTests extends ScalatraFunSuite with Persistence {
   implicit val swagger = new MinesweeperSwagger

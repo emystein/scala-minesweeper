@@ -1,6 +1,8 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.rest
 
 import java.time.format.DateTimeFormatter
+
+import ar.com.flow.minesweeper.{Board, Cell, Game}
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 

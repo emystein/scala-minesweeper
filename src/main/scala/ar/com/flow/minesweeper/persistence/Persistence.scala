@@ -1,4 +1,4 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.persistence
 
 import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 import slick.jdbc.JdbcBackend.Database

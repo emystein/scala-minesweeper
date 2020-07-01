@@ -1,5 +1,6 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.persistence
 
+import ar.com.flow.minesweeper.Game
 import slick.jdbc.H2Profile.api._
 
 import scala.concurrent.Future

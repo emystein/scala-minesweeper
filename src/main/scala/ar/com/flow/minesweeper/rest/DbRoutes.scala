@@ -1,9 +1,10 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.rest
 
+import ar.com.flow.minesweeper.persistence.Tables
 import org.scalatra.{FutureSupport, ScalatraBase}
 import slick.jdbc.H2Profile.api._
 
-trait SlickRoutes extends ScalatraBase with FutureSupport {
+trait DbRoutes extends ScalatraBase with FutureSupport {
   def db: Database
 
   get("/db/create") {

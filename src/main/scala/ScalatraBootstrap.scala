@@ -1,4 +1,5 @@
-import ar.com.flow.minesweeper._
+import ar.com.flow.minesweeper.persistence.{Persistence, Tables}
+import ar.com.flow.minesweeper.rest.{MinesweeperServlet, MinesweeperSwagger, SwaggerServlet}
 import javax.servlet.ServletContext
 import org.scalatra._
 import org.slf4j.LoggerFactory
@@ -7,8 +8,6 @@ class ScalatraBootstrap extends LifeCycle with Persistence {
   val logger = LoggerFactory.getLogger(getClass)
 
   implicit val swagger = new MinesweeperSwagger
-
-  logger.info("Created DB connection pool")
 
   override def init(context: ServletContext) {
     // TODO: move out
@@ -19,7 +18,7 @@ class ScalatraBootstrap extends LifeCycle with Persistence {
   }
 
   private def closeDbConnection() {
-    logger.info("Closing c3po connection pool")
+    logger.info("Closing DB connection")
     dataSource.close
   }
 

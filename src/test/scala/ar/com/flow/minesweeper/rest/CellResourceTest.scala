@@ -1,8 +1,10 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.rest
 
-import org.scalatest.{FunSuite, Matchers}
+import ar.com.flow.minesweeper.{Board, Cell}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class CellResourceTest extends FunSuite with Matchers {
+class CellResourceTest extends AnyFunSuite with Matchers {
   test("Create CellResources from Cells") {
     val board = Board(2, 2, 2)
 

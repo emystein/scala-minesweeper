@@ -1,7 +1,8 @@
-package ar.com.flow.minesweeper
+package ar.com.flow.minesweeper.persistence
 
 import java.time.LocalDateTime
 
+import ar.com.flow.minesweeper.Game
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
