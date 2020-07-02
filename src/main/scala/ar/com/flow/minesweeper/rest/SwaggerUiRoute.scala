@@ -1,7 +1,6 @@
 package ar.com.flow.minesweeper.rest
 
 import org.scalatra.ScalatraServlet
-import org.webjars.WebJarAssetLocator
 
 trait SwaggerUiRoute extends ScalatraServlet {
 

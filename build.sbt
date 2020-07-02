@@ -2,7 +2,7 @@ val ScalatraVersion = "2.7.0"
 val json4sVersion = "3.6.9"
 
 organization := "ar.com.flow"
-name := "Minesweeper"
+name := "minesweeper"
 version := "0.1.0-SNAPSHOT"
 
 scalaVersion := "2.13.2"
@@ -20,7 +20,7 @@ libraryDependencies ++= Seq(
   "com.h2database"          %  "h2"                % "1.4.200",
   "com.zaxxer" % "HikariCP" % "3.4.5",
   "ch.qos.logback" % "logback-classic" % "1.2.3" % "runtime",
-  "org.eclipse.jetty" % "jetty-webapp" % "9.4.9.v20180320" % "container",
+  "org.eclipse.jetty" % "jetty-webapp" % "9.4.9.v20180320" % "container;compile",
   "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
   // TODO use webjars-locator-core
   // "org.webjars" % "webjars-locator-core" % "0.46",
@@ -29,4 +29,4 @@ libraryDependencies ++= Seq(
   "org.mockito" %% "mockito-scala" % "1.14.8" % "test"
 )
 
-enablePlugins(ScalatraPlugin)
+enablePlugins(JvmPlugin, ScalatraPlugin)
