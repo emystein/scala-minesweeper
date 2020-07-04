@@ -22,7 +22,7 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var s
     setCellValue(coordinates, CellValue.question)
   }
 
-  def setCellValue(coordinates: (Int, Int), value: String): Unit = {
+  def setCellValue(coordinates: Board.Coordinates, value: String): Unit = {
     board = board.setCellValue(coordinates, value)
   }
 

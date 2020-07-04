@@ -1,11 +1,11 @@
 package ar.com.flow.minesweeper
 
 class CellLocationContext(totalRows: Int, totalColumns: Int) {
-  def neighboursOf(cell: Cell): Seq[(Int, Int)] = {
+  def neighboursOf(cell: Cell): Seq[Board.Coordinates] = {
     neighboursOf(cell.row, cell.column)
   }
 
-  def neighboursOf(row: Int, column: Int): Seq[(Int, Int)] = {
+  def neighboursOf(row: Int, column: Int): Seq[Board.Coordinates] = {
     for {
       x <- row - 1 to row + 1
       y <- column - 1 to column + 1

@@ -13,7 +13,7 @@ class CellLocationContextTest extends AnyFunSuite with TableDrivenPropertyChecks
   )
 
   test("Cell neighbours") {
-    forAll(data)((rows: Int, columns: Int, row: Int, column: Int, neighbours: Seq[(Int, Int)]) => {
+    forAll(data)((rows: Int, columns: Int, row: Int, column: Int, neighbours: Seq[Board.Coordinates]) => {
       val cellLocationContext = new CellLocationContext(rows, columns)
       cellLocationContext.neighboursOf(row, column) shouldBe neighbours
     })

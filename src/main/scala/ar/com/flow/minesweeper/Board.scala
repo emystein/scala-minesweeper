@@ -1,10 +1,12 @@
 package ar.com.flow.minesweeper
 
 import scala.collection.mutable
-import scala.collection.mutable.HashMap
 import scala.util.Random
+import Board.Coordinates
 
 object Board {
+  type Coordinates = (Int, Int)
+
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Board = {
     require(totalRows > 0)
     require(totalColumns > 0)
@@ -38,7 +40,7 @@ object Board {
   }
 }
 
-case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, cellsByCoordinates: mutable.Map[(Int, Int), Cell]) {
+case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, cellsByCoordinates: mutable.Map[Coordinates, Cell]) {
   val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
 
   def cells = cellsByCoordinates.values.toSeq
@@ -57,11 +59,11 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, cellsByCoor
   def remainingEmptyCells = emptyCells -- revealedEmptyCells
 
 
-  def getCell(coordinates: (Int, Int)): Cell = {
+  def getCell(coordinates: Coordinates): Cell = {
     cellsByCoordinates(coordinates)
   }
 
-  def setCellValue(coordinates: (Int, Int), value: String): Board = {
+  def setCellValue(coordinates: Coordinates, value: String): Board = {
     cellsByCoordinates(coordinates) = cellsByCoordinates(coordinates).copy(value = value)
     Board(totalRows, totalColumns, totalBombs, cellsByCoordinates)
   }
@@ -70,7 +72,7 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, cellsByCoor
     revealCell(cell.row, cell.column)
   }
 
-  def revealCell(coordinates: (Int, Int)): Board = {
+  def revealCell(coordinates: Coordinates): Board = {
     cellsByCoordinates(coordinates) = cellsByCoordinates(coordinates).copy(isRevealed = true)
     Board(totalRows, totalColumns, totalBombs, cellsByCoordinates)
   }

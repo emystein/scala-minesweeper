@@ -70,7 +70,7 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
     }
   }
 
-  private def cellCoordinates(): (Int, Int) = {
+  private def cellCoordinates(): Board.Coordinates = {
     val x = params("row").toInt
     val y = params("column").toInt
     (x, y)
