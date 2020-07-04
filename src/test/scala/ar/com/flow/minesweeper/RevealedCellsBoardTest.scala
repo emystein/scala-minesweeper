@@ -77,7 +77,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val newBoard = board.revealCell(emptyCell.row, emptyCell.column)
 
-        newBoard.cells.remainingEmpty shouldBe board.cells.remainingEmpty - emptyCell
+        newBoard.cells.notRevealedEmpty shouldBe board.cells.notRevealedEmpty - emptyCell
       }
     }
   }

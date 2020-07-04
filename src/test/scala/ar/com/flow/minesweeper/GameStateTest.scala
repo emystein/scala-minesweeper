@@ -11,7 +11,7 @@ class GameStateTest extends AnyFunSuite with Matchers {
 
     game.revealCell(emptyCell.row, emptyCell.column)
 
-    if (game.board.cells.remainingEmpty.isEmpty) {
+    if (game.board.cells.notRevealedEmpty.isEmpty) {
       // if recursive cell reveal won the game
       game.state shouldBe GameState(GamePlayStatus.finished, GameResult.won)
     } else {

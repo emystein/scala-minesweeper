@@ -28,7 +28,7 @@ class BoardFactoryTest extends AnyFunSuite with Matchers {
   test("New board should have all empty cells as remaining") {
     val board = Board(3, 3, 2)
 
-    board.cells.remainingEmpty shouldBe board.cells.empty
+    board.cells.notRevealedEmpty shouldBe board.cells.empty
   }
 
   test("New board should have more than 0 rows") {
