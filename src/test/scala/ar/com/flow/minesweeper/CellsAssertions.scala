@@ -1,6 +1,6 @@
 package ar.com.flow.minesweeper
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 trait CellsAssertions extends Matchers {
   def allCellsShouldBeRevealed(cells: Seq[Cell], isRevealed: Boolean = true)(implicit game: Game) =

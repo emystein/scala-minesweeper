@@ -32,23 +32,19 @@ class BoardFactoryTest extends AnyFunSuite with Matchers {
   }
 
   test("New board should have more than 0 rows") {
-    assertThrows[IllegalArgumentException] {
-      Board(0, 3, 2)
-    }
-
-    assertThrows[IllegalArgumentException] {
-      Board(-1, 3, 2)
-    }
+    Range.inclusive(-1, 0).foreach(row =>
+      assertThrows[IllegalArgumentException] {
+        Board(row, 3, 2)
+      }
+    )
   }
 
   test("New board should have more than 0 columns") {
-    assertThrows[IllegalArgumentException] {
-      Board(3, 0, 2)
-    }
-
-    assertThrows[IllegalArgumentException] {
-      Board(3, -1, 2)
-    }
+    Range.inclusive(-1, 0).foreach(column =>
+      assertThrows[IllegalArgumentException] {
+        Board(3, column, 2)
+      }
+    )
   }
 
   test("New board should not have negative bombs") {

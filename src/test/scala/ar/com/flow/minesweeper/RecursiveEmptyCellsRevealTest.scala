@@ -1,9 +1,10 @@
 package ar.com.flow.minesweeper
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 
-class RecursiveEmptyCellsRevealTest extends FunSuite with TableDrivenPropertyChecks with Matchers with CellsAssertions {
+class RecursiveEmptyCellsRevealTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers with CellsAssertions {
   val data = Table(
     ("rows", "columns", "bombs"),
     (1, 1, 0),

@@ -1,8 +1,9 @@
 package ar.com.flow.minesweeper
 
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class RevealedCellsBoardTest extends FunSpec with Matchers {
+class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
   describe("Revealed cells") {
     describe("when creating a Board") {
       it("should be an empty set") {

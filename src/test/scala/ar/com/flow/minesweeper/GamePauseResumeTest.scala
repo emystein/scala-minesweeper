@@ -1,9 +1,10 @@
 package ar.com.flow.minesweeper
 
 import ar.com.flow.minesweeper.GamePlayStatus.{paused, playing}
-import org.scalatest.{FunSpec, Matchers}
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class GamePauseResumeTest extends FunSpec with Matchers {
+class GamePauseResumeTest extends AnyFunSpec with Matchers {
   describe("New Game") {
     describe("when pausing the game") {
       it("should pause the game") {

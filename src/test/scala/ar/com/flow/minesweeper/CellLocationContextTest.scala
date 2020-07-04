@@ -1,9 +1,10 @@
 package ar.com.flow.minesweeper
 
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
-import org.scalatest.{FunSuite, Matchers}
 
-class CellLocationContextTest extends FunSuite with TableDrivenPropertyChecks with Matchers {
+class CellLocationContextTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers {
   val data = Table(
     ("rows", "columns", "row", "column", "neighbours"),
     (3, 3, 1, 1, Seq((1, 2), (2, 1), (2, 2))),

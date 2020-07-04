@@ -1,9 +1,10 @@
 package ar.com.flow.minesweeper
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
 // TODO: Add precondition for board with at least 1 more empty cell than bombs
-class GameTest extends FunSuite with Matchers {
+class GameTest extends AnyFunSuite with Matchers {
   test("Question Cell") {
     val game = Game(3, 3, 2)
 

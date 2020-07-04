@@ -1,8 +1,9 @@
 package ar.com.flow.minesweeper
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class BoardTest extends FunSuite with Matchers {
+class BoardTest extends AnyFunSuite with Matchers {
   val board = Board(3, 3, 2)
 
   test("Get cell inside boundaries") {
