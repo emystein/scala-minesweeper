@@ -2,7 +2,7 @@ package ar.com.flow.minesweeper.rest
 
 import java.time.format.DateTimeFormatter
 
-import ar.com.flow.minesweeper.{Board, Cell, Game}
+import ar.com.flow.minesweeper.{Board, Cell, Cells, Game}
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
@@ -23,6 +23,9 @@ object BoardResource {
 case class BoardResource(totalRows: Int, totalColumns: Int, totalBombs: Int, cells: Seq[CellResource])
 
 object CellResourceFactory {
+  def from(cells: Cells): Seq[CellResource] = {
+    from(cells.all.toSeq)
+  }
   def from(cells: Seq[Cell]): Seq[CellResource] = {
     cells.map(from(_)).sorted
   }

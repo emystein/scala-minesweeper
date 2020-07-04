@@ -43,21 +43,14 @@ object Board {
 case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, cellsByCoordinates: mutable.Map[Coordinates, Cell]) {
   val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
 
-  def cells = cellsByCoordinates.values.toSeq
-
-  // TODO: Remove unneeded methods
-  def bombCells = cells.filter(_.hasBomb)
-
-  def emptyCells = cells.toSet -- bombCells
-
-  def revealedCells = cells.toSet.filter(_.isRevealed)
-
-  def revealedBombCells = revealedCells.filter(_.hasBomb)
-
-  def revealedEmptyCells = revealedCells -- revealedBombCells
-
-  def remainingEmptyCells = emptyCells -- revealedEmptyCells
-
+  def cells = Cells(cellsByCoordinates.values.toSet)
+  // TODO remove and reuse methods from Cells
+  def bombCells = cells.withBomb
+  def emptyCells = cells.empty
+  def revealedCells = cells.revealed
+  def revealedBombCells = cells.revealedWithBomb
+  def revealedEmptyCells = cells.revealedEmpty
+  def remainingEmptyCells = cells.remainingEmptyCells
 
   def getCell(coordinates: Coordinates): Cell = {
     cellsByCoordinates(coordinates)
