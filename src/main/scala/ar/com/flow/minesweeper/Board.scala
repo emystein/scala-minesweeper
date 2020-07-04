@@ -1,8 +1,9 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.Board.Coordinates
+
 import scala.collection.mutable
 import scala.util.Random
-import Board.Coordinates
 
 object Board {
   type Coordinates = (Int, Int)
@@ -44,13 +45,6 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, cellsByCoor
   val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
 
   def cells = Cells(cellsByCoordinates.values.toSet)
-  // TODO remove and reuse methods from Cells
-  def bombCells = cells.withBomb
-  def emptyCells = cells.empty
-  def revealedCells = cells.revealed
-  def revealedBombCells = cells.revealedWithBomb
-  def revealedEmptyCells = cells.revealedEmpty
-  def remainingEmptyCells = cells.remainingEmptyCells
 
   def getCell(coordinates: Coordinates): Cell = {
     cellsByCoordinates(coordinates)

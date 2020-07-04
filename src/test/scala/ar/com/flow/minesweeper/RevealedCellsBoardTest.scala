@@ -9,7 +9,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
       it("should be an empty set") {
         val board = Board(3, 3, 2)
 
-        board.revealedCells shouldBe Set.empty
+        board.cells.revealed shouldBe Set.empty
       }
     }
     describe("when revealing a cell") {
@@ -19,7 +19,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
           board.revealCell(1, 1)
 
-          board.revealedCells shouldBe Set(board.getCell(1, 1))
+          board.cells.revealed shouldBe Set(board.getCell(1, 1))
         }
       }
       describe("already revealed") {
@@ -29,7 +29,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
           board.revealCell(1, 1)
           board.revealCell(1, 1)
 
-          board.revealedCells shouldBe Set(board.getCell(1, 1))
+          board.cells.revealed shouldBe Set(board.getCell(1, 1))
         }
       }
     }
@@ -40,30 +40,30 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
       it("should contain empty cell") {
         val board = Board(3, 3, 2)
 
-        board.revealedEmptyCells shouldBe Set()
+        board.cells.revealedEmpty shouldBe Set()
 
-        val emptyCell = board.emptyCells.head
+        val emptyCell = board.cells.empty.head
 
         board.revealCell(emptyCell.row, emptyCell.column)
 
         val revealedEmptyCell = emptyCell.copy(isRevealed = true)
 
-        board.revealedEmptyCells shouldBe Set(revealedEmptyCell)
+        board.cells.revealedEmpty shouldBe Set(revealedEmptyCell)
       }
     }
     describe("when revealed bomb cell") {
       it("should not contain bomb cell") {
         val board = Board(3, 3, 2)
 
-        board.revealedEmptyCells shouldBe Set()
+        board.cells.revealedEmpty shouldBe Set()
 
-        val bombCell = board.bombCells.head
+        val bombCell = board.cells.withBomb.head
 
         board.revealCell(bombCell.row, bombCell.column)
 
         val revealedBombCell = bombCell.copy(isRevealed = true)
 
-        board.revealedEmptyCells should not contain revealedBombCell
+        board.cells.revealedEmpty should not contain revealedBombCell
       }
     }
   }
@@ -73,11 +73,11 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
       it("should be removed from remaining empty cells") {
         val board = Board(3, 3, 2)
 
-        val emptyCell = board.emptyCells.head
+        val emptyCell = board.cells.empty.head
 
         val newBoard = board.revealCell(emptyCell.row, emptyCell.column)
 
-        newBoard.remainingEmptyCells shouldBe board.remainingEmptyCells - emptyCell
+        newBoard.cells.remainingEmpty shouldBe board.cells.remainingEmpty - emptyCell
       }
     }
   }

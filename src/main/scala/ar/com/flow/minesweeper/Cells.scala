@@ -13,7 +13,7 @@ case class Cells(empty: Set[Cell], withBomb: Set[Cell], revealed: Set[Cell]) {
   def all: Set[Cell] = empty ++ withBomb
   def revealedEmpty: Set[Cell] = revealed.filter(!_.hasBomb)
   def revealedWithBomb: Set[Cell] = revealed.filter(_.hasBomb)
-  def remainingEmptyCells = empty -- revealedEmpty
+  def remainingEmpty: Set[Cell] = empty -- revealedEmpty
 
   def toSeq: Seq[Cell] = all.toSeq
 

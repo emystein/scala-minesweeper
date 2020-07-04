@@ -31,7 +31,7 @@ class CellsTest extends AnyWordSpec with Matchers {
 
         val cells: Cells = Cells(Set(notRevealedEmptyCell, revealedEmptyCell, revealedCellWithBomb))
 
-        cells.remainingEmptyCells shouldBe Set(notRevealedEmptyCell)
+        cells.remainingEmpty shouldBe Set(notRevealedEmptyCell)
       }
     }
     "created with revealed cells" should {
