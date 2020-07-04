@@ -9,7 +9,7 @@ class BoardFactoryTest extends AnyFunSuite with Matchers {
 
     board.totalRows shouldBe 3
     board.totalColumns shouldBe 3
-    board.cells should have size 9
+    board.cellsByCoordinates should have size 9
     board.bombCells should have size 2
   }
 

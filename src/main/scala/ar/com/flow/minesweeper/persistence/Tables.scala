@@ -7,6 +7,8 @@ import ar.com.flow.minesweeper.{Board, Cell}
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 
+import scala.collection.mutable
+
 object Tables {
   implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Timestamp](
     localDateTime => Timestamp.valueOf(localDateTime),
@@ -57,7 +59,8 @@ object Tables {
   val dropSchemaAction = (games.schema ++ boards.schema ++ cells.schema).drop
 
   def mapToBoard(result: Seq[((GameTuple, BoardTuple), CellTuple)]): Board = {
-    Board(result.head._1._2._2, result.head._1._2._3, result.head._1._2._4, result.map(c => Tables.mapToCell(c._2)))
+    val cellsByCoordinates = mutable.HashMap(result.map(c => Tables.mapToCell(c._2)).map(c => (c.row, c.column) -> c): _*)
+    Board(result.head._1._2._2, result.head._1._2._3, result.head._1._2._4, cellsByCoordinates)
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {

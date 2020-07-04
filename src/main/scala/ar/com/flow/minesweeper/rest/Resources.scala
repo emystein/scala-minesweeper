@@ -16,7 +16,7 @@ case class GameResource(id: String, createdAt: String, board: BoardResource, sta
 
 object BoardResource {
   def apply(board: Board): BoardResource = {
-    BoardResource(board.totalRows, board.totalColumns, board.totalBombs, CellResourceFactory.from(board.cells))
+    BoardResource(board.totalRows, board.totalColumns, board.totalBombs, CellResourceFactory.from(board.cells.toSeq))
   }
 }
 

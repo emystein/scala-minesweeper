@@ -1,5 +1,6 @@
 package ar.com.flow.minesweeper
 
+import scala.collection.mutable
 import scala.collection.mutable.HashMap
 import scala.util.Random
 
@@ -28,28 +29,26 @@ object Board {
       } yield {
         val hasBomb = bombCoordinates.contains(row, column)
         val adjacentBombs = cellLocationContext.neighboursOf(row, column).count(bombCoordinates.contains)
-        new Cell(row, column, hasBomb, adjacentBombs)
+        Cell(row, column, hasBomb, adjacentBombs)
       }
     }
 
-    Board(totalRows, totalColumns, totalBombs, cells)
+    val cellMap = mutable.HashMap(cells.map(c => (c.row, c.column) -> c): _*)
+    Board(totalRows, totalColumns, totalBombs, cellMap)
   }
 }
 
-case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCells: Seq[Cell]) {
-  private val cellMap = HashMap(initialCells.map(c => (c.row, c.column) -> c): _*)
-  private def cellsSet = cellMap.values.toSet
-
+case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, cellsByCoordinates: mutable.Map[(Int, Int), Cell]) {
   val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
 
-  def cells: Seq[Cell] = cellMap.values.toSeq.sorted
+  def cells = cellsByCoordinates.values.toSeq
 
   // TODO: Remove unneeded methods
-  def bombCells = cellsSet.filter(_.hasBomb)
+  def bombCells = cells.filter(_.hasBomb)
 
-  def emptyCells = cellsSet -- bombCells
+  def emptyCells = cells.toSet -- bombCells
 
-  def revealedCells = cellsSet.filter(_.isRevealed)
+  def revealedCells = cells.toSet.filter(_.isRevealed)
 
   def revealedBombCells = revealedCells.filter(_.hasBomb)
 
@@ -59,12 +58,12 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCell
 
 
   def getCell(coordinates: (Int, Int)): Cell = {
-    cellMap(coordinates)
+    cellsByCoordinates(coordinates)
   }
 
   def setCellValue(coordinates: (Int, Int), value: String): Board = {
-    cellMap(coordinates) = cellMap(coordinates).copy(value = value)
-    Board(totalRows, totalColumns, totalBombs, cells)
+    cellsByCoordinates(coordinates) = cellsByCoordinates(coordinates).copy(value = value)
+    Board(totalRows, totalColumns, totalBombs, cellsByCoordinates)
   }
 
   def revealCell(cell: Cell): Board = {
@@ -72,8 +71,8 @@ case class Board(totalRows: Int, totalColumns: Int, totalBombs: Int, initialCell
   }
 
   def revealCell(coordinates: (Int, Int)): Board = {
-    cellMap(coordinates) = cellMap(coordinates).copy(isRevealed = true)
-    Board(totalRows, totalColumns, totalBombs, cells)
+    cellsByCoordinates(coordinates) = cellsByCoordinates(coordinates).copy(isRevealed = true)
+    Board(totalRows, totalColumns, totalBombs, cellsByCoordinates)
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {
