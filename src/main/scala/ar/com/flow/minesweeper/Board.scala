@@ -5,6 +5,10 @@ import scala.util.Random
 
 object Board {
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Board = {
+    require(totalRows > 0)
+    require(totalColumns > 0)
+    require(totalBombs >= 0)
+
     val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
 
     val cells = {

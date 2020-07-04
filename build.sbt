@@ -29,4 +29,4 @@ libraryDependencies ++= Seq(
   "org.mockito" %% "mockito-scala" % "1.14.8" % "test"
 )
 
-enablePlugins(JvmPlugin, ScalatraPlugin)
+enablePlugins(ScalatraPlugin)
