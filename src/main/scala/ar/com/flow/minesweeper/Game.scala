@@ -5,7 +5,7 @@ import java.util.UUID
 
 object Game {
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Game = {
-    new Game(UUID.randomUUID().toString, LocalDateTime.now, Board(totalRows, totalColumns, totalBombs))
+    new Game(UUID.randomUUID().toString, LocalDateTime.now, Board(Dimensions(totalRows, totalColumns), totalBombs))
   }
 }
 

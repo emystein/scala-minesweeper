@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class BoardTest extends AnyFunSuite with Matchers {
-  val board = Board(3, 3, 2)
+  val board = Board(Dimensions(3, 3), 2)
 
   test("Get cell inside boundaries") {
     board.getCell(1, 1).value shouldBe CellValue.empty

@@ -8,23 +8,22 @@ import scala.util.Random
 object Board {
   type Coordinates = (Int, Int)
 
-  def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Board = {
-    require(totalRows > 0)
-    require(totalColumns > 0)
+  def apply(dimensions: Dimensions, totalBombs: Int): Board = {
+    require(totalBombs >= 0)
+    val rows = dimensions.rows
+    val columns = dimensions.columns
+    Board(rows, columns, totalBombs, cellsByCoordinates(rows, columns, totalBombs))
+  }
+
+  def cellsByCoordinates(totalRows: Int, totalColumns: Int, totalBombs: Int): mutable.Map[Coordinates, Cell] = {
     require(totalBombs >= 0)
 
     val cellLocationContext = new CellLocationContext(totalRows, totalColumns)
 
     val cells = {
-      val allCoordinates = for {
-        rowNumber <- 1 to totalRows
-        columnNumber <- 1 to totalColumns
-      } yield {
-        (rowNumber, columnNumber)
-      }
+      val allCoordinates = this.allCoordinates(totalRows, totalColumns)
 
-      val randomCoordinates = Random.shuffle(allCoordinates)
-      val bombCoordinates = randomCoordinates.take(totalBombs)
+      val bombCoordinates = Random.shuffle(allCoordinates).take(totalBombs)
 
       for {
         row <- 1 to totalRows
@@ -36,8 +35,16 @@ object Board {
       }
     }
 
-    val cellMap = mutable.HashMap(cells.map(c => (c.row, c.column) -> c): _*)
-    Board(totalRows, totalColumns, totalBombs, cellMap)
+    mutable.HashMap(cells.map(c => (c.row, c.column) -> c): _*)
+  }
+
+  def allCoordinates(totalRows: Int, totalColumns: Int): Seq[Coordinates] = {
+    for {
+      row <- 1 to totalRows
+      column <- 1 to totalColumns
+    } yield {
+      (row, column)
+    }
   }
 }
 
