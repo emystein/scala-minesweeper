@@ -3,7 +3,7 @@ package ar.com.flow.minesweeper.persistence
 import java.sql.Timestamp
 import java.time.LocalDateTime
 
-import ar.com.flow.minesweeper.{Board, Cell}
+import ar.com.flow.minesweeper.{Board, Cell, Dimensions}
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 
@@ -60,7 +60,7 @@ object Tables {
 
   def mapToBoard(result: Seq[((GameTuple, BoardTuple), CellTuple)]): Board = {
     val cellsByCoordinates = mutable.HashMap(result.map(c => Tables.mapToCell(c._2)).map(c => (c.row, c.column) -> c): _*)
-    Board(result.head._1._2._2, result.head._1._2._3, result.head._1._2._4, cellsByCoordinates)
+    Board(Dimensions(result.head._1._2._2, result.head._1._2._3), result.head._1._2._4, cellsByCoordinates)
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {

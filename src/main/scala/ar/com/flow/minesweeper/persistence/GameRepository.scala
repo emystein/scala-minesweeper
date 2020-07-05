@@ -16,7 +16,7 @@ class GameRepository(val db: Database) {
     db.run(DBIO.sequence(cellsToBeInsertedOrUpdated))
 
     db.run(DBIO.seq(
-      Tables.boards += (game.id, game.board.totalRows, game.board.totalColumns, game.board.totalBombs),
+      Tables.boards += (game.id, game.board.dimensions.rows, game.board.dimensions.columns, game.board.totalBombs),
       Tables.games += (game.id, game.createdAt)
     ))
   }
