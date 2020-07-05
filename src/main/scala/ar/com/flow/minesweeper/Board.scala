@@ -14,9 +14,9 @@ object Board {
   }
 
   def cellsByCoordinates(dimensions: Dimensions, totalBombs: Int): mutable.Map[Coordinates, Cell] = {
-    val cellLocationContext = new CellLocationContext(dimensions.rows, dimensions.columns)
+    val cellLocationContext = new CellLocationContext(dimensions)
 
-    val cells = {
+    val cellsByCoordinates = {
       val allCoordinates = this.allCoordinates(dimensions.rows, dimensions.columns)
 
       val bombCoordinates = Random.shuffle(allCoordinates).take(totalBombs)
@@ -27,11 +27,11 @@ object Board {
       } yield {
         val hasBomb = bombCoordinates.contains(row, column)
         val adjacentBombs = cellLocationContext.neighboursOf(row, column).count(bombCoordinates.contains)
-        Cell(row, column, hasBomb, adjacentBombs)
+        (row, column) -> Cell(row, column, hasBomb, adjacentBombs)
       }
     }
 
-    mutable.HashMap(cells.map(c => (c.row, c.column) -> c): _*)
+    mutable.HashMap(cellsByCoordinates: _*)
   }
 
   def allCoordinates(totalRows: Int, totalColumns: Int): Seq[Coordinates] = {
@@ -45,7 +45,7 @@ object Board {
 }
 
 case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: mutable.Map[Coordinates, Cell]) {
-  val cellLocationContext = new CellLocationContext(dimensions.rows, dimensions.columns)
+  val cellLocationContext = new CellLocationContext(dimensions)
 
   def cells = Cells(cellsByCoordinates.values.toSet)
 
