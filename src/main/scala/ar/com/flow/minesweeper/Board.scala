@@ -13,10 +13,10 @@ object Board {
     Board(dimensions, totalBombs, cellsByCoordinates(dimensions, totalBombs))
   }
 
-  def cellsByCoordinates(dimensions: Dimensions, totalBombs: Int): mutable.Map[Coordinates, Cell] = {
+  def cellsByCoordinates(dimensions: Dimensions, totalBombs: Int): Map[Coordinates, Cell] = {
     val cellLocationContext = new CellLocationContext(dimensions)
 
-    val cellsByCoordinates = {
+    {
       val allCoordinates = this.allCoordinates(dimensions.rows, dimensions.columns)
 
       val bombCoordinates = Random.shuffle(allCoordinates).take(totalBombs)
@@ -29,9 +29,7 @@ object Board {
         val adjacentBombs = cellLocationContext.neighboursOf(row, column).count(bombCoordinates.contains)
         (row, column) -> Cell(row, column, hasBomb, adjacentBombs)
       }
-    }
-
-    mutable.HashMap(cellsByCoordinates: _*)
+    }.toMap
   }
 
   def allCoordinates(totalRows: Int, totalColumns: Int): Seq[Coordinates] = {
@@ -44,7 +42,7 @@ object Board {
   }
 }
 
-case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: mutable.Map[Coordinates, Cell]) {
+case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[Coordinates, Cell]) {
   val cellLocationContext = new CellLocationContext(dimensions)
 
   def cells = Cells(cellsByCoordinates.values.toSet)
@@ -54,8 +52,7 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: mu
   }
 
   def setCellValue(coordinates: Coordinates, value: String): Board = {
-    cellsByCoordinates(coordinates) = cellsByCoordinates(coordinates).copy(value = value)
-    Board(dimensions, totalBombs, cellsByCoordinates)
+    Board(dimensions, totalBombs, cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(value = value)))
   }
 
   def revealCell(cell: Cell): Board = {
@@ -63,8 +60,7 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: mu
   }
 
   def revealCell(coordinates: Coordinates): Board = {
-    cellsByCoordinates(coordinates) = cellsByCoordinates(coordinates).copy(isRevealed = true)
-    Board(dimensions, totalBombs, cellsByCoordinates)
+    Board(dimensions, totalBombs,  cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(isRevealed = true)))
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {

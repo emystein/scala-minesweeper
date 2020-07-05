@@ -17,9 +17,9 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
         it("should add cell to revealed cell set") {
           val board = Board(Dimensions(3, 3), 2)
 
-          board.revealCell(1, 1)
+          val updatedBoard = board.revealCell(1, 1)
 
-          board.cells.revealed shouldBe Set(board.getCell(1, 1))
+          updatedBoard.cells.revealed shouldBe Set(updatedBoard.getCell(1, 1))
         }
       }
       describe("already revealed") {
@@ -27,9 +27,9 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
           val board = Board(Dimensions(3, 3), 2)
 
           board.revealCell(1, 1)
-          board.revealCell(1, 1)
+          val updatedBoard = board.revealCell(1, 1)
 
-          board.cells.revealed shouldBe Set(board.getCell(1, 1))
+          updatedBoard.cells.revealed shouldBe Set(updatedBoard.getCell(1, 1))
         }
       }
     }
@@ -44,11 +44,11 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val emptyCell = board.cells.empty.head
 
-        board.revealCell(emptyCell.row, emptyCell.column)
+        val updatedBoard = board.revealCell(emptyCell.row, emptyCell.column)
 
         val revealedEmptyCell = emptyCell.copy(isRevealed = true)
 
-        board.cells.revealedEmpty shouldBe Set(revealedEmptyCell)
+        updatedBoard.cells.revealedEmpty shouldBe Set(revealedEmptyCell)
       }
     }
     describe("when revealed bomb cell") {
@@ -59,11 +59,11 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val bombCell = board.cells.withBomb.head
 
-        board.revealCell(bombCell.row, bombCell.column)
+        val updatedBoard = board.revealCell(bombCell.row, bombCell.column)
 
         val revealedBombCell = bombCell.copy(isRevealed = true)
 
-        board.cells.revealedEmpty should not contain revealedBombCell
+        updatedBoard.cells.revealedEmpty should not contain revealedBombCell
       }
     }
   }
@@ -75,9 +75,9 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val emptyCell = board.cells.empty.head
 
-        val newBoard = board.revealCell(emptyCell.row, emptyCell.column)
+        val updatedBoard = board.revealCell(emptyCell.row, emptyCell.column)
 
-        newBoard.cells.notRevealedEmpty shouldBe board.cells.notRevealedEmpty - emptyCell
+        updatedBoard.cells.notRevealedEmpty shouldBe board.cells.notRevealedEmpty - emptyCell
       }
     }
   }
