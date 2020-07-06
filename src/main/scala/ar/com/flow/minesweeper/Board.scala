@@ -2,7 +2,6 @@ package ar.com.flow.minesweeper
 
 import ar.com.flow.minesweeper.Board.Coordinates
 
-import scala.collection.mutable
 import scala.util.Random
 
 object Board {
@@ -14,20 +13,17 @@ object Board {
   }
 
   def cellsByCoordinates(dimensions: Dimensions, totalBombs: Int): Map[Coordinates, Cell] = {
-    val cellLocationContext = new CellLocationContext(dimensions)
+    val allCoordinates = this.allCoordinates(dimensions.rows, dimensions.columns)
+
+    val bombCoordinates = Random.shuffle(allCoordinates).take(totalBombs)
 
     {
-      val allCoordinates = this.allCoordinates(dimensions.rows, dimensions.columns)
-
-      val bombCoordinates = Random.shuffle(allCoordinates).take(totalBombs)
-
       for {
         row <- 1 to dimensions.rows
         column <- 1 to dimensions.columns
       } yield {
         val hasBomb = bombCoordinates.contains(row, column)
-        val adjacentBombs = cellLocationContext.neighboursOf(row, column).count(bombCoordinates.contains)
-        (row, column) -> Cell(row, column, hasBomb, adjacentBombs)
+        (row, column) -> Cell(row, column, hasBomb)
       }
     }.toMap
   }
@@ -60,10 +56,14 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   }
 
   def revealCell(coordinates: Coordinates): Board = {
-    Board(dimensions, totalBombs,  cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(isRevealed = true)))
+    Board(dimensions, totalBombs, cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(isRevealed = true)))
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {
     cellLocationContext.neighboursOf(cell).map(getCell)
+  }
+
+  def adjacentBombsOf(cell: Cell): Seq[Cell] = {
+    cellLocationContext.neighboursOf(cell).map(getCell).filter(_.hasBomb)
   }
 }

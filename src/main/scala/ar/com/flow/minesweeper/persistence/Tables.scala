@@ -8,7 +8,6 @@ import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 
 import scala.collection.immutable.HashMap
-import scala.collection.mutable
 
 object Tables {
   implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Timestamp](
@@ -36,18 +35,17 @@ object Tables {
     def * = (id, rows, columns, bombs)
   }
 
-  type CellTuple = (String, Int, Int, Boolean, Int, Boolean, String)
+  type CellTuple = (String, Int, Int, Boolean, Boolean, String)
 
   class Cells(tag: Tag) extends Table[CellTuple](tag, "cell") {
     def id = column[String]("id")
     def row = column[Int]("row")
     def col = column[Int]("column")
     def hasBomb = column[Boolean]("has_bomb")
-    def numberOfAdjacentBombs = column[Int]("adjacent_bombs")
     def isRevealed = column[Boolean]("is_revealed")
     def value = column[String]("value")
     def pk = primaryKey("cell_pk", (id, row, col))
-    def * = (id, row, col, hasBomb, numberOfAdjacentBombs, isRevealed, value)
+    def * = (id, row, col, hasBomb, isRevealed, value)
   }
 
   val games = TableQuery[Games]
@@ -65,10 +63,10 @@ object Tables {
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.row, cell.column, cell.hasBomb, cell.numberOfAdjacentBombs, cell.isRevealed, cell.value)
+    (gameId, cell.row, cell.column, cell.hasBomb, cell.isRevealed, cell.value)
   }
 
   def mapToCell(cellTuple: CellTuple) : Cell = {
-    Cell(cellTuple._2, cellTuple._3, cellTuple._4, cellTuple._5, cellTuple._6, cellTuple._7)
+    Cell(cellTuple._2, cellTuple._3, cellTuple._4, cellTuple._5, cellTuple._6)
   }
 }

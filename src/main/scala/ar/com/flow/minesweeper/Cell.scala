@@ -1,7 +1,6 @@
 package ar.com.flow.minesweeper
 
-// TODO: Calculate numberOfAdjacentBombs in runtime? It would require a cell to know its neighbours...
-case class Cell(row: Int, column: Int, hasBomb: Boolean = false, numberOfAdjacentBombs: Int = 0, isRevealed: Boolean = false, value: String = "") extends Ordered[Cell] {
+case class Cell(row: Int, column: Int, hasBomb: Boolean = false, isRevealed: Boolean = false, value: String = "") extends Ordered[Cell] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 

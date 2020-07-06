@@ -16,26 +16,23 @@ case class GameResource(id: String, createdAt: String, board: BoardResource, sta
 
 object BoardResource {
   def apply(board: Board): BoardResource = {
-    BoardResource(board.dimensions, board.totalBombs, CellResourceFactory.from(board.cells.toSeq))
+    BoardResource(board.dimensions, board.totalBombs, CellResourceFactory.from(board))
   }
 }
 
 case class BoardResource(dimensions: Dimensions, totalBombs: Int, cells: Seq[CellResource])
 
 object CellResourceFactory {
-  def from(cells: Cells): Seq[CellResource] = {
-    from(cells.all.toSeq)
-  }
-  def from(cells: Seq[Cell]): Seq[CellResource] = {
-    cells.map(from(_)).sorted
+  def from(board: Board): Seq[CellResource] = {
+    board.cells.toSeq.map(from(board, _)).sorted
   }
 
-  def from(cell: Cell): CellResource = {
-    CellResource(cell.row, cell.column, cell.hasBomb, cell.numberOfAdjacentBombs, cell.isRevealed, cell.value)
+  def from(board: Board, cell: Cell): CellResource = {
+    CellResource(cell.row, cell.column, cell.hasBomb, cell.isRevealed, cell.value)
   }
 }
 
-case class CellResource(row: Int, column: Int, hasBomb: Boolean = false, numberOfAdjacentBombs: Int = 0, isRevealed: Boolean = false, value: String = "") extends Ordered[CellResource] {
+case class CellResource(row: Int, column: Int, hasBomb: Boolean = false, isRevealed: Boolean = false, value: String = "") extends Ordered[CellResource] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 
@@ -47,7 +44,6 @@ case class CellResource(row: Int, column: Int, hasBomb: Boolean = false, numberO
     row == cell.row &&
       column == cell.column &&
       hasBomb == cell.hasBomb &&
-      numberOfAdjacentBombs == cell.numberOfAdjacentBombs &&
       isRevealed == cell.isRevealed &&
       value == cell.value
   }

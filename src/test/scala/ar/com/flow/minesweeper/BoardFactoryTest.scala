@@ -12,18 +12,6 @@ class BoardFactoryTest extends AnyFunSuite with Matchers {
     board.cells.withBomb should have size 2
   }
 
-  test("Adjacent bombs") {
-    val board = Board(Dimensions(3, 3), 2)
-
-    for {
-      cell <- board.cells
-    } yield {
-      val adjacentBombs = board.adjacentCellsOf(cell).count(board.cells.withBomb.contains)
-
-      cell.numberOfAdjacentBombs shouldBe adjacentBombs
-    }
-  }
-
   test("New board should have all empty cells as remaining") {
     val board = Board(Dimensions(3, 3), 2)
 

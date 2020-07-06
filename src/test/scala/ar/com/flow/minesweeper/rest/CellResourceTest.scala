@@ -8,14 +8,14 @@ class CellResourceTest extends AnyFunSuite with Matchers {
   test("Create CellResources from Cells") {
     val board = Board(Dimensions(2, 2), 2)
 
-    val cellResources = CellResourceFactory.from(board.cells)
+    val cellResources = CellResourceFactory.from(board)
 
     cellResources.foreach(cr => cr.mapsTo(board.getCell(cr.row, cr.column)) shouldBe true)
   }
 
   test("Map Cell to CellResource") {
-    val cell = new Cell(1, 1, true, 0, false)
-    val cellResource = CellResource(cell.row, cell.column, cell.hasBomb, cell.numberOfAdjacentBombs, cell.isRevealed)
+    val cell = new Cell(1, 1, true, false)
+    val cellResource = CellResource(cell.row, cell.column, cell.hasBomb, cell.isRevealed)
     cellResource.mapsTo(cell) shouldBe true
   }
 }
