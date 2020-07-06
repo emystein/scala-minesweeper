@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 
-class CellLocationContextTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers {
+class CellNeighboursTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers {
   val data = Table(
     ("rows", "columns", "row", "column", "neighbours"),
     (3, 3, 1, 1, Seq((1, 2), (2, 1), (2, 2))),
@@ -14,8 +14,8 @@ class CellLocationContextTest extends AnyFunSuite with TableDrivenPropertyChecks
 
   test("Cell neighbours") {
     forAll(data)((rows: Int, columns: Int, row: Int, column: Int, neighbours: Seq[Board.Coordinates]) => {
-      val cellLocationContext = new CellLocationContext(Dimensions(rows, columns))
-      cellLocationContext.neighboursOf(row, column) shouldBe neighbours
+      val board = Board(Dimensions(rows, columns), totalBombs = 0)
+      board.neighboursOf(Cell(row, column)) shouldBe neighbours
     })
   }
 }

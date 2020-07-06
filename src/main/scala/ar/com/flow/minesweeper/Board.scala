@@ -39,8 +39,6 @@ object Board {
 }
 
 case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[Coordinates, Cell]) {
-  val cellLocationContext = new CellLocationContext(dimensions)
-
   def cells = Cells(cellsByCoordinates.values.toSet)
 
   def getCell(coordinates: Coordinates): Cell = {
@@ -60,10 +58,22 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    cellLocationContext.neighboursOf(cell).map(getCell)
+    neighboursOf(cell).map(getCell)
   }
 
   def adjacentBombsOf(cell: Cell): Seq[Cell] = {
-    cellLocationContext.neighboursOf(cell).map(getCell).filter(_.hasBomb)
+    neighboursOf(cell).map(getCell).filter(_.hasBomb)
+  }
+
+  def neighboursOf(cell: Cell): Seq[Board.Coordinates] = {
+    neighboursOf(cell.row, cell.column)
+  }
+
+  private def neighboursOf(row: Int, column: Int): Seq[Board.Coordinates] = {
+    for {
+      x <- row - 1 to row + 1
+      y <- column - 1 to column + 1
+      if (x > 0 && x <= dimensions.rows) && (y > 0 && y <= dimensions.columns) && (x != row || y != column)
+    } yield (x, y)
   }
 }
