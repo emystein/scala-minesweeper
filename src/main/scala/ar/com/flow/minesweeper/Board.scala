@@ -38,7 +38,7 @@ object Board {
   }
 }
 
-case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[Coordinates, Cell]) {
+case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[Coordinates, Cell]) extends RectangleCoordinates {
   def cells = Cells(cellsByCoordinates.values.toSet)
 
   def getCell(coordinates: Coordinates): Cell = {
@@ -58,18 +58,10 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    neighbourCoordinatesOf(cell).map(getCell)
+    neighboursOf(cell.row, cell.column).map(getCell)
   }
 
   def adjacentBombsOf(cell: Cell): Seq[Cell] = {
-    neighbourCoordinatesOf(cell).map(getCell).filter(_.hasBomb)
-  }
-
-  def neighbourCoordinatesOf(cell: Cell): Seq[Board.Coordinates] = {
-    for {
-      x <- cell.row - 1 to cell.row + 1
-      y <- cell.column - 1 to cell.column + 1
-      if (x > 0 && x <= dimensions.rows) && (y > 0 && y <= dimensions.columns) && (x != cell.row || y != cell.column)
-    } yield (x, y)
+    neighboursOf(cell.row, cell.column).map(getCell).filter(_.hasBomb)
   }
 }
