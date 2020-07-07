@@ -15,7 +15,7 @@ class CellNeighboursTest extends AnyFunSuite with TableDrivenPropertyChecks with
   test("Cell neighbours") {
     forAll(data)((rows: Int, columns: Int, row: Int, column: Int, neighbours: Seq[Board.Coordinates]) => {
       val board = Board(Dimensions(rows, columns), totalBombs = 0)
-      board.neighboursOf(Cell(row, column)) shouldBe neighbours
+      board.neighbourCoordinatesOf(Cell(row, column)) shouldBe neighbours
     })
   }
 }

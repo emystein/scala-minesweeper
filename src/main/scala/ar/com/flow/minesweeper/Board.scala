@@ -58,22 +58,18 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    neighboursOf(cell).map(getCell)
+    neighbourCoordinatesOf(cell).map(getCell)
   }
 
   def adjacentBombsOf(cell: Cell): Seq[Cell] = {
-    neighboursOf(cell).map(getCell).filter(_.hasBomb)
+    neighbourCoordinatesOf(cell).map(getCell).filter(_.hasBomb)
   }
 
-  def neighboursOf(cell: Cell): Seq[Board.Coordinates] = {
-    neighboursOf(cell.row, cell.column)
-  }
-
-  private def neighboursOf(row: Int, column: Int): Seq[Board.Coordinates] = {
+  def neighbourCoordinatesOf(cell: Cell): Seq[Board.Coordinates] = {
     for {
-      x <- row - 1 to row + 1
-      y <- column - 1 to column + 1
-      if (x > 0 && x <= dimensions.rows) && (y > 0 && y <= dimensions.columns) && (x != row || y != column)
+      x <- cell.row - 1 to cell.row + 1
+      y <- cell.column - 1 to cell.column + 1
+      if (x > 0 && x <= dimensions.rows) && (y > 0 && y <= dimensions.columns) && (x != cell.row || y != cell.column)
     } yield (x, y)
   }
 }
