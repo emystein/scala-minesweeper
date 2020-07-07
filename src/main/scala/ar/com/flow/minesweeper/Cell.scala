@@ -7,6 +7,8 @@ case class Cell(row: Int, column: Int, hasBomb: Boolean = false, isRevealed: Boo
   override def compare(that: Cell): Int = {
     (this.row, this.column) compare (that.row, that.column)
   }
+
+  def coordinates: Board.Coordinates = (row, column)
 }
 
 //case class EmptyCell(override val row: Int, override val column: Int, override val numberOfAdjacentBombs: Int = 0, override val isRevealed: Boolean = false, override val value: String = "") extends Cell(row, column, false, numberOfAdjacentBombs, isRevealed, value )

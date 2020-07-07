@@ -17,7 +17,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
         it("should add cell to revealed cell set") {
           val board = Board(Dimensions(3, 3), 2)
 
-          val updatedBoard = board.revealCell(1, 1)
+          val updatedBoard = board.revealCell(Cell(1, 1))
 
           updatedBoard.cells.revealed shouldBe Set(updatedBoard.getCell(1, 1))
         }
@@ -26,8 +26,8 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
         it("should not add cell to revealed cell set") {
           val board = Board(Dimensions(3, 3), 2)
 
-          board.revealCell(1, 1)
-          val updatedBoard = board.revealCell(1, 1)
+          board.revealCell(Cell(1, 1))
+          val updatedBoard = board.revealCell(Cell(1, 1))
 
           updatedBoard.cells.revealed shouldBe Set(updatedBoard.getCell(1, 1))
         }
@@ -44,7 +44,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val emptyCell = board.cells.empty.head
 
-        val updatedBoard = board.revealCell(emptyCell.row, emptyCell.column)
+        val updatedBoard = board.revealCell(emptyCell)
 
         val revealedEmptyCell = emptyCell.copy(isRevealed = true)
 
@@ -59,7 +59,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val bombCell = board.cells.withBomb.head
 
-        val updatedBoard = board.revealCell(bombCell.row, bombCell.column)
+        val updatedBoard = board.revealCell(bombCell)
 
         val revealedBombCell = bombCell.copy(isRevealed = true)
 
@@ -75,7 +75,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val emptyCell = board.cells.empty.head
 
-        val updatedBoard = board.revealCell(emptyCell.row, emptyCell.column)
+        val updatedBoard = board.revealCell(emptyCell)
 
         updatedBoard.cells.notRevealedEmpty shouldBe board.cells.notRevealedEmpty - emptyCell
       }

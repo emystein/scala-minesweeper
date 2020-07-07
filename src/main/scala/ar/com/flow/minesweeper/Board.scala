@@ -50,11 +50,9 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   }
 
   def revealCell(cell: Cell): Board = {
-    revealCell(cell.row, cell.column)
-  }
-
-  def revealCell(coordinates: Coordinates): Board = {
-    Board(dimensions, totalBombs, cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(isRevealed = true)))
+    Board(dimensions, totalBombs,
+      cellsByCoordinates + (cell.coordinates -> cellsByCoordinates(cell.coordinates).copy(isRevealed = true))
+    )
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {
@@ -62,6 +60,6 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   }
 
   def adjacentBombsOf(cell: Cell): Seq[Cell] = {
-    neighboursOf(cell.row, cell.column).map(getCell).filter(_.hasBomb)
+    adjacentCellsOf(cell).filter(_.hasBomb)
   }
 }
