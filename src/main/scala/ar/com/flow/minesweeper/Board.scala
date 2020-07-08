@@ -1,18 +1,14 @@
 package ar.com.flow.minesweeper
 
-import ar.com.flow.minesweeper.Board.Coordinates
-
 import scala.util.Random
 
 object Board {
-  type Coordinates = (Int, Int)
-
   def apply(dimensions: Dimensions, totalBombs: Int): Board = {
     require(totalBombs >= 0)
     Board(dimensions, totalBombs, cellsByCoordinates(dimensions, totalBombs))
   }
 
-  def cellsByCoordinates(dimensions: Dimensions, totalBombs: Int): Map[Coordinates, Cell] = {
+  def cellsByCoordinates(dimensions: Dimensions, totalBombs: Int): Map[CartesianCoordinates, Cell] = {
     val allCoordinates = this.allCoordinates(dimensions.rows, dimensions.columns)
 
     val bombCoordinates = Random.shuffle(allCoordinates).take(totalBombs)
@@ -22,41 +18,50 @@ object Board {
         row <- 1 to dimensions.rows
         column <- 1 to dimensions.columns
       } yield {
-        val hasBomb = bombCoordinates.contains(row, column)
-        (row, column) -> Cell(row, column, hasBomb)
+        val coordinates = CartesianCoordinates(row, column)
+        val hasBomb = bombCoordinates.contains(coordinates)
+        coordinates -> Cell(coordinates, hasBomb)
       }
     }.toMap
   }
 
-  def allCoordinates(totalRows: Int, totalColumns: Int): Seq[Coordinates] = {
+  def allCoordinates(totalRows: Int, totalColumns: Int): Seq[CartesianCoordinates] = {
     for {
       row <- 1 to totalRows
       column <- 1 to totalColumns
     } yield {
-      (row, column)
+      CartesianCoordinates(row, column)
     }
   }
 }
 
-case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[Coordinates, Cell]) extends RectangleCoordinates {
+case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[CartesianCoordinates, Cell]) extends RectangleCoordinates {
   def cells = Cells(cellsByCoordinates.values.toSet)
 
-  def getCell(coordinates: Coordinates): Cell = {
+  def getCell(coordinates: (Int, Int)): Cell = {
+    getCell(CartesianCoordinates(coordinates._1, coordinates._2))
+  }
+
+  def getCell(coordinates: CartesianCoordinates): Cell = {
     cellsByCoordinates(coordinates)
   }
 
-  def setCellValue(coordinates: Coordinates, value: String): Board = {
+  def setCellValue(coordinates: (Int, Int), value: String): Board = {
+    setCellValue(CartesianCoordinates(coordinates._1, coordinates._2), value)
+  }
+
+  def setCellValue(coordinates: CartesianCoordinates, value: String): Board = {
     Board(dimensions, totalBombs, cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(value = value)))
   }
 
-  def revealCell(cell: Cell): Board = {
+  def revealCell(coordinates: CartesianCoordinates): Board = {
     Board(dimensions, totalBombs,
-      cellsByCoordinates + (cell.coordinates -> cellsByCoordinates(cell.coordinates).copy(isRevealed = true))
+      cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(isRevealed = true))
     )
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    neighboursOf(cell.row, cell.column).map(getCell)
+    neighboursOf(cell.coordinates).map(getCell)
   }
 
   def adjacentBombsOf(cell: Cell): Seq[Cell] = {

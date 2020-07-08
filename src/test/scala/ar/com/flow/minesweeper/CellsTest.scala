@@ -4,9 +4,9 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 class CellsTest extends AnyWordSpec with Matchers {
-  val notRevealedEmptyCell = Cell(1, 1, isRevealed = false, hasBomb = false)
-  val revealedEmptyCell = Cell(1, 1, isRevealed = true)
-  val revealedCellWithBomb = Cell(1, 1, isRevealed = true, hasBomb = true)
+  val notRevealedEmptyCell = Cell(CartesianCoordinates(1, 1), isRevealed = false, hasBomb = false)
+  val revealedEmptyCell = Cell(CartesianCoordinates(1, 1), isRevealed = true)
+  val revealedCellWithBomb = Cell(CartesianCoordinates(1, 1), isRevealed = true, hasBomb = true)
 
   val allCells = Set(notRevealedEmptyCell, revealedEmptyCell, revealedCellWithBomb)
 

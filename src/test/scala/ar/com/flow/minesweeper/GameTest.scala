@@ -8,7 +8,7 @@ class GameTest extends AnyFunSuite with Matchers {
   test("Question Cell") {
     val game = Game(3, 3, 2)
 
-    game.questionCell((1, 1))
+    game.questionCell(CartesianCoordinates(1, 1))
 
     game.board.getCell((1, 1)).value shouldBe CellValue.question
   }
@@ -16,7 +16,7 @@ class GameTest extends AnyFunSuite with Matchers {
   test("Flag Cell") {
     val game = Game(3, 3, 2)
 
-    game.flagCell((1, 1))
+    game.flagCell(CartesianCoordinates(1, 1))
 
     game.board.getCell((1, 1)).value shouldBe CellValue.flag
   }
@@ -26,7 +26,7 @@ class GameTest extends AnyFunSuite with Matchers {
 
     game.board.getCell((1, 1)).isRevealed shouldBe false
 
-    game.revealCell((1, 1))
+    game.revealCell(CartesianCoordinates(1, 1))
 
     game.board.getCell((1, 1)).isRevealed shouldBe true
   }

@@ -9,7 +9,7 @@ class GameStateTest extends AnyFunSuite with Matchers {
 
     val emptyCell = game.board.cells.empty.head
 
-    game.revealCell(emptyCell.row, emptyCell.column)
+    game.revealCell(emptyCell.coordinates)
 
     if (game.board.cells.notRevealedEmpty.isEmpty) {
       // if recursive cell reveal won the game
@@ -24,7 +24,7 @@ class GameStateTest extends AnyFunSuite with Matchers {
 
     val bombCell = game.board.cells.withBomb.head
 
-    game.revealCell(bombCell.row, bombCell.column)
+    game.revealCell(bombCell.coordinates)
 
     game.state shouldBe GameState(GamePlayStatus.finished, GameResult.lost)
   }
@@ -32,7 +32,7 @@ class GameStateTest extends AnyFunSuite with Matchers {
   test("Revealing last empty cell should finish the game as won") {
     val game = Game(3, 3, 2)
 
-    game.board.cells.empty.foreach(emptyCell => game.revealCell(emptyCell.row, emptyCell.column))
+    game.board.cells.empty.foreach(emptyCell => game.revealCell(emptyCell.coordinates))
 
     game.state shouldBe GameState(GamePlayStatus.finished, GameResult.won)
   }

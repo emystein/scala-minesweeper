@@ -13,11 +13,11 @@ class CellNeighboursTest extends AnyFunSuite with TableDrivenPropertyChecks with
   )
 
   test("Cell neighbours") {
-    forAll(data)((rows: Int, columns: Int, row: Int, column: Int, neighbours: Seq[Board.Coordinates]) => {
+    forAll(data)((rows: Int, columns: Int, row: Int, column: Int, neighbours: Seq[(Int, Int)]) => {
       val rectangle = new RectangleCoordinates {
         val dimensions = Dimensions(rows, columns)
       }
-      rectangle.neighboursOf(row, column) shouldBe neighbours
+      rectangle.neighboursOf(CartesianCoordinates(row, column)) shouldBe neighbours.map(n => CartesianCoordinates(n._1, n._2))
     })
   }
 }

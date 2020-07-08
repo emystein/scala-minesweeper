@@ -23,7 +23,7 @@ class RecursiveEmptyCellsRevealTest extends AnyFunSuite with TableDrivenProperty
 
       val adjacentEmptyCells = game.board.adjacentCellsOf(emptyCell).filter(!_.hasBomb)
 
-      game.revealCell(emptyCell.row, emptyCell.column)
+      game.revealCell(emptyCell.coordinates)
 
       allCellsShouldBeRevealed(adjacentEmptyCells)
     })
@@ -37,7 +37,7 @@ class RecursiveEmptyCellsRevealTest extends AnyFunSuite with TableDrivenProperty
 
       val adjacent = game.board.adjacentCellsOf(bombCell)
 
-      game.revealCell(bombCell.row, bombCell.column)
+      game.revealCell(bombCell.coordinates)
 
       allCellsShouldBeHidden(adjacent)
     })

@@ -14,26 +14,26 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var s
 
   private val emptyCellFinder = new AdjacentEmptyCellFinder(board)
 
-  def flagCell(coordinates: (Int, Int)): Unit = {
+  def flagCell(coordinates: CartesianCoordinates): Unit = {
     setCellValue(coordinates, CellValue.flag)
   }
 
-  def questionCell(coordinates: (Int, Int)): Unit = {
+  def questionCell(coordinates: CartesianCoordinates): Unit = {
     setCellValue(coordinates, CellValue.question)
   }
 
-  def setCellValue(coordinates: Board.Coordinates, value: String): Unit = {
+  def setCellValue(coordinates: CartesianCoordinates, value: String): Unit = {
     board = board.setCellValue(coordinates, value)
   }
 
-  def revealCell(coordinates: (Int, Int)): Unit = {
+  def revealCell(coordinates: CartesianCoordinates): Unit = {
     val cell = board.getCell(coordinates)
 
-    board = board.revealCell(cell)
+    board = board.revealCell(coordinates)
 
     // TODO: Use EmptyCell / BombCell polymorphism to remove this if
     if (!cell.hasBomb) {
-      emptyCellFinder.traverseEmptyAdjacentCells(cell).foreach(cell => board = board.revealCell(cell))
+      emptyCellFinder.traverseEmptyAdjacentCells(cell).foreach(cell => board = board.revealCell(cell.coordinates))
     }
 
     state = GameState(board)
