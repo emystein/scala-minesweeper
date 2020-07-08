@@ -19,7 +19,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
           val updatedBoard = board.revealCell(CartesianCoordinates(1, 1))
 
-          updatedBoard.cells.revealed shouldBe Set(updatedBoard.getCell(1, 1))
+          updatedBoard.cells.revealed shouldBe Set(updatedBoard.getCell(CartesianCoordinates(1, 1)))
         }
       }
       describe("already revealed") {
@@ -29,7 +29,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
           board.revealCell(CartesianCoordinates(1, 1))
           val updatedBoard = board.revealCell(CartesianCoordinates(1, 1))
 
-          updatedBoard.cells.revealed shouldBe Set(updatedBoard.getCell(1, 1))
+          updatedBoard.cells.revealed shouldBe Set(updatedBoard.getCell(CartesianCoordinates(1, 1)))
         }
       }
     }

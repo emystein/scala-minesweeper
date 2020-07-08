@@ -38,16 +38,8 @@ object Board {
 case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[CartesianCoordinates, Cell]) extends RectangleCoordinates {
   def cells = Cells(cellsByCoordinates.values.toSet)
 
-  def getCell(coordinates: (Int, Int)): Cell = {
-    getCell(CartesianCoordinates(coordinates._1, coordinates._2))
-  }
-
   def getCell(coordinates: CartesianCoordinates): Cell = {
     cellsByCoordinates(coordinates)
-  }
-
-  def setCellValue(coordinates: (Int, Int), value: String): Board = {
-    setCellValue(CartesianCoordinates(coordinates._1, coordinates._2), value)
   }
 
   def setCellValue(coordinates: CartesianCoordinates, value: String): Board = {
