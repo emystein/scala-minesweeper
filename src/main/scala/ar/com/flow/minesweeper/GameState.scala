@@ -25,7 +25,7 @@ object GameResult {
 
 object GameState {
   def apply(board: Board): GameState = {
-    val result: String = GameResult.of(board.cells.revealedWithBomb, board.cells.notRevealedEmpty)
+    val result: String = GameResult.of(board.cells.revealed.withBomb(), board.cells.notRevealedEmpty)
 
     val playStatus: String = result match {
       case GameResult.pending => GamePlayStatus.playing

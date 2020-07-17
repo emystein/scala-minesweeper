@@ -3,13 +3,7 @@ package ar.com.flow.minesweeper
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class CellsTest extends AnyWordSpec with Matchers {
-  val notRevealedEmptyCell = Cell(CartesianCoordinates(1, 1), isRevealed = false, hasBomb = false)
-  val revealedEmptyCell = Cell(CartesianCoordinates(1, 1), isRevealed = true)
-  val revealedCellWithBomb = Cell(CartesianCoordinates(1, 1), isRevealed = true, hasBomb = true)
-
-  val allCells = Set(notRevealedEmptyCell, revealedEmptyCell, revealedCellWithBomb)
-
+class CellsTest extends AnyWordSpec with TestCells with Matchers {
   "Cells" when {
     "created" should {
       "discriminate empty, bombs, revealed cells" in {
@@ -17,10 +11,29 @@ class CellsTest extends AnyWordSpec with Matchers {
 
         cells.all shouldBe allCells
         cells.empty shouldBe Set(notRevealedEmptyCell, revealedEmptyCell)
-        cells.withBomb shouldBe Set(revealedCellWithBomb)
-        cells.notRevealedEmpty shouldBe Set(notRevealedEmptyCell)
-        cells.revealedEmpty shouldBe Set(revealedEmptyCell)
-        cells.revealedWithBomb shouldBe Set(revealedCellWithBomb)
+        cells.withBomb shouldBe Set(notRevealedCellWithBomb, revealedCellWithBomb)
+        cells.hidden shouldBe HiddenCells(Set(notRevealedEmptyCell, notRevealedCellWithBomb))
+        cells.revealed shouldBe RevealedCells(Set(revealedEmptyCell, revealedCellWithBomb))
+      }
+    }
+  }
+
+  "HiddenCells" when {
+    "created" should {
+      "discriminate empty, bombs" in {
+        val hiddenCells = HiddenCells.of(allCells)
+        hiddenCells.empty shouldBe Set(notRevealedEmptyCell)
+        hiddenCells.withBomb shouldBe Set(notRevealedCellWithBomb)
+      }
+    }
+  }
+
+  "RevealedCells" when {
+    "created" should {
+      "discriminate empty, bombs" in {
+        val revealed = RevealedCells.of(Set(revealedEmptyCell, revealedCellWithBomb))
+        revealed.empty shouldBe Set(revealedEmptyCell)
+        revealed.withBomb shouldBe Set(revealedCellWithBomb)
       }
     }
   }
