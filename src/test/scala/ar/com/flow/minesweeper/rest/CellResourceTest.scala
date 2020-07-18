@@ -1,5 +1,6 @@
 package ar.com.flow.minesweeper.rest
 
+import ar.com.flow.minesweeper.CellContent.Bomb
 import ar.com.flow.minesweeper.Visibility.Hidden
 import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, Dimensions}
 import org.scalatest.funsuite.AnyFunSuite
@@ -14,8 +15,8 @@ class CellResourceTest extends AnyFunSuite with Matchers with CellResourceAssert
   }
 
   test("Map Cell to CellResource") {
-    val cell = new Cell(CartesianCoordinates(1, 1), true, visibility = Hidden)
-    val cellResource = CellResource(cell.coordinates, cell.hasBomb, cell.visibility)
+    val cell = new Cell(CartesianCoordinates(1, 1), Some(Bomb), visibility = Hidden)
+    val cellResource = CellResource(cell.coordinates, cell.content, cell.visibility)
     same(cellResource, cell) shouldBe true
   }
 }
@@ -23,7 +24,7 @@ class CellResourceTest extends AnyFunSuite with Matchers with CellResourceAssert
 trait CellResourceAssertions {
   def same(resource: CellResource, cell: Cell): Boolean = {
     resource.coordinates == cell.coordinates &&
-      resource.hasBomb == cell.hasBomb &&
+      resource.content == cell.content &&
       resource.visibility == cell.visibility &&
       resource.mark == cell.mark
   }

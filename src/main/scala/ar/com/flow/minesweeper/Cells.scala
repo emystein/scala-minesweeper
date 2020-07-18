@@ -4,8 +4,8 @@ import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
 
 object Cells {
   def apply(source: Set[Cell]): Cells = {
-    val empty: Set[Cell] = source.filter(!_.hasBomb)
-    val withBomb: Set[Cell] = source.filter(_.hasBomb)
+    val empty: Set[Cell] = source.filter(_.content.isEmpty)
+    val withBomb: Set[Cell] = source.filter(_.content.isDefined)
     val hidden = HiddenCells.of(source)
     val revealed = RevealedCells.of(source)
     new Cells(empty, withBomb, hidden, revealed)
@@ -16,11 +16,11 @@ trait CellSet {
   val cells: Set[Cell]
 
   def empty(): Set[Cell] = {
-    cells.filter(!_.hasBomb)
+    cells.filter(_.content.isEmpty)
   }
 
   def withBomb(): Set[Cell] = {
-    cells.filter(_.hasBomb)
+    cells.filter(_.content.isDefined)
   }
 }
 

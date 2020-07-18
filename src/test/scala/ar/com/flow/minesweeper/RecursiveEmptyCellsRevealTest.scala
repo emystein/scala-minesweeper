@@ -21,7 +21,7 @@ class RecursiveEmptyCellsRevealTest extends AnyFunSuite with TableDrivenProperty
 
       val emptyCell = game.board.cells.empty.head
 
-      val adjacentEmptyCells = game.board.adjacentCellsOf(emptyCell).filter(!_.hasBomb)
+      val adjacentEmptyCells = game.board.adjacentCellsOf(emptyCell).filter(_.content.isEmpty)
 
       game.revealCell(emptyCell.coordinates)
 

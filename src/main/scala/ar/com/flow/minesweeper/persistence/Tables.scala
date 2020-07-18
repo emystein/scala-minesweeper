@@ -4,7 +4,7 @@ import java.sql.Timestamp
 import java.time.LocalDateTime
 
 import ar.com.flow.minesweeper.Visibility.Shown
-import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, Visibility, Dimensions}
+import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, Dimensions, Visibility}
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 
@@ -64,10 +64,10 @@ object Tables {
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.coordinates.x, cell.coordinates.y, cell.hasBomb, cell.visibility == Shown, cell.mark)
+    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility == Shown, cell.mark)
   }
 
   def mapToCell(cellTuple: CellTuple) : Cell = {
-    Cell(CartesianCoordinates(cellTuple._2, cellTuple._3), cellTuple._4, Visibility(cellTuple._5), cellTuple._6)
+    Cell(CartesianCoordinates(cellTuple._2, cellTuple._3), CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6)
   }
 }

@@ -1,10 +1,12 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellContent.Bomb
+
 trait TestCells {
-  val notRevealedEmptyCell = new EmptyCell(CartesianCoordinates(1, 1), Visibility.Hidden)
-  val notRevealedCellWithBomb = new BombCell(CartesianCoordinates(1, 1), Visibility.Hidden)
-  val revealedEmptyCell = new EmptyCell(CartesianCoordinates(1, 1), Visibility.Shown)
-  val revealedCellWithBomb = new BombCell(CartesianCoordinates(1, 1), Visibility.Shown)
+  val notRevealedEmptyCell = Cell(CartesianCoordinates(1, 1), content = None, Visibility.Hidden)
+  val notRevealedCellWithBomb = Cell(CartesianCoordinates(1, 1), content = Some(Bomb), Visibility.Hidden)
+  val revealedEmptyCell = Cell(CartesianCoordinates(1, 1), content = None, Visibility.Shown)
+  val revealedCellWithBomb = Cell(CartesianCoordinates(1, 1), content = Some(Bomb), Visibility.Shown)
 
   val allCells = Set(notRevealedEmptyCell, notRevealedCellWithBomb, revealedEmptyCell, revealedCellWithBomb)
 }

@@ -22,7 +22,7 @@ object Board {
       } yield {
         val coordinates = CartesianCoordinates(row, column)
         val hasBomb = bombCoordinates.contains(coordinates)
-        coordinates -> Cell(coordinates, hasBomb)
+        coordinates -> Cell(coordinates, CellContent(hasBomb))
       }
     }.toMap
   }
@@ -59,6 +59,13 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   }
 
   def adjacentBombsOf(cell: Cell): Seq[Cell] = {
-    adjacentCellsOf(cell).filter(_.hasBomb)
+    adjacentCellsOf(cell).filter(_.content.isDefined)
+  }
+
+  def emptySpaceAdjacentTo(cell: Cell, previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
+    val adjacentCells = adjacentCellsOf(cell).toSet -- previouslyTraversed
+
+    adjacentCells.filter(_.content.isEmpty)
+      .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => emptySpaceAdjacentTo(adjacent, traversed))
   }
 }
