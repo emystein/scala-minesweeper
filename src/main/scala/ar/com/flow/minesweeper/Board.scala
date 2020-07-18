@@ -44,7 +44,7 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
     cellsByCoordinates(coordinates)
   }
 
-  def setCellValue(coordinates: CartesianCoordinates, value: String): Board = {
+  def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board = {
     Board(dimensions, totalBombs, cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(value = value)))
   }
 

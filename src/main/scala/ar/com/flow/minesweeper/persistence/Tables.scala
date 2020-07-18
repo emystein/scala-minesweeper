@@ -36,7 +36,7 @@ object Tables {
     def * = (id, rows, columns, bombs)
   }
 
-  type CellTuple = (String, Int, Int, Boolean, Boolean, String)
+  type CellTuple = (String, Int, Int, Boolean, Boolean, Option[String])
 
   class Cells(tag: Tag) extends Table[CellTuple](tag, "cell") {
     def id = column[String]("id")
@@ -44,7 +44,7 @@ object Tables {
     def col = column[Int]("column")
     def hasBomb = column[Boolean]("has_bomb")
     def isRevealed = column[Boolean]("is_revealed")
-    def value = column[String]("value")
+    def value = column[Option[String]]("value")
     def pk = primaryKey("cell_pk", (id, row, col))
     def * = (id, row, col, hasBomb, isRevealed, value)
   }

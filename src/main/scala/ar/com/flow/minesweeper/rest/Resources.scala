@@ -32,7 +32,7 @@ object CellResourceFactory {
   }
 }
 
-case class CellResource(row: Int, column: Int, hasBomb: Boolean = false, visibility: CellValueVisibility, value: String = "") extends Ordered[CellResource] {
+case class CellResource(row: Int, column: Int, hasBomb: Boolean = false, visibility: CellValueVisibility, value: Option[String] = None) extends Ordered[CellResource] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 

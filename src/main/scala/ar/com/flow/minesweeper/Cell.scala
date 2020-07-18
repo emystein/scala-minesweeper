@@ -10,7 +10,7 @@ object Cell {
   }
 }
 
-case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: CellValueVisibility = CellValueVisibility.Hidden, value: String = "") extends Ordered[Cell] {
+case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: CellValueVisibility = CellValueVisibility.Hidden, value: Option[String] = None) extends Ordered[Cell] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 
@@ -28,19 +28,14 @@ object CellValueVisibility {
   final case object Hidden extends CellValueVisibility
   final case object Shown extends CellValueVisibility
 
-  def apply(shown: Boolean): CellValueVisibility = if (shown) { Shown } else { Hidden}
-
-  def unapply(visibility: CellValueVisibility): Boolean = visibility match {
-    case Shown => true
-    case Hidden => false
-  }
+  def apply(shown: Boolean): CellValueVisibility =  if (shown) Shown else Hidden
 }
 
-class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: CellValueVisibility = CellValueVisibility.Hidden, override val value: String = "") extends Cell(coordinates, false, visibility, value)
+class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: CellValueVisibility = CellValueVisibility.Hidden, override val value: Option[String] = None) extends Cell(coordinates, false, visibility, value)
 
-class BombCell(override val coordinates: CartesianCoordinates, override val visibility: CellValueVisibility = CellValueVisibility.Hidden, override val value: String = "") extends Cell(coordinates, true, visibility, value )
+class BombCell(override val coordinates: CartesianCoordinates, override val visibility: CellValueVisibility = CellValueVisibility.Hidden, override val value: Option[String] = None) extends Cell(coordinates, true, visibility, value)
 
-object CellValue {
+object CellContent {
   val empty: String = ""
   val flag: String = "f"
   val question: String = "?"
