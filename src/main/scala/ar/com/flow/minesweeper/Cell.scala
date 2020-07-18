@@ -10,7 +10,7 @@ object Cell {
   }
 }
 
-case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: CellValueVisibility = CellValueVisibility.Hidden, content: Option[String] = None) extends Ordered[Cell] {
+case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: CellVisibility = CellVisibility.Hidden, content: Option[String] = None) extends Ordered[Cell] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 
@@ -22,18 +22,18 @@ case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, vis
   def column: Int = coordinates.y
 }
 
-sealed abstract class CellValueVisibility extends Product with Serializable
+sealed abstract class CellVisibility extends Product with Serializable
 
-object CellValueVisibility {
-  final case object Hidden extends CellValueVisibility
-  final case object Shown extends CellValueVisibility
+object CellVisibility {
+  final case object Hidden extends CellVisibility
+  final case object Shown extends CellVisibility
 
-  def apply(shown: Boolean): CellValueVisibility =  if (shown) Shown else Hidden
+  def apply(shown: Boolean): CellVisibility =  if (shown) Shown else Hidden
 }
 
-class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: CellValueVisibility = CellValueVisibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, false, visibility, content)
+class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: CellVisibility = CellVisibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, false, visibility, content)
 
-class BombCell(override val coordinates: CartesianCoordinates, override val visibility: CellValueVisibility = CellValueVisibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, true, visibility, content)
+class BombCell(override val coordinates: CartesianCoordinates, override val visibility: CellVisibility = CellVisibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, true, visibility, content)
 
 object CellContent {
   val empty: String = ""
