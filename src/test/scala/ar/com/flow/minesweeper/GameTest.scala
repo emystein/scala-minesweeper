@@ -1,5 +1,6 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellValueVisibility.{Hidden, Shown}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
@@ -24,10 +25,10 @@ class GameTest extends AnyFunSuite with Matchers {
   test("Reveal Cell should mark it as revealed") {
     val game = Game(3, 3, 2)
 
-    game.board.getCell(CartesianCoordinates(1, 1)).isRevealed shouldBe false
+    game.board.getCell(CartesianCoordinates(1, 1)).visibility shouldBe Hidden
 
     game.revealCell(CartesianCoordinates(1, 1))
 
-    game.board.getCell(CartesianCoordinates(1, 1)).isRevealed shouldBe true
+    game.board.getCell(CartesianCoordinates(1, 1)).visibility shouldBe Shown
   }
 }

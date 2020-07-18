@@ -3,7 +3,8 @@ package ar.com.flow.minesweeper.persistence
 import java.sql.Timestamp
 import java.time.LocalDateTime
 
-import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, Dimensions}
+import ar.com.flow.minesweeper.CellValueVisibility.Shown
+import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellValueVisibility, Dimensions}
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 
@@ -63,10 +64,10 @@ object Tables {
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.row, cell.column, cell.hasBomb, cell.isRevealed, cell.value)
+    (gameId, cell.row, cell.column, cell.hasBomb, cell.visibility == Shown, cell.value)
   }
 
   def mapToCell(cellTuple: CellTuple) : Cell = {
-    Cell(CartesianCoordinates(cellTuple._2, cellTuple._3), cellTuple._4, cellTuple._5, cellTuple._6)
+    Cell(CartesianCoordinates(cellTuple._2, cellTuple._3), cellTuple._4, CellValueVisibility(cellTuple._5), cellTuple._6)
   }
 }

@@ -1,6 +1,16 @@
 package ar.com.flow.minesweeper
 
-case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, isRevealed: Boolean = false, value: String = "") extends Ordered[Cell] {
+object Cell {
+  def apply(coordinates: CartesianCoordinates, hasBomb: Boolean): Cell = {
+    if (hasBomb) {
+      new BombCell(coordinates)
+    } else {
+      new EmptyCell(coordinates)
+    }
+  }
+}
+
+case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: CellValueVisibility = CellValueVisibility.Hidden, value: String = "") extends Ordered[Cell] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 
@@ -10,10 +20,27 @@ case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, isR
 
   def row: Int = coordinates.x
   def column: Int = coordinates.y
+//  def isRevealed: Boolean = visibility.isVisible
 }
 
-//case class EmptyCell(override val row: Int, override val column: Int, override val numberOfAdjacentBombs: Int = 0, override val isRevealed: Boolean = false, override val value: String = "") extends Cell(row, column, false, numberOfAdjacentBombs, isRevealed, value )
-//case class BombCell(override val row: Int, override val column: Int, override val numberOfAdjacentBombs: Int = 0, override val isRevealed: Boolean = false, override val value: String = "") extends Cell(row, column, true, numberOfAdjacentBombs, isRevealed, value )
+sealed abstract class CellValueVisibility extends Product with Serializable {
+  def isVisible: Boolean
+}
+
+object CellValueVisibility {
+  def apply(shown: Boolean): CellValueVisibility = if (shown) { Shown } else { Hidden}
+
+  final case object Hidden extends CellValueVisibility {
+    override def isVisible: Boolean = false
+  }
+  final case object Shown extends CellValueVisibility {
+    override def isVisible: Boolean = true
+  }
+}
+
+class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: CellValueVisibility = CellValueVisibility.Hidden, override val value: String = "") extends Cell(coordinates, false, visibility, value)
+
+class BombCell(override val coordinates: CartesianCoordinates, override val visibility: CellValueVisibility = CellValueVisibility.Hidden, override val value: String = "") extends Cell(coordinates, true, visibility, value )
 
 object CellValue {
   val empty: String = ""

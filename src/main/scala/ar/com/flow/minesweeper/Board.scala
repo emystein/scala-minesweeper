@@ -1,5 +1,7 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellValueVisibility.Shown
+
 import scala.util.Random
 
 object Board {
@@ -48,7 +50,7 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
 
   def revealCell(coordinates: CartesianCoordinates): Board = {
     Board(dimensions, totalBombs,
-      cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(isRevealed = true))
+      cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(visibility = Shown))
     )
   }
 

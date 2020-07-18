@@ -1,5 +1,7 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellValueVisibility.{Hidden, Shown}
+
 object Cells {
   def apply(source: Set[Cell]): Cells = {
     val empty: Set[Cell] = source.filter(!_.hasBomb)
@@ -24,7 +26,7 @@ trait CellSet {
 
 object HiddenCells {
   def of(source: Set[Cell]): HiddenCells = {
-    new HiddenCells(source.filter(!_.isRevealed))
+    new HiddenCells(source.filter(_.visibility == Hidden))
   }
 }
 
@@ -32,7 +34,7 @@ case class HiddenCells(cells: Set[Cell]) extends CellSet
 
 object RevealedCells {
   def of(source: Set[Cell]): RevealedCells = {
-    new RevealedCells(source.filter(_.isRevealed))
+    new RevealedCells(source.filter(_.visibility == Shown))
   }
 }
 
