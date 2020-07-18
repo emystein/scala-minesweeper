@@ -1,6 +1,6 @@
 package ar.com.flow.minesweeper
 
-import ar.com.flow.minesweeper.CellVisibility.{Hidden, Shown}
+import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
 
 object Cells {
   def apply(source: Set[Cell]): Cells = {

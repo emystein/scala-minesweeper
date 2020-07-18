@@ -1,6 +1,6 @@
 package ar.com.flow.minesweeper.persistence
 
-import ar.com.flow.minesweeper.CellVisibility.Shown
+import ar.com.flow.minesweeper.Visibility.Shown
 import ar.com.flow.minesweeper.Game
 import slick.jdbc.H2Profile.api._
 

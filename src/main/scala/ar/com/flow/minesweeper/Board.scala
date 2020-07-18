@@ -1,6 +1,6 @@
 package ar.com.flow.minesweeper
 
-import ar.com.flow.minesweeper.CellVisibility.Shown
+import ar.com.flow.minesweeper.Visibility.Shown
 
 import scala.util.Random
 

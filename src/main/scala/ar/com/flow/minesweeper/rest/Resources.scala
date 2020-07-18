@@ -2,7 +2,7 @@ package ar.com.flow.minesweeper.rest
 
 import java.time.format.DateTimeFormatter
 
-import ar.com.flow.minesweeper.{Board, Cell, CellVisibility, Cells, Dimensions, Game}
+import ar.com.flow.minesweeper.{Board, Cell, Visibility, Cells, Dimensions, Game}
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
@@ -32,7 +32,7 @@ object CellResourceFactory {
   }
 }
 
-case class CellResource(row: Int, column: Int, hasBomb: Boolean = false, visibility: CellVisibility, value: Option[String] = None) extends Ordered[CellResource] {
+case class CellResource(row: Int, column: Int, hasBomb: Boolean = false, visibility: Visibility, value: Option[String] = None) extends Ordered[CellResource] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 

@@ -1,6 +1,6 @@
 package ar.com.flow.minesweeper.rest
 
-import ar.com.flow.minesweeper.CellVisibility.Hidden
+import ar.com.flow.minesweeper.Visibility.Hidden
 import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, Dimensions}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
