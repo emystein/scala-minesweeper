@@ -10,7 +10,7 @@ class GameRepository(val db: Database) {
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
 
   def save(game: Game): Unit = {
-    val cells = game.board.cells.map(c => (game.id, c.row, c.column, c.hasBomb, c.visibility == Shown, c.value)).toSeq
+    val cells = game.board.cells.map(c => (game.id, c.row, c.column, c.hasBomb, c.visibility == Shown, c.content)).toSeq
 
     val cellsToBeInsertedOrUpdated = cells.map(cell => Tables.cells.insertOrUpdate(cell))
 

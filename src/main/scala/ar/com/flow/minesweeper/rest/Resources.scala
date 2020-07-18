@@ -28,7 +28,7 @@ object CellResourceFactory {
   }
 
   def from(board: Board, cell: Cell): CellResource = {
-    CellResource(cell.row, cell.column, cell.hasBomb, cell.visibility, cell.value)
+    CellResource(cell.row, cell.column, cell.hasBomb, cell.visibility, cell.content)
   }
 }
 
@@ -45,7 +45,7 @@ case class CellResource(row: Int, column: Int, hasBomb: Boolean = false, visibil
       column == cell.column &&
       hasBomb == cell.hasBomb &&
       visibility == cell.visibility &&
-      value == cell.value
+      value == cell.content
   }
 }
 

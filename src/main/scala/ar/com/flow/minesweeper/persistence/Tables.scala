@@ -64,7 +64,7 @@ object Tables {
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.row, cell.column, cell.hasBomb, cell.visibility == Shown, cell.value)
+    (gameId, cell.row, cell.column, cell.hasBomb, cell.visibility == Shown, cell.content)
   }
 
   def mapToCell(cellTuple: CellTuple) : Cell = {
