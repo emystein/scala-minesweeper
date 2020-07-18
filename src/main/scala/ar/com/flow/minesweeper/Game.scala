@@ -15,11 +15,11 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var s
   private val emptyCellFinder = new AdjacentEmptyCellFinder(board)
 
   def flagCell(coordinates: CartesianCoordinates): Unit = {
-    setCellValue(coordinates, CellContent.flag)
+    setCellValue(coordinates, CellMark.flag)
   }
 
   def questionCell(coordinates: CartesianCoordinates): Unit = {
-    setCellValue(coordinates, CellContent.question)
+    setCellValue(coordinates, CellMark.question)
   }
 
   def setCellValue(coordinates: CartesianCoordinates, value: String): Unit = {

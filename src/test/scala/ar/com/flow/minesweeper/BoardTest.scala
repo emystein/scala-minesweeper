@@ -7,7 +7,7 @@ class BoardTest extends AnyFunSuite with Matchers {
   var board = Board(Dimensions(3, 3), 2)
 
   test("Get cell inside boundaries") {
-    board.getCell(CartesianCoordinates(1, 1)).content shouldBe None
+    board.getCell(CartesianCoordinates(1, 1)).mark shouldBe None
   }
 
   test("Trying to get a cell in a row outside the board boundaries should throw an exception") {
@@ -19,8 +19,8 @@ class BoardTest extends AnyFunSuite with Matchers {
   }
 
   test("Set cell value") {
-    board = board.setCellValue(CartesianCoordinates(1, 1), Some(CellContent.flag))
+    board = board.setCellValue(CartesianCoordinates(1, 1), Some(CellMark.flag))
 
-    board.getCell(CartesianCoordinates(1, 1)).content shouldBe Some(CellContent.flag)
+    board.getCell(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.flag)
   }
 }

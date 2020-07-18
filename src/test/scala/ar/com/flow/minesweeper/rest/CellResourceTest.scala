@@ -25,7 +25,7 @@ trait CellResourceAssertions {
     resource.coordinates == cell.coordinates &&
       resource.hasBomb == cell.hasBomb &&
       resource.visibility == cell.visibility &&
-      resource.value == cell.content
+      resource.mark == cell.mark
   }
 }
 

@@ -28,13 +28,13 @@ object CellResources {
   }
 }
 
-object CellResource{
+object CellResource {
   def from(cell: Cell): CellResource = {
-    new CellResource(cell.coordinates, cell.hasBomb, cell.visibility, cell.content)
+    new CellResource(cell.coordinates, cell.hasBomb, cell.visibility, cell.mark)
   }
 }
 
-case class CellResource(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: Visibility, value: Option[String] = None) extends Ordered[CellResource] {
+case class CellResource(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: Visibility, mark: Option[String] = None) extends Ordered[CellResource] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 

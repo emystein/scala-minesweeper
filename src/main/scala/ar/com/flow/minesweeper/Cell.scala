@@ -10,7 +10,7 @@ object Cell {
   }
 }
 
-case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: Visibility = Visibility.Hidden, content: Option[String] = None) extends Ordered[Cell] {
+case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, visibility: Visibility = Visibility.Hidden, mark: Option[String] = None) extends Ordered[Cell] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 
@@ -19,11 +19,11 @@ case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, vis
   }
 }
 
-class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: Visibility = Visibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, false, visibility, content)
+class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: Visibility = Visibility.Hidden, override val mark: Option[String] = None) extends Cell(coordinates, false, visibility, mark)
 
-class BombCell(override val coordinates: CartesianCoordinates, override val visibility: Visibility = Visibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, true, visibility, content)
+class BombCell(override val coordinates: CartesianCoordinates, override val visibility: Visibility = Visibility.Hidden, override val mark: Option[String] = None) extends Cell(coordinates, true, visibility, mark)
 
-object CellContent {
+object CellMark {
   val empty: String = ""
   val flag: String = "f"
   val question: String = "?"
