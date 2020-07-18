@@ -15,7 +15,7 @@ case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, vis
   import scala.math.Ordered.orderingToOrdered
 
   override def compare(that: Cell): Int = {
-    (this.coordinates.x, this.coordinates.y) compare (that.coordinates.x, that.coordinates.y)
+    this.coordinates compare that.coordinates
   }
 
   def row: Int = coordinates.x
