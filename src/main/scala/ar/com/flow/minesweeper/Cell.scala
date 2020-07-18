@@ -17,9 +17,6 @@ case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, vis
   override def compare(that: Cell): Int = {
     this.coordinates compare that.coordinates
   }
-
-  def row: Int = coordinates.x
-  def column: Int = coordinates.y
 }
 
 class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: Visibility = Visibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, false, visibility, content)

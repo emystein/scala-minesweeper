@@ -59,12 +59,12 @@ object Tables {
   val dropSchemaAction = (games.schema ++ boards.schema ++ cells.schema).drop
 
   def mapToBoard(result: Seq[((GameTuple, BoardTuple), CellTuple)]): Board = {
-    val cellsByCoordinates = HashMap(result.map(c => Tables.mapToCell(c._2)).map(c => CartesianCoordinates(c.row, c.column) -> c): _*)
+    val cellsByCoordinates = HashMap(result.map(c => Tables.mapToCell(c._2)).map(c => c.coordinates -> c): _*)
     Board(Dimensions(result.head._1._2._2, result.head._1._2._3), result.head._1._2._4, cellsByCoordinates)
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.row, cell.column, cell.hasBomb, cell.visibility == Shown, cell.content)
+    (gameId, cell.coordinates.x, cell.coordinates.y, cell.hasBomb, cell.visibility == Shown, cell.content)
   }
 
   def mapToCell(cellTuple: CellTuple) : Cell = {
