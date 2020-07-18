@@ -40,7 +40,7 @@ object Board {
 case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[CartesianCoordinates, Cell]) extends RectangleCoordinates {
   def cells = Cells(cellsByCoordinates.values.toSet)
 
-  def getCell(coordinates: CartesianCoordinates): Cell = {
+  def cellAt(coordinates: CartesianCoordinates): Cell = {
     cellsByCoordinates(coordinates)
   }
 
@@ -55,7 +55,7 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   }
 
   def adjacentCellsOf(cell: Cell): Seq[Cell] = {
-    neighboursOf(cell.coordinates).map(getCell)
+    neighboursOf(cell.coordinates).map(cellAt)
   }
 
   def adjacentBombsOf(cell: Cell): Seq[Cell] = {

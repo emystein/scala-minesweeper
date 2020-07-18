@@ -25,7 +25,7 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var s
   }
 
   def revealCell(coordinates: CartesianCoordinates): Unit = {
-    val cell = board.getCell(coordinates)
+    val cell = board.cellAt(coordinates)
 
     board = board.revealCell(coordinates)
 

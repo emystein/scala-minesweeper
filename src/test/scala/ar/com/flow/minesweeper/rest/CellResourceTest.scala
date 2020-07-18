@@ -11,7 +11,7 @@ class CellResourceTest extends AnyFunSuite with Matchers with CellResourceAssert
     val board = Board(Dimensions(2, 2), 2)
 
     CellResources.from(board)
-      .foreach(cr => same(cr, board.getCell(cr.coordinates)) shouldBe true)
+      .foreach(cr => same(cr, board.cellAt(cr.coordinates)) shouldBe true)
   }
 
   test("Map Cell to CellResource") {
