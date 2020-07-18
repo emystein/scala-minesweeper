@@ -22,15 +22,6 @@ case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, vis
   def column: Int = coordinates.y
 }
 
-sealed abstract class Visibility extends Product with Serializable
-
-object Visibility {
-  final case object Hidden extends Visibility
-  final case object Shown extends Visibility
-
-  def apply(shown: Boolean): Visibility =  if (shown) Shown else Hidden
-}
-
 class EmptyCell(override val coordinates: CartesianCoordinates, override val visibility: Visibility = Visibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, false, visibility, content)
 
 class BombCell(override val coordinates: CartesianCoordinates, override val visibility: Visibility = Visibility.Hidden, override val content: Option[String] = None) extends Cell(coordinates, true, visibility, content)
