@@ -20,21 +20,19 @@ case class Cell(coordinates: CartesianCoordinates, hasBomb: Boolean = false, vis
 
   def row: Int = coordinates.x
   def column: Int = coordinates.y
-//  def isRevealed: Boolean = visibility.isVisible
 }
 
-sealed abstract class CellValueVisibility extends Product with Serializable {
-  def isVisible: Boolean
-}
+sealed abstract class CellValueVisibility extends Product with Serializable
 
 object CellValueVisibility {
+  final case object Hidden extends CellValueVisibility
+  final case object Shown extends CellValueVisibility
+
   def apply(shown: Boolean): CellValueVisibility = if (shown) { Shown } else { Hidden}
 
-  final case object Hidden extends CellValueVisibility {
-    override def isVisible: Boolean = false
-  }
-  final case object Shown extends CellValueVisibility {
-    override def isVisible: Boolean = true
+  def unapply(visibility: CellValueVisibility): Boolean = visibility match {
+    case Shown => true
+    case Hidden => false
   }
 }
 
