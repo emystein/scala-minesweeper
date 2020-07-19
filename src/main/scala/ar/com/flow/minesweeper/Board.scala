@@ -43,26 +43,11 @@ object Board {
   }
 }
 
-class CellInBoard(val cellData: CellData, val board: Board) extends Cell(cellData.coordinates, cellData.content, cellData.visibility, cellData.mark) with RectangleCoordinates {
-  override val dimensions: Dimensions = board.dimensions
-
-  def adjacentCells(): Seq[CellInBoard] = {
-    neighboursOf(cellData.coordinates).map(board.cellAt)
-  }
-
-  def adjacentEmptySpace(previouslyTraversed: Set[CellInBoard] = Set.empty): Set[CellInBoard] = {
-    val adjacentCells = this.adjacentCells().toSet -- previouslyTraversed
-
-    adjacentCells.filter(_.content.isEmpty)
-      .foldLeft(previouslyTraversed + this)((traversed, adjacent) => adjacent.adjacentEmptySpace(traversed))
-  }
-}
-
 case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[CartesianCoordinates, CellData]) extends RectangleCoordinates {
-  def cells: Cells[CellInBoard] = Cells(cellsByCoordinates.values.toSet.map((cellData: CellData) => new CellInBoard(cellData, this)))
+  def cells: Cells[Cell] = Cells(cellsByCoordinates.values.toSet.map((cellData: CellData) => Cell(cellData, this)))
 
-  def cellAt(coordinates: CartesianCoordinates): CellInBoard = {
-    new CellInBoard(cellsByCoordinates(coordinates), this)
+  def cellAt(coordinates: CartesianCoordinates): Cell = {
+    Cell(cellsByCoordinates(coordinates), this)
   }
 
   def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board = {
@@ -72,5 +57,4 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
   def revealCell(coordinates: CartesianCoordinates): Board = {
     copy(cellsByCoordinates = cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(visibility = Shown)))
   }
-
 }

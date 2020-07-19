@@ -7,6 +7,8 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class CellResourceTest extends AnyFunSuite with Matchers with CellResourceAssertions {
+  val board: Board = Board(Dimensions(3, 3), totalBombs = 3)
+
   test("Create CellResources from Cells") {
     val board = Board(Dimensions(2, 2), 2)
 
@@ -15,7 +17,7 @@ class CellResourceTest extends AnyFunSuite with Matchers with CellResourceAssert
   }
 
   test("Map Cell to CellResource") {
-    val cell = new Cell(CartesianCoordinates(1, 1), Some(Bomb), visibility = Hidden)
+    val cell = new Cell(CartesianCoordinates(1, 1), Some(Bomb), visibility = Hidden, mark = None, board)
     val cellResource = CellResource(cell.coordinates, cell.content, cell.visibility)
     same(cellResource, cell) shouldBe true
   }
