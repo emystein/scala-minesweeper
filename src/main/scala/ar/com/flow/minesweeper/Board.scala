@@ -54,16 +54,16 @@ case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Ma
     )
   }
 
-  def adjacentCellsOf(cell: Cell): Seq[Cell] = {
+  def cellsAdjacentTo(cell: Cell): Seq[Cell] = {
     neighboursOf(cell.coordinates).map(cellAt)
   }
 
-  def adjacentBombsOf(cell: Cell): Seq[Cell] = {
-    adjacentCellsOf(cell).filter(_.content.isDefined)
+  def bombsAdjacentTo(cell: Cell): Seq[Cell] = {
+    cellsAdjacentTo(cell).filter(_.content.isDefined)
   }
 
   def emptySpaceAdjacentTo(cell: Cell, previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
-    val adjacentCells = adjacentCellsOf(cell).toSet -- previouslyTraversed
+    val adjacentCells = cellsAdjacentTo(cell).toSet -- previouslyTraversed
 
     adjacentCells.filter(_.content.isEmpty)
       .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => emptySpaceAdjacentTo(adjacent, traversed))
