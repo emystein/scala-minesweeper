@@ -6,6 +6,8 @@ case class Cell(coordinates: CartesianCoordinates, content: Option[CellContent] 
   override def compare(that: Cell): Int = {
     this.coordinates compare that.coordinates
   }
+  
+  val data = CellData(coordinates, content, visibility, mark)
 }
 
 abstract class CellContent extends Product with Serializable

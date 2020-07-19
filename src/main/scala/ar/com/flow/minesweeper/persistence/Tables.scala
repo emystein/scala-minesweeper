@@ -4,7 +4,7 @@ import java.sql.Timestamp
 import java.time.LocalDateTime
 
 import ar.com.flow.minesweeper.Visibility.Shown
-import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, Dimensions, Visibility}
+import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, CellData, Dimensions, Visibility}
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
 
@@ -59,7 +59,7 @@ object Tables {
   val dropSchemaAction = (games.schema ++ boards.schema ++ cells.schema).drop
 
   def mapToBoard(result: Seq[((GameTuple, BoardTuple), CellTuple)]): Board = {
-    val cellsByCoordinates = HashMap(result.map(c => Tables.mapToCell(c._2)).map(c => c.coordinates -> c): _*)
+    val cellsByCoordinates = HashMap(result.map(c => Tables.mapToCell(c._2)).map(c => CellData(c)).map(c => c.coordinates -> c): _*)
     Board(Dimensions(result.head._1._2._2, result.head._1._2._3), result.head._1._2._4, cellsByCoordinates)
   }
 

@@ -13,7 +13,7 @@ object GameResult {
   val won = "won"
   val lost = "lost"
 
-  def of(revealedBombCells: Set[Cell], remainingEmptyCells: Set[Cell]): String = {
+  def of(revealedBombCells: Set[_ <: Cell], remainingEmptyCells: Set[_ <: Cell]): String = {
     if (revealedBombCells.nonEmpty)
       lost
     else if (remainingEmptyCells.isEmpty)

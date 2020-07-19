@@ -11,17 +11,12 @@ object Game {
 
 // TODO: Make board, state a val
 class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var state: GameState = GameState(GamePlayStatus.playing, GameResult.pending)) {
-
   def flagCell(coordinates: CartesianCoordinates): Unit = {
-    setCellValue(coordinates, CellMark.flag)
+    board = board.setCellValue(coordinates, Some(CellMark.flag))
   }
 
   def questionCell(coordinates: CartesianCoordinates): Unit = {
-    setCellValue(coordinates, CellMark.question)
-  }
-
-  def setCellValue(coordinates: CartesianCoordinates, value: String): Unit = {
-    board = board.setCellValue(coordinates, Some(value))
+    board = board.setCellValue(coordinates, Some(CellMark.question))
   }
 
   def revealCell(coordinates: CartesianCoordinates): Unit = {
@@ -31,17 +26,17 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var s
 
     // TODO: Use EmptyCell / BombCell polymorphism to remove this if
     if (cell.content.isEmpty) {
-      board.emptySpaceAdjacentTo(cell).foreach(cell => board = board.revealCell(cell.coordinates))
+      cell.adjacentEmptySpace().foreach(cell => board = board.revealCell(cell.coordinates))
     }
 
     state = GameState(board)
   }
 
-  def pause = {
+  def pause(): Unit = {
     state = switchPlayStatusTo(GamePlayStatus.paused)
   }
 
-  def resume = {
+  def resume(): Unit = {
     state = switchPlayStatusTo(GamePlayStatus.playing)
   }
 
