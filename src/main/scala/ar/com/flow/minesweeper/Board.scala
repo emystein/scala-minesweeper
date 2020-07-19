@@ -4,10 +4,6 @@ import ar.com.flow.minesweeper.Visibility.Shown
 
 import scala.util.Random
 
-object CellData {
-  def apply(cell: Cell): CellData = new CellData(cell.coordinates, cell.content, cell.visibility, cell.mark)
-}
-
 case class CellData(coordinates: CartesianCoordinates, content: Option[CellContent] = None, visibility: Visibility = Visibility.Hidden, mark: Option[String] = None)
 
 object Board {
@@ -43,8 +39,8 @@ object Board {
   }
 }
 
-case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[CartesianCoordinates, CellData]) extends RectangleCoordinates {
-  def cells: Cells[Cell] = Cells(cellsByCoordinates.values.toSet.map((cellData: CellData) => Cell(cellData, this)))
+case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[CartesianCoordinates, CellData]) {
+  def cells: Cells = Cells(cellsByCoordinates.values.toSet.map((c: CellData) => Cell(c, this)))
 
   def cellAt(coordinates: CartesianCoordinates): Cell = {
     Cell(cellsByCoordinates(coordinates), this)
