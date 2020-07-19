@@ -4,7 +4,7 @@ import ar.com.flow.minesweeper.Visibility.Shown
 
 import scala.util.Random
 
-case class CellData(coordinates: CartesianCoordinates, content: Option[CellContent] = None, visibility: Visibility = Visibility.Hidden, mark: Option[String] = None)
+case class CellData(content: Option[CellContent] = None, visibility: Visibility = Visibility.Hidden, mark: Option[String] = None)
 
 object Board {
   def apply(dimensions: Dimensions, totalBombs: Int): Board = {
@@ -24,7 +24,7 @@ object Board {
       } yield {
         val coordinates = CartesianCoordinates(row, column)
         val hasBomb = bombCoordinates.contains(coordinates)
-        coordinates -> CellData(coordinates, CellContent(hasBomb))
+        coordinates -> CellData(CellContent(hasBomb))
       }
     }.toMap
   }
@@ -39,18 +39,20 @@ object Board {
   }
 }
 
-case class Board(dimensions: Dimensions, totalBombs: Int, cellsByCoordinates: Map[CartesianCoordinates, CellData]) {
-  def cells: Cells = Cells(cellsByCoordinates.values.toSet.map((c: CellData) => Cell(c, this)))
+case class Board(dimensions: Dimensions, totalBombs: Int, cellContent: Map[CartesianCoordinates, CellData]) {
+  def cells: Cells =
+    Cells(cellContent.toSet.map((c: (CartesianCoordinates, CellData)) => Cell(c._1, c._2, this)))
+
 
   def cellAt(coordinates: CartesianCoordinates): Cell = {
-    Cell(cellsByCoordinates(coordinates), this)
+    Cell(coordinates, cellContent(coordinates), this)
   }
 
   def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board = {
-    Board(dimensions, totalBombs, cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(mark = value)))
+    copy(cellContent = cellContent + (coordinates -> cellContent(coordinates).copy(mark = value)))
   }
 
   def revealCell(coordinates: CartesianCoordinates): Board = {
-    copy(cellsByCoordinates = cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(visibility = Shown)))
+    copy(cellContent = cellContent + (coordinates -> cellContent(coordinates).copy(visibility = Shown)))
   }
 }

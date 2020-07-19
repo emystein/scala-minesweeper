@@ -1,13 +1,13 @@
 package ar.com.flow.minesweeper
 
 object Cell {
-  def apply(cellData: CellData, board: Board): Cell = {
-    new Cell(cellData.coordinates, cellData.content, cellData.visibility, cellData.mark , board)
+  def apply(coordinates: CartesianCoordinates, cellData: CellData, board: Board): Cell = {
+    new Cell(coordinates, cellData.content, cellData.visibility, cellData.mark , board)
   }
 }
 
 case class Cell(coordinates: CartesianCoordinates, content: Option[CellContent] = None, visibility: Visibility = Visibility.Hidden, mark: Option[String] = None, board: Board) extends Ordered[Cell] with RectangleCoordinates {
-  val data = CellData(coordinates, content, visibility, mark)
+  val data = CellData(content, visibility, mark)
   
   override val dimensions: Dimensions = board.dimensions
 

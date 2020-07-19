@@ -4,11 +4,9 @@ import java.sql.Timestamp
 import java.time.LocalDateTime
 
 import ar.com.flow.minesweeper.Visibility.Shown
-import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, CellData, Dimensions, Visibility}
+import ar.com.flow.minesweeper._
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
-
-import scala.collection.immutable.HashMap
 
 object Tables {
   implicit val localDateToDate = MappedColumnType.base[LocalDateTime, Timestamp](
@@ -59,7 +57,7 @@ object Tables {
   val dropSchemaAction = (games.schema ++ boards.schema ++ cells.schema).drop
 
   def mapToBoard(result: Seq[((GameTuple, BoardTuple), CellTuple)]): Board = {
-    val cellsByCoordinates = HashMap(result.map(c => Tables.mapToCell(c._2)).map(c => c.coordinates -> c): _*)
+    val cellsByCoordinates = result.map(c => Tables.mapToCell(c._2)).toMap
     Board(Dimensions(result.head._1._2._2, result.head._1._2._3), result.head._1._2._4, cellsByCoordinates)
   }
 
@@ -67,7 +65,7 @@ object Tables {
     (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility == Shown, cell.mark)
   }
 
-  def mapToCell(cellTuple: CellTuple) : CellData = {
-    CellData(CartesianCoordinates(cellTuple._2, cellTuple._3), CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6)
+  def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, CellData) = {
+    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellData(CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6)
   }
 }
