@@ -8,7 +8,7 @@ class BoardFactoryTest extends AnyFunSuite with Matchers {
     val board = Board(Dimensions(3, 3), 2)
 
     board.dimensions shouldBe Dimensions(3, 3)
-    board.cellContent should have size 9
+    board.cellData should have size 9
     board.cells.withBomb should have size 2
   }
 

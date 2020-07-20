@@ -9,7 +9,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
       it("should be an empty set") {
         val board = Board(Dimensions(3, 3), 2)
 
-        board.cells.revealed.cells shouldBe Set.empty
+        board.cells.revealed.all shouldBe Set.empty
       }
     }
     describe("when revealing a cell") {
@@ -19,7 +19,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
           val updatedBoard = board.revealCell(CartesianCoordinates(1, 1))
 
-          updatedBoard.cells.revealed.cells shouldBe Set(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
+          updatedBoard.cells.revealed.all shouldBe Set(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
         }
       }
       describe("already revealed") {
@@ -29,7 +29,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
           board.revealCell(CartesianCoordinates(1, 1))
           val updatedBoard = board.revealCell(CartesianCoordinates(1, 1))
 
-          updatedBoard.cells.revealed.cells shouldBe Set(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
+          updatedBoard.cells.revealed.all shouldBe Set(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
         }
       }
     }

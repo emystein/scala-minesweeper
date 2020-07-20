@@ -6,13 +6,14 @@ object Cell {
   }
 }
 
-case class Cell(coordinates: CartesianCoordinates, content: Option[CellContent] = None, visibility: Visibility = Visibility.Hidden, mark: Option[String] = None, board: Board) extends Ordered[Cell] with RectangleCoordinates {
-  val data = CellData(content, visibility, mark)
-  
+case class Cell(coordinates: CartesianCoordinates,
+                content: Option[CellContent] = None,
+                visibility: Visibility = Visibility.Hidden,
+                mark: Option[String] = None, board: Board) extends Ordered[Cell] with RectangleCoordinates {
   override val dimensions: Dimensions = board.dimensions
 
   def adjacentCells(): Seq[Cell] = {
-    neighboursOf(coordinates).map(board.cellAt)
+    adjacentOf(coordinates).map(board.cellAt)
   }
 
   def adjacentEmptySpace(previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {

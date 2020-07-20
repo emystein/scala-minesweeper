@@ -3,7 +3,7 @@ package ar.com.flow.minesweeper
 trait RectangleCoordinates {
   val dimensions: Dimensions
 
-  def neighboursOf(coordinates: CartesianCoordinates): Seq[CartesianCoordinates] = {
+  def adjacentOf(coordinates: CartesianCoordinates): Seq[CartesianCoordinates] = {
     for {
       x <- coordinates.x - 1 to coordinates.x + 1
       y <- coordinates.y - 1 to coordinates.y + 1

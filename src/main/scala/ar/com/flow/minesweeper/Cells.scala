@@ -12,13 +12,13 @@ object Cells {
   }
 }
 
-case class CellSet(cells: Set[Cell]) {
+case class CellSet(all: Set[Cell]) {
   def empty(): Set[Cell] = {
-    cells.filter(_.content.isEmpty)
+    all.filter(_.content.isEmpty)
   }
 
   def withBomb(): Set[Cell] = {
-    cells.filter(_.content.isDefined)
+    all.filter(_.content.isDefined)
   }
 }
 

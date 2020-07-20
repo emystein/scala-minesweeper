@@ -17,7 +17,7 @@ class CellNeighboursTest extends AnyFunSuite with TableDrivenPropertyChecks with
       val rectangle = new RectangleCoordinates {
         val dimensions = Dimensions(rows, columns)
       }
-      rectangle.neighboursOf(CartesianCoordinates(row, column)) shouldBe neighbours.map(n => CartesianCoordinates(n._1, n._2))
+      rectangle.adjacentOf(CartesianCoordinates(row, column)) shouldBe neighbours.map(n => CartesianCoordinates(n._1, n._2))
     })
   }
 }
