@@ -12,8 +12,8 @@ class CellsTest extends AnyWordSpec with TestCells with Matchers {
         cells.all shouldBe allCells
         cells.empty shouldBe Set(notRevealedEmptyCell, revealedEmptyCell)
         cells.withBomb shouldBe Set(notRevealedCellWithBomb, revealedCellWithBomb)
-        cells.hidden shouldBe CellSet(Set(notRevealedEmptyCell, notRevealedCellWithBomb))
-        cells.revealed shouldBe CellSet(Set(revealedEmptyCell, revealedCellWithBomb))
+        cells.hidden shouldBe CellFilters(Set(notRevealedEmptyCell, notRevealedCellWithBomb))
+        cells.revealed shouldBe CellFilters(Set(revealedEmptyCell, revealedCellWithBomb))
       }
     }
   }

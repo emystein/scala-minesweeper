@@ -26,7 +26,6 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
         it("should not add cell to revealed cell set") {
           val board = Board(Dimensions(3, 3), 2)
 
-          board.revealCell(CartesianCoordinates(1, 1))
           val updatedBoard = board.revealCell(CartesianCoordinates(1, 1))
 
           updatedBoard.cells.revealed.all shouldBe Set(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
@@ -77,7 +76,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val updatedBoard = board.revealCell(emptyCell.coordinates)
 
-        updatedBoard.cells.notRevealedEmpty shouldNot contain(emptyCell.copy(board = updatedBoard))
+        updatedBoard.cells.hidden.empty shouldNot contain(emptyCell.copy(board = updatedBoard))
       }
     }
   }
