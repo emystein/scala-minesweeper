@@ -65,7 +65,7 @@ object Tables {
     (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility == Shown, cell.mark)
   }
 
-  def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, CellData) = {
-    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellData(CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6)
+  def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, CellState) = {
+    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6)
   }
 }

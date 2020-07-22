@@ -28,6 +28,6 @@ class BoardTest extends AnyFunSuite with Matchers {
     val adjacent = board.cellAt(CartesianCoordinates(1, 1)).adjacentCells
 
     adjacent.map(_.coordinates) shouldBe
-      Seq(CartesianCoordinates(1, 2), CartesianCoordinates(2, 1), CartesianCoordinates(2, 2))
+      Set(CartesianCoordinates(1, 2), CartesianCoordinates(2, 1), CartesianCoordinates(2, 2))
   }
 }
