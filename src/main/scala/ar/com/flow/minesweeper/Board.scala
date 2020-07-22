@@ -32,13 +32,15 @@ object Board {
   }
 }
 
-case class Board(dimensions: Dimensions, totalBombs: Int, cellData: Map[CartesianCoordinates, CellData]) {
+case class Board(dimensions: Dimensions, totalBombs: Int, cellData: Map[CartesianCoordinates, CellData]) extends RectangleCoordinates {
   def cells: Cells =
     Cells(cellData.toSet.map((c: (CartesianCoordinates, CellData)) => Cell(c._1, c._2, this)))
 
   def cellAt(coordinates: CartesianCoordinates): Cell = {
     Cell(coordinates, cellData(coordinates), this)
   }
+
+  def cellsAdjacentTo(coordinates: CartesianCoordinates): Seq[Cell] = adjacentOf(coordinates).map(cellAt)
 
   def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board = {
     copy(cellData = cellData + (coordinates -> cellData(coordinates).copy(mark = value)))

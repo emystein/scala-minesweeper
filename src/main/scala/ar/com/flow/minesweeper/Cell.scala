@@ -9,17 +9,12 @@ object Cell {
 case class Cell(coordinates: CartesianCoordinates,
                 content: Option[CellContent] = None,
                 visibility: Visibility = Visibility.Hidden,
-                mark: Option[String] = None, board: Board) extends Ordered[Cell] with RectangleCoordinates {
-  override val dimensions: Dimensions = board.dimensions
+                mark: Option[String] = None, board: Board) extends Ordered[Cell] {
 
-  def adjacentCells(): Seq[Cell] = {
-    adjacentOf(coordinates).map(board.cellAt)
-  }
+  val adjacentCells: Set[Cell] = board.cellsAdjacentTo(coordinates).toSet
 
   def adjacentEmptySpace(previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
-    val adjacentCells = this.adjacentCells().toSet -- previouslyTraversed
-
-    adjacentCells.filter(_.content.isEmpty)
+    (this.adjacentCells -- previouslyTraversed).filter(_.content.isEmpty)
       .foldLeft(previouslyTraversed + this)((traversed, adjacent) => adjacent.adjacentEmptySpace(traversed))
   }
   
