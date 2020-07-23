@@ -12,11 +12,11 @@ object Game {
 // TODO: Make board, state a val
 class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var state: GameState = GameState(GamePlayStatus.playing, GameResult.pending)) {
   def flagCell(coordinates: CartesianCoordinates): Unit = {
-    board = board.setCellValue(coordinates, Some(CellMark.flag))
+    board = board.markCell(coordinates, Some(CellMark.Flag))
   }
 
   def questionCell(coordinates: CartesianCoordinates): Unit = {
-    board = board.setCellValue(coordinates, Some(CellMark.question))
+    board = board.markCell(coordinates, Some(CellMark.Question))
   }
 
   def revealCell(coordinates: CartesianCoordinates): Unit = {

@@ -61,10 +61,10 @@ object Tables {
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility == Shown, cell.mark)
+    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility == Shown, cell.mark.map(CellMark.cellMarkToString))
   }
 
   def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, CellState) = {
-    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6)
+    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6.map(CellMark.from))
   }
 }

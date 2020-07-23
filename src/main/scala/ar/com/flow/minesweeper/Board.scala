@@ -37,8 +37,8 @@ case class Board(dimensions: Dimensions,
 
   val cells: Cells = Cells(cellAt.values)
 
-  def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board =
-    updateCellAt(coordinates, cellsState(coordinates).copy(mark = value))
+  def markCell(coordinates: CartesianCoordinates, mark: Option[CellMark]): Board =
+    updateCellAt(coordinates, cellsState(coordinates).copy(mark = mark))
 
   def revealCell(coordinates: CartesianCoordinates): Board =
     updateCellAt(coordinates, cellsState(coordinates).copy(visibility = Shown))

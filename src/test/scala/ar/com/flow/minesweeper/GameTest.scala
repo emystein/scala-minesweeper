@@ -11,7 +11,7 @@ class GameTest extends AnyFunSuite with Matchers {
 
     game.questionCell(CartesianCoordinates(1, 1))
 
-    game.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.question)
+    game.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Question)
   }
 
   test("Flag Cell") {
@@ -19,7 +19,7 @@ class GameTest extends AnyFunSuite with Matchers {
 
     game.flagCell(CartesianCoordinates(1, 1))
 
-    game.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.flag)
+    game.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Flag)
   }
 
   test("Reveal Cell should mark it as revealed") {

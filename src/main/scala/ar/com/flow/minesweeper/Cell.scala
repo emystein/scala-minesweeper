@@ -11,7 +11,7 @@ object Cell {
 case class Cell(coordinates: CartesianCoordinates,
                 content: Option[CellContent] = None,
                 visibility: Visibility = Visibility.Hidden,
-                mark: Option[String] = None, board: Board) extends Ordered[Cell] {
+                mark: Option[CellMark] = None, board: Board) extends Ordered[Cell] {
 
   def adjacentCells: Set[Cell] = board.adjacentOf(coordinates).map(board.cellAt)
 
@@ -29,7 +29,7 @@ case class Cell(coordinates: CartesianCoordinates,
 
 case class CellState(content: Option[CellContent] = None,
                      visibility: Visibility = Hidden,
-                     mark: Option[String] = None)
+                     mark: Option[CellMark] = None)
 
 abstract class CellContent extends Product with Serializable
 
@@ -48,8 +48,19 @@ object Visibility {
   def apply(shown: Boolean): Visibility =  if (shown) Shown else Hidden
 }
 
+sealed abstract class CellMark extends Product with Serializable
+
 object CellMark {
-  val empty: String = ""
-  val flag: String = "f"
-  val question: String = "?"
+  final case object Flag extends CellMark
+  final case object Question extends CellMark
+
+  def from(value: String): CellMark = value match {
+    case "f" => Flag
+    case "?" => Question
+  }
+
+  implicit val cellMarkToString: CellMark => String = {
+    case Flag => "f"
+    case Question => "?"
+  }
 }
