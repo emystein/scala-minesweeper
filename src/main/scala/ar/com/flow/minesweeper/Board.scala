@@ -38,11 +38,11 @@ case class Board(dimensions: Dimensions,
   val cells: Cells = Cells(cellAt.values)
 
   def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board =
-    updateCell(coordinates, cellsState(coordinates).copy(mark = value))
+    updateCellAt(coordinates, cellsState(coordinates).copy(mark = value))
 
   def revealCell(coordinates: CartesianCoordinates): Board =
-    updateCell(coordinates, cellsState(coordinates).copy(visibility = Shown))
+    updateCellAt(coordinates, cellsState(coordinates).copy(visibility = Shown))
 
-  private def updateCell(coordinates: CartesianCoordinates, newState: CellState): Board =
+  private def updateCellAt(coordinates: CartesianCoordinates, newState: CellState): Board =
     copy(cellsState = cellsState + (coordinates -> newState))
 }

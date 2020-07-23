@@ -3,15 +3,8 @@ package ar.com.flow.minesweeper
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
-class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
+class BoardRevealCellsTest extends AnyFunSpec with Matchers {
   describe("Revealed cells") {
-    describe("when creating a Board") {
-      it("should be an empty set") {
-        val board = Board(Dimensions(3, 3), 2)
-
-        board.cells.revealed.all shouldBe Seq.empty
-      }
-    }
     describe("when revealing a cell") {
       describe("not previously revealed") {
         it("should add cell to revealed cell set") {

@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 
-class RecursiveEmptyCellsRevealTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers with CellsAssertions {
+class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers with CellsAssertions {
   val data = Table(
     ("rows", "columns", "bombs"),
     (1, 1, 0),
