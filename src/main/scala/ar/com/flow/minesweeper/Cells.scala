@@ -2,6 +2,12 @@ package ar.com.flow.minesweeper
 
 import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
 
+object Cells {
+  def apply(all: Iterable[Cell]): Cells = {
+    new Cells(all.toSet)
+  }
+}
+
 case class Cells(all: Set[Cell]) {
   val empty: Set[Cell] = all.filter(_.content.isEmpty)
   val withBomb: Set[Cell] = all.filter(_.content.isDefined)
@@ -26,4 +32,3 @@ case class CellFilters(all: Set[Cell]) {
     all.filter(_.content.isDefined)
   }
 }
-

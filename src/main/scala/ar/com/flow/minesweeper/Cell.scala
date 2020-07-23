@@ -11,7 +11,7 @@ case class Cell(coordinates: CartesianCoordinates,
                 visibility: Visibility = Visibility.Hidden,
                 mark: Option[String] = None, board: Board) extends Ordered[Cell] {
 
-  def adjacentCells: Set[Cell] = board.cellsAdjacentTo(coordinates).toSet
+  def adjacentCells: Set[Cell] = board.adjacentOf(coordinates).map(board.cellAt)
 
   def adjacentEmptySpace(previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
     (adjacentCells -- previouslyTraversed).filter(_.content.isEmpty)

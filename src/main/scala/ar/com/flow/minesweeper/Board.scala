@@ -32,22 +32,19 @@ object Board {
   }
 }
 
-case class Board(dimensions: Dimensions, totalBombs: Int, cellStateByCoordinate: Map[CartesianCoordinates, CellState]) extends RectangleCoordinates {
-  val cellsByCoordinate: Map[CartesianCoordinates, Cell] = cellStateByCoordinate.map((c: (CartesianCoordinates, CellState)) => c._1 -> Cell(c._1, c._2, this))
+case class Board(dimensions: Dimensions,
+                 totalBombs: Int,
+                 cellsState: Map[CartesianCoordinates, CellState]) extends RectangleCoordinates {
 
-  val cells: Cells = Cells(cellsByCoordinate.values.toSet)
-
-  def cellAt(coordinates: CartesianCoordinates): Cell = {
-    cellsByCoordinate(coordinates)
+  val cellAt: Map[CartesianCoordinates, Cell] = cellsState.map {
+    case (coordinates, state) => coordinates -> Cell(coordinates, state, this)
   }
 
-  def cellsAdjacentTo(coordinates: CartesianCoordinates): Seq[Cell] = adjacentOf(coordinates).map(cellAt)
+  val cells: Cells = Cells(cellAt.values)
 
-  def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board = {
-    copy(cellStateByCoordinate = cellStateByCoordinate + (coordinates -> cellStateByCoordinate(coordinates).copy(mark = value)))
-  }
+  def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board =
+    copy(cellsState = cellsState + (coordinates -> cellsState(coordinates).copy(mark = value)))
 
-  def revealCell(coordinates: CartesianCoordinates): Board = {
-    copy(cellStateByCoordinate = cellStateByCoordinate + (coordinates -> cellStateByCoordinate(coordinates).copy(visibility = Shown)))
-  }
+  def revealCell(coordinates: CartesianCoordinates): Board =
+    copy(cellsState = cellsState + (coordinates -> cellsState(coordinates).copy(visibility = Shown)))
 }
