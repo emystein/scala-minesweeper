@@ -4,7 +4,7 @@ import java.sql.Timestamp
 import java.time.LocalDateTime
 
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
-import ar.com.flow.minesweeper.Visibility.Shown
+import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
 import ar.com.flow.minesweeper._
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
@@ -34,6 +34,17 @@ object Tables {
     def * = (id, rows, columns)
   }
 
+  implicit val visibilityColumnType = MappedColumnType.base[Visibility, Boolean](
+    {
+      case Shown => true
+      case Hidden => false
+    },
+    {
+      case true => Shown
+      case false => Hidden
+    }
+  )
+
   implicit val cellMarkColumnType = MappedColumnType.base[CellMark, String](
     {
       case Flag => "f"
@@ -45,14 +56,14 @@ object Tables {
     }
   )
 
-  type CellTuple = (String, Int, Int, Boolean, Boolean, Option[CellMark])
+  type CellTuple = (String, Int, Int, Boolean, Visibility, Option[CellMark])
 
   class Cells(tag: Tag) extends Table[CellTuple](tag, "cell") {
     def id = column[String]("id")
     def row = column[Int]("row")
     def col = column[Int]("column")
     def hasBomb = column[Boolean]("has_bomb")
-    def isRevealed = column[Boolean]("is_revealed")
+    def isRevealed = column[Visibility]("is_revealed")
     def value = column[Option[CellMark]]("value")
     def pk = primaryKey("cell_pk", (id, row, col))
     def * = (id, row, col, hasBomb, isRevealed, value)
@@ -73,10 +84,10 @@ object Tables {
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility == Shown, cell.mark)
+    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility, cell.mark)
   }
 
   def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, CellState) = {
-    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6)
+    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(CellContent(cellTuple._4), cellTuple._5, cellTuple._6)
   }
 }

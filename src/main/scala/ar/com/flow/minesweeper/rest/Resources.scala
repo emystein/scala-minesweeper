@@ -25,7 +25,7 @@ case class BoardResource(dimensions: Dimensions, cells: Seq[CellResource])
 
 object CellResources {
   def from(board: Board): Seq[CellResource] = {
-    board.cells.all.toSeq.map(cell => CellResource.from(cell)).sorted
+    board.cells.all.toSeq.map(CellResource.from).sorted
   }
 }
 
