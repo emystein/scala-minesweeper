@@ -53,14 +53,4 @@ sealed abstract class CellMark extends Product with Serializable
 object CellMark {
   final case object Flag extends CellMark
   final case object Question extends CellMark
-
-  def from(value: String): CellMark = value match {
-    case "f" => Flag
-    case "?" => Question
-  }
-
-  implicit val cellMarkToString: CellMark => String = {
-    case Flag => "f"
-    case Question => "?"
-  }
 }

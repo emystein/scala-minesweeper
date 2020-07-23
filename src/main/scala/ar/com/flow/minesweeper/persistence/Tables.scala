@@ -3,6 +3,7 @@ package ar.com.flow.minesweeper.persistence
 import java.sql.Timestamp
 import java.time.LocalDateTime
 
+import ar.com.flow.minesweeper.CellMark.{Flag, Question}
 import ar.com.flow.minesweeper.Visibility.Shown
 import ar.com.flow.minesweeper._
 import slick.jdbc.H2Profile.api._
@@ -33,7 +34,18 @@ object Tables {
     def * = (id, rows, columns)
   }
 
-  type CellTuple = (String, Int, Int, Boolean, Boolean, Option[String])
+  implicit val cellMarkColumnType = MappedColumnType.base[CellMark, String](
+    {
+      case Flag => "f"
+      case Question => "?"
+    },
+    {
+      case "f" => Flag
+      case "?" => Question
+    }
+  )
+
+  type CellTuple = (String, Int, Int, Boolean, Boolean, Option[CellMark])
 
   class Cells(tag: Tag) extends Table[CellTuple](tag, "cell") {
     def id = column[String]("id")
@@ -41,7 +53,7 @@ object Tables {
     def col = column[Int]("column")
     def hasBomb = column[Boolean]("has_bomb")
     def isRevealed = column[Boolean]("is_revealed")
-    def value = column[Option[String]]("value")
+    def value = column[Option[CellMark]]("value")
     def pk = primaryKey("cell_pk", (id, row, col))
     def * = (id, row, col, hasBomb, isRevealed, value)
   }
@@ -61,10 +73,10 @@ object Tables {
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility == Shown, cell.mark.map(CellMark.cellMarkToString))
+    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility == Shown, cell.mark)
   }
 
   def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, CellState) = {
-    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6.map(CellMark.from))
+    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(CellContent(cellTuple._4), Visibility(cellTuple._5), cellTuple._6)
   }
 }

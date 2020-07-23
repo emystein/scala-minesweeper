@@ -2,6 +2,7 @@ package ar.com.flow.minesweeper.rest
 
 import java.time.format.DateTimeFormatter
 
+import ar.com.flow.minesweeper.CellMark.{Flag, Question}
 import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, CellMark, Cells, Dimensions, Game, Visibility}
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
@@ -29,8 +30,13 @@ object CellResources {
 }
 
 object CellResource {
+  implicit val cellMarkToString: CellMark => String = {
+    case Flag => "f"
+    case Question => "?"
+  }
+
   def from(cell: Cell): CellResource = {
-    new CellResource(cell.coordinates, cell.content, cell.visibility, cell.mark.map(CellMark.cellMarkToString))
+    new CellResource(cell.coordinates, cell.content, cell.visibility, cell.mark.map(cellMarkToString))
   }
 }
 
