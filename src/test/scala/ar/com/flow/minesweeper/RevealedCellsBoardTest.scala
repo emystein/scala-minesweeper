@@ -9,7 +9,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
       it("should be an empty set") {
         val board = Board(Dimensions(3, 3), 2)
 
-        board.cells.revealed.all shouldBe Set.empty
+        board.cells.revealed.all shouldBe Seq.empty
       }
     }
     describe("when revealing a cell") {
@@ -19,7 +19,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
           val updatedBoard = board.revealCell(CartesianCoordinates(1, 1))
 
-          updatedBoard.cells.revealed.all shouldBe Set(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
+          updatedBoard.cells.revealed.all shouldBe Seq(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
         }
       }
       describe("already revealed") {
@@ -28,7 +28,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
           val updatedBoard = board.revealCell(CartesianCoordinates(1, 1))
 
-          updatedBoard.cells.revealed.all shouldBe Set(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
+          updatedBoard.cells.revealed.all shouldBe Seq(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
         }
       }
     }
@@ -39,7 +39,7 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
       it("should contain empty cell") {
         val board = Board(Dimensions(3, 3), 2)
 
-        board.cells.revealed.empty shouldBe Set()
+        board.cells.revealed.empty shouldBe Seq.empty
 
         val emptyCell = board.cells.empty.head
 
@@ -47,14 +47,14 @@ class RevealedCellsBoardTest extends AnyFunSpec with Matchers {
 
         val revealedEmptyCell = emptyCell.copy(visibility = Visibility.Shown, board = updatedBoard)
 
-        updatedBoard.cells.revealed.empty shouldBe Set(revealedEmptyCell)
+        updatedBoard.cells.revealed.empty shouldBe Seq(revealedEmptyCell)
       }
     }
     describe("when revealed bomb cell") {
       it("should not contain bomb cell") {
         val board = Board(Dimensions(3, 3), 2)
 
-        board.cells.revealed.empty shouldBe Set()
+        board.cells.revealed.empty shouldBe Seq.empty
 
         val bombCell = board.cells.withBomb.head
 

@@ -1,5 +1,7 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.Visibility.Hidden
+
 object Cell {
   def apply(coordinates: CartesianCoordinates, cellData: CellState, board: Board): Cell = {
     new Cell(coordinates, cellData.content, cellData.visibility, cellData.mark , board)
@@ -24,6 +26,10 @@ case class Cell(coordinates: CartesianCoordinates,
     this.coordinates compare that.coordinates
   }
 }
+
+case class CellState(content: Option[CellContent] = None,
+                     visibility: Visibility = Hidden,
+                     mark: Option[String] = None)
 
 abstract class CellContent extends Product with Serializable
 

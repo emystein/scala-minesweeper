@@ -4,10 +4,6 @@ import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
 
 import scala.util.Random
 
-case class CellState(content: Option[CellContent] = None,
-                     visibility: Visibility = Hidden,
-                     mark: Option[String] = None)
-
 object Board {
   def apply(dimensions: Dimensions, totalBombs: Int): Board = {
     require(totalBombs >= 0)
@@ -42,8 +38,11 @@ case class Board(dimensions: Dimensions,
   val cells: Cells = Cells(cellAt.values)
 
   def setCellValue(coordinates: CartesianCoordinates, value: Option[String]): Board =
-    copy(cellsState = cellsState + (coordinates -> cellsState(coordinates).copy(mark = value)))
+    updateCell(coordinates, cellsState(coordinates).copy(mark = value))
 
   def revealCell(coordinates: CartesianCoordinates): Board =
-    copy(cellsState = cellsState + (coordinates -> cellsState(coordinates).copy(visibility = Shown)))
+    updateCell(coordinates, cellsState(coordinates).copy(visibility = Shown))
+
+  private def updateCell(coordinates: CartesianCoordinates, newState: CellState): Board =
+    copy(cellsState = cellsState + (coordinates -> newState))
 }
