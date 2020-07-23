@@ -11,7 +11,7 @@ case class CellState(content: Option[CellContent] = None,
 object Board {
   def apply(dimensions: Dimensions, totalBombs: Int): Board = {
     require(totalBombs >= 0)
-    Board(dimensions, totalBombs, cellStateByCoordinate(dimensions, totalBombs))
+    Board(dimensions, cellStateByCoordinate(dimensions, totalBombs))
   }
 
   def cellStateByCoordinate(dimensions: Dimensions, totalBombs: Int): Map[CartesianCoordinates, CellState] = {
@@ -33,7 +33,6 @@ object Board {
 }
 
 case class Board(dimensions: Dimensions,
-                 totalBombs: Int,
                  cellsState: Map[CartesianCoordinates, CellState]) extends RectangleCoordinates {
 
   val cellAt: Map[CartesianCoordinates, Cell] = cellsState.map {

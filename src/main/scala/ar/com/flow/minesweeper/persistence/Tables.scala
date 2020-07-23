@@ -24,14 +24,13 @@ object Tables {
     def board = foreignKey("board", id, boards)(_.id)
   }
 
-  type BoardTuple = (String, Int, Int, Int)
+  type BoardTuple = (String, Int, Int)
 
   class Boards(tag: Tag) extends Table[BoardTuple](tag, "board") {
     def id = column[String]("id", O.PrimaryKey)
     def rows = column[Int]("rows")
     def columns = column[Int]("columns")
-    def bombs = column[Int]("bombs")
-    def * = (id, rows, columns, bombs)
+    def * = (id, rows, columns)
   }
 
   type CellTuple = (String, Int, Int, Boolean, Boolean, Option[String])
@@ -58,7 +57,7 @@ object Tables {
 
   def mapToBoard(result: Seq[((GameTuple, BoardTuple), CellTuple)]): Board = {
     val cellsByCoordinates = result.map(c => Tables.mapToCell(c._2)).toMap
-    Board(Dimensions(result.head._1._2._2, result.head._1._2._3), result.head._1._2._4, cellsByCoordinates)
+    Board(Dimensions(result.head._1._2._2, result.head._1._2._3), cellsByCoordinates)
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {

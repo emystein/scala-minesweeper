@@ -16,11 +16,11 @@ case class GameResource(id: String, createdAt: String, board: BoardResource, sta
 
 object BoardResource {
   def apply(board: Board): BoardResource = {
-    BoardResource(board.dimensions, board.totalBombs, CellResources.from(board))
+    BoardResource(board.dimensions, CellResources.from(board))
   }
 }
 
-case class BoardResource(dimensions: Dimensions, totalBombs: Int, cells: Seq[CellResource])
+case class BoardResource(dimensions: Dimensions, cells: Seq[CellResource])
 
 object CellResources {
   def from(board: Board): Seq[CellResource] = {
