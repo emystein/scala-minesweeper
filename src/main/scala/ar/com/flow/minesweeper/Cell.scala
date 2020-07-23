@@ -34,9 +34,9 @@ case class CellState(content: Option[CellContent] = None,
 abstract class CellContent extends Product with Serializable
 
 object CellContent {
-  def apply(hasBomb: Boolean): Option[CellContent] =  if (hasBomb) Some(Bomb) else None
-
   final case object Bomb extends CellContent
+
+  implicit val booleanToBomb: Boolean => Option[CellContent] = hasBomb => if (hasBomb) Some(Bomb) else None
 }
 
 sealed abstract class Visibility extends Product with Serializable

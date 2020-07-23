@@ -22,7 +22,7 @@ object Board {
       } yield {
         val coordinates = CartesianCoordinates(row, column)
         val hasBomb = bombCoordinates.contains(coordinates)
-        coordinates -> CellState(CellContent(hasBomb))
+        coordinates -> CellState(hasBomb)
       }
     }.toMap
   }

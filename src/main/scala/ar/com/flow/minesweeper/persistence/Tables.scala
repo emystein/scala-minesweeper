@@ -88,6 +88,6 @@ object Tables {
   }
 
   def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, CellState) = {
-    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(CellContent(cellTuple._4), cellTuple._5, cellTuple._6)
+    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  CellState(cellTuple._4, cellTuple._5, cellTuple._6)
   }
 }
