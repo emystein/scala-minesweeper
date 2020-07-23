@@ -39,6 +39,15 @@ object CellContent {
   final case object Bomb extends CellContent
 }
 
+sealed abstract class Visibility extends Product with Serializable
+
+object Visibility {
+  final case object Hidden extends Visibility
+  final case object Shown extends Visibility
+
+  def apply(shown: Boolean): Visibility =  if (shown) Shown else Hidden
+}
+
 object CellMark {
   val empty: String = ""
   val flag: String = "f"
