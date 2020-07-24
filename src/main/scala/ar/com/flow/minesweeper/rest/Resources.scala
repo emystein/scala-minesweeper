@@ -40,7 +40,7 @@ object CellResource {
   }
 }
 
-case class CellResource(coordinates: CartesianCoordinates, content: Option[CellContent] = None, visibility: Visibility, mark: Option[String] = None) extends Ordered[CellResource] {
+case class CellResource(coordinates: CartesianCoordinates, hasBomb: Boolean, visibility: Visibility, mark: Option[String] = None) extends Ordered[CellResource] {
   // https://stackoverflow.com/a/19348339/545273
   import scala.math.Ordered.orderingToOrdered
 

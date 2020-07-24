@@ -3,20 +3,20 @@ package ar.com.flow.minesweeper
 import ar.com.flow.minesweeper.Visibility.Hidden
 
 object Cell {
-  def apply(coordinates: CartesianCoordinates, cellData: CellState, board: Board): Cell = {
-    new Cell(coordinates, cellData.content, cellData.visibility, cellData.mark , board)
+  def apply(coordinates: CartesianCoordinates, cellState: CellState, board: Board): Cell = {
+    new Cell(coordinates, cellState.content, cellState.visibility, cellState.mark, board)
   }
 }
 
 case class Cell(coordinates: CartesianCoordinates,
-                content: Option[CellContent] = None,
+                content: CellContent = CellContent.Empty,
                 visibility: Visibility = Visibility.Hidden,
                 mark: Option[CellMark] = None, board: Board) extends Ordered[Cell] {
 
   def adjacentCells: Set[Cell] = board.adjacentOf(coordinates).map(board.cellAt)
 
   def adjacentEmptySpace(previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
-    (adjacentCells -- previouslyTraversed).filter(_.content.isEmpty)
+    (adjacentCells -- previouslyTraversed).filter(_.content == CellContent.Empty)
       .foldLeft(previouslyTraversed + this)((traversed, adjacent) => adjacent.adjacentEmptySpace(traversed))
   }
   
@@ -27,16 +27,23 @@ case class Cell(coordinates: CartesianCoordinates,
   }
 }
 
-case class CellState(content: Option[CellContent] = None,
+case class CellState(content: CellContent = CellContent.Empty,
                      visibility: Visibility = Hidden,
                      mark: Option[CellMark] = None)
 
 abstract class CellContent extends Product with Serializable
 
 object CellContent {
+  final case object Empty extends CellContent
   final case object Bomb extends CellContent
 
-  implicit val booleanToBomb: Boolean => Option[CellContent] = hasBomb => if (hasBomb) Some(Bomb) else None
+  implicit val booleanToBomb: Boolean => CellContent =
+    hasBomb => if (hasBomb) Bomb else CellContent.Empty
+
+  implicit val contentToBoolean: CellContent => Boolean = {
+    case Bomb => true
+    case Empty => false
+  }
 }
 
 sealed abstract class Visibility extends Product with Serializable

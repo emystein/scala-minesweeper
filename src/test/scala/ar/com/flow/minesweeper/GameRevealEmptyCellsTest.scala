@@ -21,7 +21,7 @@ class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyCheck
 
       val emptyCell = game.board.cells.empty.head
 
-      val adjacentEmptyCells = emptyCell.adjacentCells.filter(_.content.isEmpty)
+      val adjacentEmptyCells = emptyCell.adjacentCells.filter(_.content == CellContent.Empty)
 
       game.revealCell(emptyCell.coordinates)
 

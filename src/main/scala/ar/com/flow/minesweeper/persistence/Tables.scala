@@ -3,6 +3,7 @@ package ar.com.flow.minesweeper.persistence
 import java.sql.Timestamp
 import java.time.LocalDateTime
 
+import ar.com.flow.minesweeper.CellContent.{Bomb, Empty}
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
 import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
 import ar.com.flow.minesweeper._
@@ -34,6 +35,17 @@ object Tables {
     def * = (id, rows, columns)
   }
 
+  implicit val cellContentColumnType = MappedColumnType.base[CellContent, Boolean](
+    {
+      case CellContent.Bomb => true
+      case CellContent.Empty => false
+    },
+    {
+      case true => CellContent.Bomb
+      case false => CellContent.Empty
+    }
+  )
+
   implicit val visibilityColumnType = MappedColumnType.base[Visibility, Boolean](
     {
       case Shown => true
@@ -56,13 +68,13 @@ object Tables {
     }
   )
 
-  type CellTuple = (String, Int, Int, Boolean, Visibility, Option[CellMark])
+  type CellTuple = (String, Int, Int, CellContent, Visibility, Option[CellMark])
 
   class Cells(tag: Tag) extends Table[CellTuple](tag, "cell") {
     def id = column[String]("id")
     def row = column[Int]("row")
     def col = column[Int]("column")
-    def hasBomb = column[Boolean]("has_bomb")
+    def hasBomb = column[CellContent]("has_bomb")
     def isRevealed = column[Visibility]("is_revealed")
     def value = column[Option[CellMark]]("value")
     def pk = primaryKey("cell_pk", (id, row, col))
@@ -84,7 +96,7 @@ object Tables {
   }
 
   def mapFromCell(gameId: String, cell: Cell): CellTuple = {
-    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content.isDefined, cell.visibility, cell.mark)
+    (gameId, cell.coordinates.x, cell.coordinates.y, cell.content, cell.visibility, cell.mark)
   }
 
   def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, CellState) = {
