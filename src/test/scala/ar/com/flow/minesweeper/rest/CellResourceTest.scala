@@ -5,6 +5,7 @@ import ar.com.flow.minesweeper.Visibility.Hidden
 import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, Dimensions}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
+import CellResource.cellContentToBoolean
 
 class CellResourceTest extends AnyFunSuite with Matchers with CellResourceAssertions {
   val board: Board = Board(Dimensions(3, 3), totalBombs = 3)

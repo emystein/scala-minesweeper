@@ -37,13 +37,8 @@ object CellContent {
   final case object Empty extends CellContent
   final case object Bomb extends CellContent
 
-  implicit val booleanToBomb: Boolean => CellContent =
-    hasBomb => if (hasBomb) Bomb else CellContent.Empty
-
-  implicit val contentToBoolean: CellContent => Boolean = {
-    case Bomb => true
-    case Empty => false
-  }
+  implicit val booleanToCellContent: Boolean => CellContent =
+    hasBomb => if (hasBomb) CellContent.Bomb else CellContent.Empty
 }
 
 sealed abstract class Visibility extends Product with Serializable

@@ -30,6 +30,11 @@ object CellResources {
 }
 
 object CellResource {
+  implicit val cellContentToBoolean: CellContent => Boolean = {
+    case CellContent.Bomb => true
+    case CellContent.Empty => false
+  }
+
   implicit val cellMarkToString: CellMark => String = {
     case Flag => "f"
     case Question => "?"
