@@ -1,8 +1,13 @@
 # Minesweeper #
 
-Minesweeper RESTful API implemented with *Scalatra*, *Slick* for persistence.
+Minesweeper model implemented in Scala.
 
-The model is not pure functional. For a pure functional model see: https://github.com/scala-minesweeper 
+The model is hybrid object-oriented and functional. For a more functional model see: https://github.com/scala-minesweeper 
+
+RESTful API implemented in [Scalatra](https://scalatra.org//).
+
+Persistence implemented in [Slick](https://scala-slick.org/).
+
 
 ## Build & Run ##
 
