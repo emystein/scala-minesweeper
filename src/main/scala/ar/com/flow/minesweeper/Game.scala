@@ -4,7 +4,6 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
-import ar.com.flow.minesweeper.GamePlayStatus.{paused, playing}
 import ar.com.flow.minesweeper.Visibility.Hidden
 
 object Game {
@@ -17,7 +16,7 @@ object Game {
 case class Game(id: String,
                 createdAt: LocalDateTime = LocalDateTime.now,
                 board: Board,
-                state: GameState = GameState(playing, GameResult.pending)) {
+                state: GameState = GameState(GamePlayStatus.Playing, GameResult.Pending)) {
 
   def advanceCellState(coordinates: CartesianCoordinates): Game = {
       val newCellMark: Option[CellMark] = board.cellAt(coordinates).mark match {
@@ -51,7 +50,7 @@ case class Game(id: String,
     val revealedCellBoard = board.revealCellAt(coordinates)
 
     if (cell.content == CellContent.Bomb) {
-      return copy(board = revealedCellBoard, state = GameState(GamePlayStatus.finished, GameResult.lost))
+      return copy(board = revealedCellBoard, state = GameState(GamePlayStatus.Finished, GameResult.Lost))
     }
 
     var updatedBoard = revealedCellBoard
@@ -65,39 +64,27 @@ case class Game(id: String,
 
     if (updatedBoard.cells.hidden.empty.isEmpty) {
       // if recursive cell reveal won the game
-      updatedGameState = GameState(GamePlayStatus.finished, GameResult.won)
+      updatedGameState = GameState(GamePlayStatus.Finished, GameResult.Won)
     }
 
     copy(board = updatedBoard, state = updatedGameState)
   }
 
   def pause(): Game = {
-    switchPlayStatusTo(paused)
+    switchPlayStatusTo(GamePlayStatus.Paused)
   }
 
   def resume(): Game = {
-    switchPlayStatusTo(playing)
+    switchPlayStatusTo(GamePlayStatus.Playing)
   }
 
   // TODO: implement State pattern ?
-  private def switchPlayStatusTo(status: String): Game = {
+  private def switchPlayStatusTo(status: GamePlayStatus): Game = {
     val newState = state match {
-      case GameState(GamePlayStatus.finished, _) => state
+      case GameState(GamePlayStatus.Finished, _) => state
       case _ => GameState(status, state.result)
     }
 
     copy(state = newState)
   }
-
-//  def canEqual(other: Any): Boolean = other.isInstanceOf[Game]
-//
-//  override def equals(other: Any): Boolean = other match {
-//    case that: Game => (that canEqual this) && hashCode == that.hashCode
-//    case _ => false
-//  }
-//
-//  override def hashCode(): Int = {
-//    val state = Seq(createdAt, board)
-//    state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
-//  }
 }
