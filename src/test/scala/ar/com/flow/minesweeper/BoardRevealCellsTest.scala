@@ -38,7 +38,7 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
 
         val updatedBoard = board.revealCell(emptyCell.coordinates)
 
-        val revealedEmptyCell = emptyCell.copy(visibility = Visibility.Shown, board = updatedBoard)
+        val revealedEmptyCell = emptyCell.copy(visibility = Visibility.Shown)
 
         updatedBoard.cells.revealed.empty shouldBe Seq(revealedEmptyCell)
       }
@@ -69,7 +69,7 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
 
         val updatedBoard = board.revealCell(emptyCell.coordinates)
 
-        updatedBoard.cells.hidden.empty shouldNot contain(emptyCell.copy(board = updatedBoard))
+        updatedBoard.cells.hidden.empty shouldNot contain(emptyCell)
       }
     }
   }

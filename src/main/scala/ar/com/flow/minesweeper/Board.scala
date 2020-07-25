@@ -1,16 +1,14 @@
 package ar.com.flow.minesweeper
 
-import ar.com.flow.minesweeper.Visibility.Shown
-
 import scala.util.Random
 
 object Board {
   def apply(dimensions: Dimensions, totalBombs: Int): Board = {
     require(totalBombs >= 0)
-    Board(dimensions, cellStateByCoordinate(dimensions, totalBombs))
+    Board(dimensions, cellsByCoordinates(dimensions, totalBombs))
   }
 
-  def cellStateByCoordinate(dimensions: Dimensions, totalBombs: Int): Map[CartesianCoordinates, CellState] = {
+  def cellsByCoordinates(dimensions: Dimensions, totalBombs: Int): Map[CartesianCoordinates, Cell] = {
     val allCoordinates = CartesianCoordinates.all(dimensions.rows, dimensions.columns)
 
     val bombCoordinates = Random.shuffle(allCoordinates).take(totalBombs)
@@ -22,22 +20,30 @@ object Board {
       } yield {
         val coordinates = CartesianCoordinates(row, column)
         val hasBomb = bombCoordinates.contains(coordinates)
-        coordinates -> CellState(hasBomb)
+        coordinates -> Cell(coordinates, hasBomb)
       }
     }.toMap
   }
 }
 
 case class Board(dimensions: Dimensions,
-                 cellsState: Map[CartesianCoordinates, CellState]) extends RectangleCoordinates {
+                 cellsByCoordinates: Map[CartesianCoordinates, Cell]) extends RectangleCoordinates {
 
-  val cells: Cells = Cells(this)
+  val cells: Cells = Cells(cellsByCoordinates.values)
 
   def cellAt(coordinates: CartesianCoordinates): Cell = cells.all.filter(_.coordinates == coordinates).head
 
+  def adjacentCells(cell: Cell): Set[Cell] = adjacentOf(cell.coordinates).map(cellAt)
+
+  def adjacentEmptySpace(cell: Cell, previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
+    (adjacentCells(cell) -- previouslyTraversed)
+      .filter(_.content == CellContent.Empty)
+      .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => adjacentEmptySpace(adjacent, traversed))
+  }
+
   def markCell(coordinates: CartesianCoordinates, mark: Option[CellMark]): Board =
-    copy(cellsState = cellsState + (coordinates -> cellsState(coordinates).copy(mark = mark)))
+    copy(cellsByCoordinates = cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(mark = mark)))
 
   def revealCell(coordinates: CartesianCoordinates): Board =
-    copy(cellsState = cellsState + (coordinates -> cellsState(coordinates).copy(visibility = Visibility.Shown)))
+    copy(cellsByCoordinates = cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(visibility = Visibility.Shown)))
 }

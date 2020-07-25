@@ -18,7 +18,7 @@ class CellResourceTest extends AnyFunSuite with Matchers with CellResourceAssert
   }
 
   test("Map Cell to CellResource") {
-    val cell = new Cell(CartesianCoordinates(1, 1), CellContent.Bomb, visibility = Hidden, mark = None, board)
+    val cell = new Cell(CartesianCoordinates(1, 1), CellContent.Bomb, visibility = Hidden, mark = None)
     val cellResource = CellResource(cell.coordinates, cell.content, cell.visibility)
     same(cellResource, cell) shouldBe true
   }

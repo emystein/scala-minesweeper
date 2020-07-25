@@ -1,35 +1,14 @@
 package ar.com.flow.minesweeper
 
-import ar.com.flow.minesweeper.Visibility.Hidden
-
-object Cell {
-  def apply(coordinates: CartesianCoordinates, cellState: CellState, board: Board): Cell = {
-    new Cell(coordinates, cellState.content, cellState.visibility, cellState.mark, board)
-  }
-}
-
 case class Cell(coordinates: CartesianCoordinates,
                 content: CellContent = CellContent.Empty,
                 visibility: Visibility = Visibility.Hidden,
-                mark: Option[CellMark] = None, board: Board) extends Ordered[Cell] {
-
-  def adjacentCells: Set[Cell] = board.adjacentOf(coordinates).map(board.cellAt)
-
-  def adjacentEmptySpace(previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
-    (adjacentCells -- previouslyTraversed).filter(_.content == CellContent.Empty)
-      .foldLeft(previouslyTraversed + this)((traversed, adjacent) => adjacent.adjacentEmptySpace(traversed))
-  }
-  
+                mark: Option[CellMark] = None) extends Ordered[Cell] {
   // https://stackoverflow.com/a/19348339/545273
-
   override def compare(that: Cell): Int = {
     this.coordinates compare that.coordinates
   }
 }
-
-case class CellState(content: CellContent = CellContent.Empty,
-                     visibility: Visibility = Hidden,
-                     mark: Option[CellMark] = None)
 
 abstract class CellContent extends Product with Serializable
 

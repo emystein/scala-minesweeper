@@ -26,7 +26,7 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var s
 
     // TODO: Use EmptyCell / BombCell polymorphism to remove this if
     if (cell.content == CellContent.Empty) {
-      cell.adjacentEmptySpace().foreach(cell => board = board.revealCell(cell.coordinates))
+      board.adjacentEmptySpace(cell).foreach(cell => board = board.revealCell(cell.coordinates))
     }
 
     state = GameState(board)
