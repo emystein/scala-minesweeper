@@ -19,7 +19,7 @@ class BoardTest extends AnyFunSuite with Matchers {
   }
 
   test("Set cell value") {
-    board = board.markCell(CartesianCoordinates(1, 1), Some(CellMark.Flag))
+    board = board.markCellAt(CartesianCoordinates(1, 1), Some(CellMark.Flag))
 
     board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Flag)
   }

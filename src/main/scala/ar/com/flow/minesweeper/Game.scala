@@ -12,21 +12,21 @@ object Game {
 // TODO: Make board, state a val
 class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var state: GameState = GameState(GamePlayStatus.playing, GameResult.pending)) {
   def flagCell(coordinates: CartesianCoordinates): Unit = {
-    board = board.markCell(coordinates, Some(CellMark.Flag))
+    board = board.markCellAt(coordinates, Some(CellMark.Flag))
   }
 
   def questionCell(coordinates: CartesianCoordinates): Unit = {
-    board = board.markCell(coordinates, Some(CellMark.Question))
+    board = board.markCellAt(coordinates, Some(CellMark.Question))
   }
 
   def revealCell(coordinates: CartesianCoordinates): Unit = {
     val cell = board.cellAt(coordinates)
 
-    board = board.revealCell(coordinates)
+    board = board.revealCellAt(coordinates)
 
     // TODO: Use EmptyCell / BombCell polymorphism to remove this if
     if (cell.content == CellContent.Empty) {
-      board.adjacentEmptySpace(cell).foreach(cell => board = board.revealCell(cell.coordinates))
+      board.adjacentEmptySpace(cell).foreach(cell => board = board.revealCellAt(cell.coordinates))
     }
 
     state = GameState(board)
