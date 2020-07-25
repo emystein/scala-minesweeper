@@ -4,36 +4,26 @@ import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
 class GamePauseResumeTest extends AnyFunSpec with Matchers {
-  describe("New Game") {
-    describe("when pausing the game") {
+  describe("Running Game") {
+    describe("when toggling play/pause") {
       it("should pause the game") {
         val game = Game(3, 3, 2)
 
-        game.pause.playStatus shouldBe GamePlayStatus.Paused
-      }
-    }
-    describe("when resuming the game") {
-      it("should resume the game") {
-        val game = Game(3, 3, 2)
+        val pausedGame = game.togglePauseResume
 
-        game.resume.playStatus shouldBe GamePlayStatus.Playing
+        pausedGame.playStatus shouldBe GamePlayStatus.Paused
       }
     }
   }
-
-  describe("GamePlayStatus.Paused Game") {
-    describe("when pausing the game") {
-      it("should pause the game") {
-        val game = Game(3, 3, 2)
-
-        game.pause.pause.playStatus shouldBe GamePlayStatus.Paused
-      }
-    }
-    describe("when resuming the game") {
+  describe("Paused Game") {
+    describe("when toggling play/pause") {
       it("should resume the game") {
         val game = Game(3, 3, 2)
 
-        game.pause.resume.playStatus shouldBe GamePlayStatus.Playing
+        val pausedGame = game.togglePauseResume
+        val resumedGame = pausedGame.togglePauseResume
+
+        resumedGame.playStatus shouldBe GamePlayStatus.Playing
       }
     }
   }

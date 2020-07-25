@@ -56,16 +56,9 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
     }
   }
 
-  post("/games/:gameId/pause") {
+  post("/games/:gameId/pause-resume") {
     gameRepository.findById(params("gameId")).map{game =>
-      game.pause
-      save(game)
-    }
-  }
-
-  post("/games/:gameId/resume") {
-    gameRepository.findById(params("gameId")).map{game =>
-      game.resume
+      game.togglePauseResume
       save(game)
     }
   }

@@ -73,20 +73,5 @@ case class Game(id: String,
     copy(board = updatedBoard, playStatus = updatedPlayStatus, result = updatedResult)
   }
 
-  def pause(): Game = {
-    switchPlayStatusTo(GamePlayStatus.Paused)
-  }
-
-  def resume(): Game = {
-    switchPlayStatusTo(GamePlayStatus.Playing)
-  }
-
-  private def switchPlayStatusTo(newPlayStatus: GamePlayStatus): Game = {
-    val updatedStatus = playStatus match {
-      case GamePlayStatus.Finished => GamePlayStatus.Finished
-      case _ => newPlayStatus
-    }
-
-    copy(playStatus = updatedStatus)
-  }
+  def togglePauseResume: Game = copy(playStatus = playStatus.next())
 }
