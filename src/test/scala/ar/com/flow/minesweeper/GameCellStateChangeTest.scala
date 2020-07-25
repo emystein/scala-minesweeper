@@ -19,7 +19,7 @@ class GameCellStateChangeTest extends AnyWordSpec with Matchers {
         val game = Game(totalRows = 3, totalColumns = 3, totalBombs = 2)
 
         val flagCellGame = game.advanceCellState(CartesianCoordinates(1, 1))
-        val updatedGame = game.advanceCellState(CartesianCoordinates(1, 1))
+        val updatedGame = flagCellGame.advanceCellState(CartesianCoordinates(1, 1))
 
         updatedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Question)
       }
@@ -30,7 +30,7 @@ class GameCellStateChangeTest extends AnyWordSpec with Matchers {
 
         val flagCellGame = game.advanceCellState(CartesianCoordinates(1, 1))
         val questionCellGame = flagCellGame.advanceCellState(CartesianCoordinates(1, 1))
-        val updatedGame = game.advanceCellState(CartesianCoordinates(1, 1))
+        val updatedGame = questionCellGame.advanceCellState(CartesianCoordinates(1, 1))
 
         updatedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe None
       }

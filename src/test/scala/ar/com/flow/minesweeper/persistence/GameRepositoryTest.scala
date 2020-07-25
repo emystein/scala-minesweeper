@@ -40,9 +40,9 @@ class GameRepositoryTest extends AnyFunSuite with DbSchemaSetup with Persistence
   test("Flag Cell") {
     val game: Game = Game(2, 2, 2)
 
-    game.flagCell(CartesianCoordinates(1, 1))
+    val flagCellGame = game.flagCell(CartesianCoordinates(1, 1))
 
-    gameRepository.save(game)
+    gameRepository.save(flagCellGame)
 
     val gameFuture = gameRepository.findById(game.id)
 
@@ -52,9 +52,9 @@ class GameRepositoryTest extends AnyFunSuite with DbSchemaSetup with Persistence
   test("Question Cell") {
     val game: Game = Game(2, 2, 2)
 
-    game.questionCell(CartesianCoordinates(1, 1))
+    val questionCellGame = game.questionCell(CartesianCoordinates(1, 1))
 
-    gameRepository.save(game)
+    gameRepository.save(questionCellGame)
 
     val gameFuture = gameRepository.findById(game.id)
 

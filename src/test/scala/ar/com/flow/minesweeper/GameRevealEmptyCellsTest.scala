@@ -17,13 +17,13 @@ class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyCheck
 
   test("Revealing empty cell with adjacent empty cells should reveal the adjacent empty cells as well") {
     forAll(data)((rows: Int, columns: Int, bombs: Int) => {
-      implicit val game = Game(rows, columns, bombs)
+      implicit var game = Game(rows, columns, bombs)
 
       val emptyCell = game.board.cells.empty.head
 
       val adjacentEmptyCells = game.board.adjacentEmptySpace(emptyCell)
 
-      game.revealCell(emptyCell.coordinates)
+      game = game.revealCell(emptyCell.coordinates)
 
       allCellsShouldBeRevealed(adjacentEmptyCells)
     })
@@ -31,13 +31,13 @@ class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyCheck
 
   test("Revealing bomb cell should not reveal adjacent cells") {
     forAll(data.filter(_._3 > 0))((rows: Int, columns: Int, bombs: Int) => {
-      implicit val game = Game(rows, columns, bombs)
+      implicit var game = Game(rows, columns, bombs)
 
       val bombCell = game.board.cells.withBomb.head
 
       val adjacent = game.board.adjacentCells(bombCell)
 
-      game.revealCell(bombCell.coordinates)
+      game = game.revealCell(bombCell.coordinates)
 
       allCellsShouldBeHidden(adjacent)
     })

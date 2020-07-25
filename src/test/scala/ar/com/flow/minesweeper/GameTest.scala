@@ -15,36 +15,25 @@ class GameTest extends AnyFunSuite with Matchers {
   test("Question Cell") {
     val game = Game(totalRows = 3, totalColumns = 3, totalBombs = 2)
 
-    game.questionCell(CartesianCoordinates(1, 1))
+    val updatedGame = game.questionCell(CartesianCoordinates(1, 1))
 
-    game.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Question)
+    updatedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Question)
   }
 
   test("Flag Cell") {
     val game = Game(totalRows = 3, totalColumns = 3, totalBombs = 2)
 
-    game.flagCell(CartesianCoordinates(1, 1))
+    val updatedGame = game.flagCell(CartesianCoordinates(1, 1))
 
-    game.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Flag)
+    updatedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Flag)
   }
 
   test("Reveal Cell should mark it as revealed") {
     val game = Game(totalRows = 3, totalColumns = 3, totalBombs = 2)
 
-    game.revealCell(CartesianCoordinates(1, 1))
+    val updatedGame = game.revealCell(CartesianCoordinates(1, 1))
 
-    game.board.cellAt(CartesianCoordinates(1, 1)).visibility shouldBe Shown
-    game.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe None
-  }
-
-  test("Reveal Cell should not allow further question and flag marks") {
-    val game = Game(totalRows = 3, totalColumns = 3, totalBombs = 2)
-
-    game.revealCell(CartesianCoordinates(1, 1))
-
-    game.flagCell(CartesianCoordinates(1, 1))
-    game.questionCell(CartesianCoordinates(1, 1))
-
-    game.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe None
+    updatedGame.board.cellAt(CartesianCoordinates(1, 1)).visibility shouldBe Shown
+    updatedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe None
   }
 }
