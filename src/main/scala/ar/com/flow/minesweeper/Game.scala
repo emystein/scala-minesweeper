@@ -16,7 +16,8 @@ object Game {
 case class Game(id: String,
                 createdAt: LocalDateTime = LocalDateTime.now,
                 board: Board,
-                state: GameState = GameState(GamePlayStatus.Playing, GameResult.Pending)) {
+                playStatus: GamePlayStatus = GamePlayStatus.Playing,
+                result: GameResult = GameResult.Pending) {
 
   def advanceCellState(coordinates: CartesianCoordinates): Game = {
       val newCellMark: Option[CellMark] = board.cellAt(coordinates).mark match {
@@ -38,7 +39,7 @@ case class Game(id: String,
 
   private def markCell(coordinates: CartesianCoordinates, cellMark: Option[CellMark]): Game = {
     if (board.cellAt(coordinates).visibility == Hidden) {
-      new Game(id, createdAt, board = board.markCellAt(coordinates, cellMark), state)
+      copy(board = board.markCellAt(coordinates, cellMark))
     } else {
       this
     }
@@ -50,7 +51,7 @@ case class Game(id: String,
     val revealedCellBoard = board.revealCellAt(coordinates)
 
     if (cell.content == CellContent.Bomb) {
-      return copy(board = revealedCellBoard, state = GameState(GamePlayStatus.Finished, GameResult.Lost))
+      return copy(board = revealedCellBoard, playStatus = GamePlayStatus.Finished, result = GameResult.Lost)
     }
 
     var updatedBoard = revealedCellBoard
@@ -60,14 +61,16 @@ case class Game(id: String,
       updatedBoard = revealedCellBoard.adjacentEmptySpace(cell).foldLeft(revealedCellBoard)((board, cell) => board.revealCellAt(cell.coordinates))
     }
 
-    var updatedGameState = state
+    var updatedPlayStatus = playStatus
+    var updatedResult = result
 
     if (updatedBoard.cells.hidden.empty.isEmpty) {
       // if recursive cell reveal won the game
-      updatedGameState = GameState(GamePlayStatus.Finished, GameResult.Won)
+      updatedPlayStatus = GamePlayStatus.Finished
+      updatedResult = GameResult.Won
     }
 
-    copy(board = updatedBoard, state = updatedGameState)
+    copy(board = updatedBoard, playStatus = updatedPlayStatus, result = updatedResult)
   }
 
   def pause(): Game = {
@@ -78,13 +81,12 @@ case class Game(id: String,
     switchPlayStatusTo(GamePlayStatus.Playing)
   }
 
-  // TODO: implement State pattern ?
-  private def switchPlayStatusTo(status: GamePlayStatus): Game = {
-    val newState = state match {
-      case GameState(GamePlayStatus.Finished, _) => state
-      case _ => GameState(status, state.result)
+  private def switchPlayStatusTo(newPlayStatus: GamePlayStatus): Game = {
+    val updatedStatus = playStatus match {
+      case GamePlayStatus.Finished => GamePlayStatus.Finished
+      case _ => newPlayStatus
     }
 
-    copy(state = newState)
+    copy(playStatus = updatedStatus)
   }
 }

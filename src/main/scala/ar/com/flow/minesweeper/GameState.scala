@@ -24,18 +24,3 @@ object GameResult {
       Pending
   }
 }
-
-object GameState {
-  def apply(board: Board): GameState = {
-    val result = GameResult.of(board.cells.revealed.withBomb(), board.cells.hidden.empty)
-
-    val playStatus: GamePlayStatus = result match {
-      case GameResult.Pending => GamePlayStatus.Playing
-      case _ => GamePlayStatus.Finished
-    }
-
-    GameState(playStatus, result)
-  }
-}
-
-case class GameState(playStatus: GamePlayStatus, result: GameResult)

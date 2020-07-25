@@ -23,7 +23,7 @@ object GameResource {
   }
 
   def from(game: Game): GameResource = {
-    GameResource(game.id, game.createdAt.format(DateTimeFormatter.ISO_DATE_TIME), BoardResource(game.board), game.state.playStatus, game.state.result)
+    GameResource(game.id, game.createdAt.format(DateTimeFormatter.ISO_DATE_TIME), BoardResource(game.board), game.playStatus, game.result)
   }
 }
 
