@@ -3,6 +3,9 @@ package ar.com.flow.minesweeper
 import java.time.LocalDateTime
 import java.util.UUID
 
+import ar.com.flow.minesweeper.CellMark.{Flag, Question}
+import ar.com.flow.minesweeper.Visibility.Hidden
+
 object Game {
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Game = {
     new Game(UUID.randomUUID().toString, LocalDateTime.now, Board(Dimensions(totalRows, totalColumns), totalBombs))
@@ -11,12 +14,26 @@ object Game {
 
 // TODO: Make board, state a val
 class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var state: GameState = GameState(GamePlayStatus.playing, GameResult.pending)) {
+  def advanceCellState(coordinates: CartesianCoordinates): Unit = {
+      val newCellMark: Option[CellMark] = board.cellAt(coordinates).mark match {
+        case None => Some(Flag)
+        case Some(Flag) => Some(Question)
+        case Some(Question) => None
+      }
+      markCell(coordinates, newCellMark)
+  }
+
   def flagCell(coordinates: CartesianCoordinates): Unit = {
-    board = board.markCellAt(coordinates, Some(CellMark.Flag))
+    markCell(coordinates, Some(Flag))
   }
 
   def questionCell(coordinates: CartesianCoordinates): Unit = {
-    board = board.markCellAt(coordinates, Some(CellMark.Question))
+      markCell(coordinates, Some(Question))
+  }
+
+  private def markCell(coordinates: CartesianCoordinates, cellMark: Option[CellMark]): Unit = {
+    if (board.cellAt(coordinates).visibility == Hidden)
+      board = board.markCellAt(coordinates, cellMark)
   }
 
   def revealCell(coordinates: CartesianCoordinates): Unit = {

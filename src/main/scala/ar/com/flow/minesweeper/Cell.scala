@@ -3,12 +3,7 @@ package ar.com.flow.minesweeper
 case class Cell(coordinates: CartesianCoordinates,
                 content: CellContent = CellContent.Empty,
                 visibility: Visibility = Visibility.Hidden,
-                mark: Option[CellMark] = None) extends Ordered[Cell] {
-  // https://stackoverflow.com/a/19348339/545273
-  override def compare(that: Cell): Int = {
-    this.coordinates compare that.coordinates
-  }
-}
+                mark: Option[CellMark] = None)
 
 abstract class CellContent extends Product with Serializable
 
