@@ -3,23 +3,23 @@ package ar.com.flow.minesweeper.rest
 import java.time.format.DateTimeFormatter
 
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
-import ar.com.flow.minesweeper.GamePlayStatus.{Finished, Paused, Playing}
-import ar.com.flow.minesweeper.GameResult.{Lost, Pending, Won}
-import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, CellMark, Cells, Dimensions, Game, GamePlayStatus, GameResult, Visibility}
+import ar.com.flow.minesweeper.GamePlayState.{Finished, Paused, Running}
+import ar.com.flow.minesweeper.GameResult.{Lost, Won}
+import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, CellMark, Cells, Dimensions, Game, GamePlayState, GameResult, Visibility}
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
 object GameResource {
-  implicit val gamePlayStatusToString: GamePlayStatus => String = {
-    case Playing => "playing"
+  implicit val gamePlayStatusToString: GamePlayState => String = {
+    case Running => "playing"
     case Paused => "paused"
     case Finished => "finished"
   }
 
-  implicit val gameResult: GameResult => String = {
-    case Pending => "pending"
-    case Won => "won"
-    case Lost => "lost"
+  implicit val gameResult: Option[GameResult] => String = {
+    case None => "pending"
+    case Some(Won) => "won"
+    case Some(Lost) => "lost"
   }
 
   def from(game: Game): GameResource = {

@@ -16,8 +16,8 @@ object Game {
 case class Game(id: String,
                 createdAt: LocalDateTime = LocalDateTime.now,
                 board: Board,
-                playStatus: GamePlayStatus = GamePlayStatus.Playing,
-                result: GameResult = GameResult.Pending) {
+                playStatus: GamePlayState = GamePlayState.Running,
+                result: Option[GameResult] = None) {
 
   def advanceCellState(coordinates: CartesianCoordinates): Game = {
       val newCellMark: Option[CellMark] = board.cellAt(coordinates).mark match {
@@ -51,7 +51,7 @@ case class Game(id: String,
     val revealedCellBoard = board.revealCellAt(coordinates)
 
     if (cell.content == CellContent.Bomb) {
-      return copy(board = revealedCellBoard, playStatus = GamePlayStatus.Finished, result = GameResult.Lost)
+      return copy(board = revealedCellBoard, playStatus = GamePlayState.Finished, result = Some(GameResult.Lost))
     }
 
     var updatedBoard = revealedCellBoard
@@ -66,8 +66,8 @@ case class Game(id: String,
 
     if (updatedBoard.cells.hidden.empty.isEmpty) {
       // if recursive cell reveal won the game
-      updatedPlayStatus = GamePlayStatus.Finished
-      updatedResult = GameResult.Won
+      updatedPlayStatus = GamePlayState.Finished
+      updatedResult = Some(GameResult.Won)
     }
 
     copy(board = updatedBoard, playStatus = updatedPlayStatus, result = updatedResult)

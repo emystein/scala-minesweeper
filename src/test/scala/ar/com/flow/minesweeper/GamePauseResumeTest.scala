@@ -11,7 +11,7 @@ class GamePauseResumeTest extends AnyFunSpec with Matchers {
 
         val pausedGame = game.togglePauseResume
 
-        pausedGame.playStatus shouldBe GamePlayStatus.Paused
+        pausedGame.playStatus shouldBe GamePlayState.Paused
       }
     }
   }
@@ -23,7 +23,7 @@ class GamePauseResumeTest extends AnyFunSpec with Matchers {
         val pausedGame = game.togglePauseResume
         val resumedGame = pausedGame.togglePauseResume
 
-        resumedGame.playStatus shouldBe GamePlayStatus.Playing
+        resumedGame.playStatus shouldBe GamePlayState.Running
       }
     }
   }
