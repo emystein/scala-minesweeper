@@ -10,18 +10,14 @@ class GamePauseResumeTest extends AnyFunSpec with Matchers {
       it("should pause the game") {
         val game = Game(3, 3, 2)
 
-        game.pause
-
-        game.state shouldBe GameState(paused, GameResult.pending)
+        game.pause.state shouldBe GameState(paused, GameResult.pending)
       }
     }
     describe("when resuming the game") {
       it("should resume the game") {
         val game = Game(3, 3, 2)
 
-        game.resume
-
-        game.state shouldBe GameState(playing, GameResult.pending)
+        game.resume.state shouldBe GameState(playing, GameResult.pending)
       }
     }
   }
@@ -31,20 +27,14 @@ class GamePauseResumeTest extends AnyFunSpec with Matchers {
       it("should pause the game") {
         val game = Game(3, 3, 2)
 
-        game.pause
-        game.pause
-
-        game.state shouldBe GameState(paused, GameResult.pending)
+        game.pause.pause.state shouldBe GameState(paused, GameResult.pending)
       }
     }
     describe("when resuming the game") {
       it("should resume the game") {
         val game = Game(3, 3, 2)
 
-        game.pause
-        game.resume
-
-        game.state shouldBe GameState(playing, GameResult.pending)
+        game.pause.resume.state shouldBe GameState(playing, GameResult.pending)
       }
     }
   }

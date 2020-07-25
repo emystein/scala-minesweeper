@@ -14,7 +14,7 @@ object Game {
 
 // TODO: Make board, state a val
 class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var state: GameState = GameState(GamePlayStatus.playing, GameResult.pending)) {
-  def advanceCellState(coordinates: CartesianCoordinates): Unit = {
+  def advanceCellState(coordinates: CartesianCoordinates): Game = {
       val newCellMark: Option[CellMark] = board.cellAt(coordinates).mark match {
         case None => Some(Flag)
         case Some(Flag) => Some(Question)
@@ -23,20 +23,22 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var s
       markCell(coordinates, newCellMark)
   }
 
-  def flagCell(coordinates: CartesianCoordinates): Unit = {
+  def flagCell(coordinates: CartesianCoordinates): Game = {
     markCell(coordinates, Some(Flag))
   }
 
-  def questionCell(coordinates: CartesianCoordinates): Unit = {
+  def questionCell(coordinates: CartesianCoordinates): Game = {
       markCell(coordinates, Some(Question))
   }
 
-  private def markCell(coordinates: CartesianCoordinates, cellMark: Option[CellMark]): Unit = {
+  private def markCell(coordinates: CartesianCoordinates, cellMark: Option[CellMark]): Game = {
     if (board.cellAt(coordinates).visibility == Hidden)
       board = board.markCellAt(coordinates, cellMark)
+
+    this
   }
 
-  def revealCell(coordinates: CartesianCoordinates): Unit = {
+  def revealCell(coordinates: CartesianCoordinates): Game = {
     val cell = board.cellAt(coordinates)
 
     board = board.revealCellAt(coordinates)
@@ -47,14 +49,20 @@ class Game(val id: String, val createdAt: LocalDateTime, var board: Board, var s
     }
 
     state = GameState(board)
+
+    this
   }
 
-  def pause(): Unit = {
+  def pause(): Game = {
     state = switchPlayStatusTo(GamePlayStatus.paused)
+
+    this
   }
 
-  def resume(): Unit = {
+  def resume(): Game = {
     state = switchPlayStatusTo(GamePlayStatus.playing)
+
+    this
   }
 
   // TODO: implement State pattern ?
