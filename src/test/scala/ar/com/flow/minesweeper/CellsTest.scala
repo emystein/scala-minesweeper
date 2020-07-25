@@ -14,8 +14,8 @@ class CellsTest extends AnyWordSpec with TestCells with Matchers {
         cells.all.size shouldBe 9
         cells.empty shouldBe cells.all.filter(_.content == CellContent.Empty)
         cells.withBomb shouldBe cells.all.filter(_.content == CellContent.Bomb)
-        cells.hidden shouldBe CellFilters(cells.all.filter(_.visibility == Visibility.Hidden))
-        cells.revealed shouldBe CellFilters(cells.all.filter(_.visibility == Visibility.Shown))
+        cells.hidden shouldBe CellContentFilters(cells.all.filter(_.visibility == Visibility.Hidden))
+        cells.revealed shouldBe CellContentFilters(cells.all.filter(_.visibility == Visibility.Shown))
       }
     }
   }
