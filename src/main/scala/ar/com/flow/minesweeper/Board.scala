@@ -31,18 +31,13 @@ object Board {
 case class Board(dimensions: Dimensions,
                  cellsState: Map[CartesianCoordinates, CellState]) extends RectangleCoordinates {
 
-  val cellAt: Map[CartesianCoordinates, Cell] = cellsState.map {
-    case (coordinates, state) => coordinates -> Cell(coordinates, state, this)
-  }
+  val cells: Cells = Cells(this)
 
-  val cells: Cells = Cells(cellAt.values)
+  def cellAt(coordinates: CartesianCoordinates): Cell = cells.all.filter(_.coordinates == coordinates).head
 
   def markCell(coordinates: CartesianCoordinates, mark: Option[CellMark]): Board =
-    updateCellAt(coordinates, cellsState(coordinates).copy(mark = mark))
+    copy(cellsState = cellsState + (coordinates -> cellsState(coordinates).copy(mark = mark)))
 
   def revealCell(coordinates: CartesianCoordinates): Board =
-    updateCellAt(coordinates, cellsState(coordinates).copy(visibility = Shown))
-
-  private def updateCellAt(coordinates: CartesianCoordinates, newState: CellState): Board =
-    copy(cellsState = cellsState + (coordinates -> newState))
+    copy(cellsState = cellsState + (coordinates -> cellsState(coordinates).copy(visibility = Visibility.Shown)))
 }

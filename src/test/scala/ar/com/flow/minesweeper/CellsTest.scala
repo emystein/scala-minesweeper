@@ -7,13 +7,15 @@ class CellsTest extends AnyWordSpec with TestCells with Matchers {
   "Cells" when {
     "created" should {
       "discriminate empty, bombs, revealed cells" in {
-        val cells = Cells(allCells)
+        val board = Board(Dimensions(3, 3), 2)
 
-        cells.all shouldBe allCells
-        cells.empty shouldBe Set(notRevealedEmptyCell, revealedEmptyCell)
-        cells.withBomb shouldBe Set(notRevealedCellWithBomb, revealedCellWithBomb)
-        cells.hidden shouldBe CellFilters(Set(notRevealedEmptyCell, notRevealedCellWithBomb))
-        cells.revealed shouldBe CellFilters(Set(revealedEmptyCell, revealedCellWithBomb))
+        val cells = Cells(board)
+
+        cells.all.size shouldBe 9
+        cells.empty shouldBe cells.all.filter(_.content == CellContent.Empty)
+        cells.withBomb shouldBe cells.all.filter(_.content == CellContent.Bomb)
+        cells.hidden shouldBe CellFilters(cells.all.filter(_.visibility == Visibility.Hidden))
+        cells.revealed shouldBe CellFilters(cells.all.filter(_.visibility == Visibility.Shown))
       }
     }
   }
