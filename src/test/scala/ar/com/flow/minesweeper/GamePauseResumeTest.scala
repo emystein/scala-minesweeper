@@ -8,7 +8,7 @@ class GamePauseResumeTest extends AnyWordSpec with Matchers {
   "Running Game" when {
     "toggle play/pause" should {
       "should pause the game" in {
-        val game = Game(3, 3, 2)
+        val game = Game(2, 2, 2)
 
         val pausedGame = game.togglePauseResume
 
@@ -19,7 +19,7 @@ class GamePauseResumeTest extends AnyWordSpec with Matchers {
   "Paused Game" when {
     "toggle play/pause" should {
       "should resume the game" in {
-        val game = Game(3, 3, 2)
+        val game = Game(2, 2, 2)
 
         val pausedGame = game.togglePauseResume
         val resumedGame = pausedGame.togglePauseResume
@@ -29,7 +29,7 @@ class GamePauseResumeTest extends AnyWordSpec with Matchers {
     }
     "toggle cell mark" should {
       "ignore the mark" in {
-        val game = Game(3, 3, 2)
+        val game = Game(2, 2, 2)
 
         val pausedGame = game.togglePauseResume
 
@@ -40,7 +40,7 @@ class GamePauseResumeTest extends AnyWordSpec with Matchers {
     }
     "reveal cell" should {
       "keep cell hidden" in {
-        val game = Game(3, 3, 2)
+        val game = Game(2, 2, 2)
 
         val pausedGame = game.togglePauseResume
 

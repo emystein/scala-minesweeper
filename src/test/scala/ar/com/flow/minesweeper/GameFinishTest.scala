@@ -4,7 +4,6 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class GameFinishTest extends AnyFunSuite with Matchers {
-
   test("Revealing a cell containing a bomb should finish the game as lost") {
     val game = Game(2, 2, 2)
 

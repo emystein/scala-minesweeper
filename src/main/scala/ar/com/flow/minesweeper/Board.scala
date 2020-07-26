@@ -14,49 +14,24 @@ object Board {
   def apply(dimensions: Dimensions, totalBombs: Int): Board = {
     require(totalBombs >= 0)
     Board(dimensions,
-          contentByCoordinates(dimensions, totalBombs),
-          visibilityByCoordinates(dimensions),
-          markByCoordinates(dimensions))
+          initializeContent(dimensions, totalBombs),
+          hideAll(dimensions),
+          fillNoMarkAll(dimensions))
   }
 
-  def contentByCoordinates(dimensions: Dimensions, totalBombs: Int): Map[CartesianCoordinates, CellContent] = {
+  def initializeContent(dimensions: Dimensions, totalBombs: Int): Map[CartesianCoordinates, CellContent] = {
     val allCoordinates = CartesianCoordinates.all(dimensions.rows, dimensions.columns)
 
     val bombCoordinates = Random.shuffle(allCoordinates).take(totalBombs)
 
-    {
-      for {
-        row <- 1 to dimensions.rows
-        column <- 1 to dimensions.columns
-      } yield {
-        val coordinates = CartesianCoordinates(row, column)
-        val hasBomb = bombCoordinates.contains(coordinates)
-        coordinates -> CellContent(hasBomb)
-      }
-    }.toMap
+    allCoordinates.map(coordinates => coordinates -> CellContent(bombCoordinates.contains(coordinates))).toMap
   }
 
-  def visibilityByCoordinates(dimensions: Dimensions): Map[CartesianCoordinates, Visibility] = {
-    {
-      for {
-        row <- 1 to dimensions.rows
-        column <- 1 to dimensions.columns
-      } yield {
-        CartesianCoordinates(row, column) -> Visibility.Hidden
-      }
-    }.toMap
-  }
+  def hideAll(dimensions: Dimensions): Map[CartesianCoordinates, Visibility] =
+    CartesianCoordinates.all(dimensions.rows, dimensions.columns).map(_ -> Visibility.Hidden).toMap
 
-  def markByCoordinates(dimensions: Dimensions): Map[CartesianCoordinates, Option[CellMark]] = {
-    {
-      for {
-        row <- 1 to dimensions.rows
-        column <- 1 to dimensions.columns
-      } yield {
-        CartesianCoordinates(row, column) -> None
-      }
-    }.toMap
-  }
+  def fillNoMarkAll(dimensions: Dimensions): Map[CartesianCoordinates, Option[CellMark]] =
+    CartesianCoordinates.all(dimensions.rows, dimensions.columns).map(_ -> None).toMap
 }
 
 case class Board(dimensions: Dimensions,
