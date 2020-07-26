@@ -12,18 +12,10 @@ class GameTest extends AnyFunSuite with Matchers {
     game.board.cells.all.foreach(cell => cell.visibility shouldBe Hidden)
   }
 
-  test("Question Cell") {
+  test("Toggle Cell mark") {
     val game = Game(totalRows = 3, totalColumns = 3, totalBombs = 2)
 
-    val updatedGame = game.questionCell(CartesianCoordinates(1, 1))
-
-    updatedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Question)
-  }
-
-  test("Flag Cell") {
-    val game = Game(totalRows = 3, totalColumns = 3, totalBombs = 2)
-
-    val updatedGame = game.flagCell(CartesianCoordinates(1, 1))
+    val updatedGame = game.toggleCellMark(CartesianCoordinates(1, 1))
 
     updatedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Flag)
   }

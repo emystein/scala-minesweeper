@@ -41,8 +41,8 @@ case class Board(dimensions: Dimensions,
       .foldLeft(previouslyTraversed + cell)((traversed, adjacent) => adjacentEmptySpace(adjacent, traversed))
   }
 
-  def markCellAt(coordinates: CartesianCoordinates, mark: Option[CellMark]): Board =
-    copy(cellsByCoordinates = cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(mark = mark)))
+  def toggleMarkAt(coordinates: CartesianCoordinates): Board =
+    copy(cellsByCoordinates = cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).advanceMark))
 
   def revealCellAt(coordinates: CartesianCoordinates): Board =
     copy(cellsByCoordinates = cellsByCoordinates + (coordinates -> cellsByCoordinates(coordinates).copy(visibility = Visibility.Shown)))

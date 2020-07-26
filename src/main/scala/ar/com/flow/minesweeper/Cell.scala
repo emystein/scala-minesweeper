@@ -1,13 +1,34 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellMark.{Flag, Question}
+import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
+
 case class Cell(coordinates: CartesianCoordinates,
                 content: CellContent = CellContent.Empty,
-                visibility: Visibility = Visibility.Hidden,
-                mark: Option[CellMark] = None)
+                visibility: Visibility = Hidden,
+                mark: Option[CellMark] = None) {
+  def toggleVisibility: Cell = {
+    if (visibility == Hidden) {
+      copy(visibility = Shown)
+    } else {
+      this
+    }
+  }
+
+  def advanceMark: Cell = {
+    val newMark: Option[CellMark] = mark match {
+      case None => Some(Flag)
+      case Some(Flag) => Some(Question)
+      case Some(Question) => None
+    }
+    copy(mark = newMark)
+  }
+}
 
 abstract class CellContent extends Product with Serializable
 
 object CellContent {
+  // TODO model using Option?
   final case object Empty extends CellContent
   final case object Bomb extends CellContent
 

@@ -35,16 +35,9 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
     save(game)
   }
 
-  post("/games/:gameId/cell/:row/:column/question") {
+  post("/games/:gameId/cell/:row/:column/toggle-mark") {
     gameRepository.findById(params("gameId")).map{game =>
-      game.questionCell(cellCoordinates)
-      save(game)
-    }
-  }
-
-  post("/games/:gameId/cell/:row/:column/flag") {
-    gameRepository.findById(params("gameId")).map{game =>
-      game.flagCell(cellCoordinates)
+      game.toggleCellMark(cellCoordinates)
       save(game)
     }
   }

@@ -18,16 +18,16 @@ class BoardTest extends AnyFunSuite with Matchers {
     an[NoSuchElementException] should be thrownBy board.cellAt(CartesianCoordinates(1, board.dimensions.columns + 1))
   }
 
-  test("Set cell value") {
-    board = board.markCellAt(CartesianCoordinates(1, 1), Some(CellMark.Flag))
-
-    board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Flag)
-  }
-
   test("Get adjacent cells") {
     val adjacent = board.adjacentCells(board.cellAt(CartesianCoordinates(1, 1)))
 
     adjacent.map(_.coordinates) shouldBe
       Set(CartesianCoordinates(1, 2), CartesianCoordinates(2, 1), CartesianCoordinates(2, 2))
+  }
+
+  test("Advance Cell Mark") {
+    board = board.toggleMarkAt(CartesianCoordinates(1, 1))
+
+    board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Flag)
   }
 }

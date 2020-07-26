@@ -37,10 +37,10 @@ class GameRepositoryTest extends AnyFunSuite with DbSchemaSetup with Persistence
     val retrievedGame = Await.result(gameFuture, Duration.Inf)
     retrievedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe None
   }
-  test("Flag Cell") {
+  test("Toggle Cell mark") {
     val game: Game = Game(2, 2, 2)
 
-    val flagCellGame = game.flagCell(CartesianCoordinates(1, 1))
+    val flagCellGame = game.toggleCellMark(CartesianCoordinates(1, 1))
 
     gameRepository.save(flagCellGame)
 
@@ -48,17 +48,5 @@ class GameRepositoryTest extends AnyFunSuite with DbSchemaSetup with Persistence
 
     val retrievedGame = Await.result(gameFuture, Duration.Inf)
     retrievedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Flag)
-  }
-  test("Question Cell") {
-    val game: Game = Game(2, 2, 2)
-
-    val questionCellGame = game.questionCell(CartesianCoordinates(1, 1))
-
-    gameRepository.save(questionCellGame)
-
-    val gameFuture = gameRepository.findById(game.id)
-
-    val retrievedGame = Await.result(gameFuture, Duration.Inf)
-    retrievedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe Some(CellMark.Question)
   }
 }
