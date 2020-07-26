@@ -23,18 +23,10 @@ case class Game(id: String,
   def revealCell(coordinates: CartesianCoordinates): Game = {
     val updatedBoard = board.cellAt(coordinates).content match {
       case Bomb => board.revealCellAt(coordinates)
-      case _    => revealAdjacentEmptyCells(coordinates)
+      case _    => board.revealCellAndAdjacentAt(coordinates)
     }
 
     copy(board = updatedBoard)
-  }
-
-  // TODO move to Board?
-  private def revealAdjacentEmptyCells(coordinates: CartesianCoordinates): Board = {
-    val revealedCellBoard = board.revealCellAt(coordinates)
-
-    revealedCellBoard.cellAt(coordinates).adjacentEmptySpace()
-      .foldLeft(revealedCellBoard)((board, cell) => board.revealCellAt(cell.coordinates))
   }
 
   def togglePauseResume: Game = copy(pauseResume = pauseResume.toggle())

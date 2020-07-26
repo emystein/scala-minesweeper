@@ -74,4 +74,11 @@ case class Board(dimensions: Dimensions,
 
   def revealCellAt(coordinates: CartesianCoordinates): Board =
     copy(visibilityByCoordinates = visibilityByCoordinates + (coordinates -> Visibility.Shown))
+
+  def revealCellAndAdjacentAt(coordinates: CartesianCoordinates): Board = {
+    val revealedCellBoard = revealCellAt(coordinates)
+
+    revealedCellBoard.cellAt(coordinates).adjacentEmptySpace()
+      .foldLeft(revealedCellBoard)((board, cell) => board.revealCellAt(cell.coordinates))
+  }
 }
