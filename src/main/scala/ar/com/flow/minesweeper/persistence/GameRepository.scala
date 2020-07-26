@@ -1,6 +1,6 @@
 package ar.com.flow.minesweeper.persistence
 
-import ar.com.flow.minesweeper.Game
+import ar.com.flow.minesweeper.{Game, RunningGame}
 import slick.jdbc.H2Profile.api._
 
 import scala.concurrent.Future
@@ -28,7 +28,7 @@ class GameRepository(val db: Database) {
       .join(Tables.cells).on{case ((game, board), cell) => game.id === board.id && board.id === cell.id}
       .result.map(r => r.groupBy(_._1._1)) // group by game id
 
-    db.run(query).map(results => results.map(result => new Game(result._1._1, result._1._2, Tables.mapToBoard(result._2))).toSeq.head)
+    db.run(query).map(results => results.map(result => new RunningGame(result._1._1, result._1._2, Tables.mapToBoard(result._2))).toSeq.head)
   }
 
   def findAll: Future[Seq[Game]] = {
@@ -37,6 +37,6 @@ class GameRepository(val db: Database) {
       .join(Tables.cells).on{case ((game, board), cell) => game.id === board.id && board.id === cell.id}
       .result.map(r => r.groupBy(_._1._1)) // group by game id
 
-    db.run(query).map(results => results.map(result => new Game(result._1._1, result._1._2, Tables.mapToBoard(result._2))).toSeq)
+    db.run(query).map(results => results.map(result => new RunningGame(result._1._1, result._1._2, Tables.mapToBoard(result._2))).toSeq)
   }
 }
