@@ -30,7 +30,7 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
   describe("Revealed empty cells") {
     describe("when revealed empty cell") {
       it("should contain empty cell") {
-        val board = Board(Dimensions(3, 3), 2)
+        val board = Board(Dimensions(2, 2), 2)
 
         board.cells.revealed.empty shouldBe Seq.empty
 
@@ -38,7 +38,7 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
 
         val updatedBoard = board.revealCellAt(emptyCell.coordinates)
 
-        val revealedEmptyCell = emptyCell.copy(visibility = Visibility.Shown)
+        val revealedEmptyCell = emptyCell.copy(visibility = Visibility.Shown, board = Some(updatedBoard))
 
         updatedBoard.cells.revealed.empty shouldBe Seq(revealedEmptyCell)
       }
@@ -53,7 +53,7 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
 
         val updatedBoard = board.revealCellAt(bombCell.coordinates)
 
-        val revealedBombCell = bombCell.copy(visibility = Visibility.Shown)
+        val revealedBombCell = bombCell.copy(visibility = Visibility.Shown, board = Some(updatedBoard))
 
         updatedBoard.cells.revealed.empty should not contain revealedBombCell
       }

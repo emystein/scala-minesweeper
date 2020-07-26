@@ -9,7 +9,7 @@ class CellsTest extends AnyWordSpec with TestCells with Matchers {
       "discriminate empty, bombs, revealed cells" in {
         val board = Board(Dimensions(3, 3), 2)
 
-        val cells = Cells(board.cellsByCoordinates.values)
+        val cells = Cells(board)
 
         cells.all.size shouldBe 9
         cells.empty shouldBe cells.all.filter(_.content == CellContent.Empty)

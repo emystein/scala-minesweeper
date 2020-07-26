@@ -100,6 +100,6 @@ object Tables {
   }
 
   def mapToCell(cellTuple: CellTuple) : (CartesianCoordinates, Cell) = {
-    CartesianCoordinates(cellTuple._2, cellTuple._3) ->  Cell(CartesianCoordinates(cellTuple._2, cellTuple._3), cellTuple._4, cellTuple._5, cellTuple._6)
+    CartesianCoordinates(cellTuple._2, cellTuple._3) -> Cell(CartesianCoordinates(cellTuple._2, cellTuple._3), cellTuple._4, cellTuple._5, cellTuple._6)
   }
 }
