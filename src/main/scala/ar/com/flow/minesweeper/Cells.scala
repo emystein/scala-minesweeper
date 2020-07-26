@@ -12,7 +12,6 @@ case class Cells(contentByCoordinates: Map[CartesianCoordinates, CellContent],
                  visibilityByCoordinates: Map[CartesianCoordinates, Visibility],
                  markByCoordinates: Map[CartesianCoordinates, Option[CellMark]],
                  board: Board) {
-
   val all: Iterable[Cell] = for {
     (coordinates, content) <- contentByCoordinates
     visibility = visibilityByCoordinates(coordinates)

@@ -1,28 +1,25 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellContent.Empty
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
 import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
 
 case class Cell(coordinates: CartesianCoordinates,
-                content: CellContent = CellContent.Empty,
+                content: CellContent = Empty,
                 visibility: Visibility = Hidden,
                 mark: Option[CellMark] = None,
                 board: Option[Board] = None) {
 
-  def adjacentCells: Set[Cell] = board.map(b => b.adjacentOf(coordinates).map(b.cellAt)).getOrElse(Set.empty)
+  def adjacentCells: Set[Cell] = board.map(b => b.adjacentOf(coordinates).map(b.cellAt)).getOrElse(Set())
 
-  def adjacentEmptySpace(previouslyTraversed: Set[Cell] = Set.empty): Set[Cell] = {
+  def adjacentEmptySpace(previouslyTraversed: Set[Cell] = Set()): Set[Cell] = {
     (adjacentCells -- previouslyTraversed)
-      .filter(_.content == CellContent.Empty)
+      .filter(_.content == Empty)
       .foldLeft(previouslyTraversed + this)((traversed, adjacent) => adjacent.adjacentEmptySpace(traversed))
   }
 
-  def toggleVisibility: Cell = {
-    if (visibility == Hidden) {
-      copy(visibility = Shown)
-    } else {
-      this
-    }
+  def reveal: Cell = {
+    copy(visibility = Shown)
   }
 
   def advanceMark: Cell = {
@@ -42,10 +39,7 @@ object CellContent {
   final case object Empty extends CellContent
   final case object Bomb extends CellContent
 
-  implicit val booleanToCellContent: Boolean => CellContent =
-    hasBomb => if (hasBomb) CellContent.Bomb else CellContent.Empty
-
-  def apply(hasBomb: Boolean): CellContent = if (hasBomb) CellContent.Bomb else CellContent.Empty
+  def apply(hasBomb: Boolean): CellContent = if (hasBomb) CellContent.Bomb else Empty
 }
 
 sealed abstract class Visibility extends Product with Serializable

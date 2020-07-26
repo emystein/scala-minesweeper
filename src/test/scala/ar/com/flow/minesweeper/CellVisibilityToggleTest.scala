@@ -10,7 +10,7 @@ class CellVisibilityToggleTest extends AnyWordSpec with Matchers {
       "be shown" in {
         val hiddenCell = Cell(CartesianCoordinates(1, 1), visibility = Hidden)
 
-        hiddenCell.toggleVisibility.visibility shouldBe Shown
+        hiddenCell.reveal.visibility shouldBe Shown
       }
     }
   }
@@ -19,7 +19,7 @@ class CellVisibilityToggleTest extends AnyWordSpec with Matchers {
       "be shown" in {
         val shownCell = Cell(CartesianCoordinates(1, 1), visibility = Shown)
 
-        shownCell.toggleVisibility.visibility shouldBe Shown
+        shownCell.reveal.visibility shouldBe Shown
       }
     }
   }

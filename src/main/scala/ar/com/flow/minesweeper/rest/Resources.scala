@@ -15,6 +15,7 @@ object GameResource {
     case Paused => "paused"
     case Resumed => "resumed"
   }
+
   implicit val gamePlayStatusToString: GameRunningState => String = {
     case Running => "playing"
     case Finished => "finished"
