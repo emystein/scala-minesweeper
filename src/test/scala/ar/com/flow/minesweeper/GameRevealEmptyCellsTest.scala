@@ -42,4 +42,21 @@ class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyCheck
       allCellsShouldBeHidden(adjacent)
     })
   }
+
+  test("Revealing an empty cell and having remaining empty cells should keep the game playing") {
+    val game = Game(2, 2, 2)
+
+    val emptyCell = game.board.cells.empty.head
+
+    val updatedGame = game.revealCell(emptyCell.coordinates)
+
+    if (updatedGame.board.cells.hidden.empty.isEmpty) {
+      // if recursive cell reveal won the game
+      updatedGame.runningState shouldBe GameRunningState.Finished
+      updatedGame.result shouldBe Some(GameResult.Won)
+    } else {
+      updatedGame.runningState shouldBe GameRunningState.Running
+      updatedGame.result shouldBe None
+    }
+  }
 }
