@@ -4,8 +4,6 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import ar.com.flow.minesweeper.CellContent.Bomb
-import ar.com.flow.minesweeper.CellMark.{Flag, Question}
-import ar.com.flow.minesweeper.Visibility.Hidden
 
 object Game {
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Game = {
@@ -16,38 +14,46 @@ object Game {
 case class Game(id: String,
                 createdAt: LocalDateTime = LocalDateTime.now,
                 board: Board,
-                playStatus: GamePlayState = GamePlayState.Running,
-                result: Option[GameResult] = None) {
+                pauseResume: GamePauseResume = GamePauseResume.Resumed) {
 
   def toggleCellMark(coordinates: CartesianCoordinates): Game = {
       copy(board = board.toggleMarkAt(coordinates))
   }
 
   def revealCell(coordinates: CartesianCoordinates): Game = {
+    val updatedBoard = board.cellAt(coordinates).content match {
+      case Bomb => board.revealCellAt(coordinates)
+      case _    => revealAdjacentEmptyCells(coordinates)
+    }
+
+    copy(board = updatedBoard)
+  }
+
+  // TODO move to Board?
+  private def revealAdjacentEmptyCells(coordinates: CartesianCoordinates): Board = {
     val revealedCellBoard = board.revealCellAt(coordinates)
 
-    revealedCellBoard.cellAt(coordinates).content match {
-      case Bomb => lostGame(revealedCellBoard)
-      case _    => continuePlayingGame(revealedCellBoard, coordinates)
-    }
+    revealedCellBoard.cellAt(coordinates).adjacentEmptySpace()
+      .foldLeft(revealedCellBoard)((board, cell) => board.revealCellAt(cell.coordinates))
   }
 
-  private def lostGame(revealedCellBoard: Board): Game = {
-    copy(board = revealedCellBoard, playStatus = GamePlayState.Finished, result = Some(GameResult.Lost))
-  }
+  def togglePauseResume: Game = copy(pauseResume = pauseResume.toggle())
 
-  private def continuePlayingGame(revealedCellBoard: Board, coordinates: CartesianCoordinates): Game = {
-    val revealedCell = revealedCellBoard.cellAt(coordinates)
-
-    val updatedBoard = revealedCell.adjacentEmptySpace().foldLeft(revealedCellBoard)((board, cell) => board.revealCellAt(cell.coordinates))
-
-    if (updatedBoard.cells.hidden.empty.isEmpty) {
-      // if recursive cell reveal won the game
-      copy(board = updatedBoard, playStatus = GamePlayState.Finished, result = Some(GameResult.Won))
+  def runningState: GameRunningState = {
+    if (board.cells.hidden.empty.isEmpty || board.cells.revealed.withBomb.nonEmpty) {
+      GameRunningState.Finished
     } else {
-      copy(board = updatedBoard)
+      GameRunningState.Running
     }
   }
 
-  def togglePauseResume: Game = copy(playStatus = playStatus.next())
+  def result: Option[GameResult] = {
+    if (board.cells.hidden.empty.isEmpty) {
+      Some(GameResult.Won)
+    } else if (board.cells.revealed.withBomb.nonEmpty) {
+      Some(GameResult.Lost)
+    } else {
+      None
+    }
+  }
 }

@@ -3,16 +3,20 @@ package ar.com.flow.minesweeper.rest
 import java.time.format.DateTimeFormatter
 
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
-import ar.com.flow.minesweeper.GamePlayState.{Finished, Paused, Running}
+import ar.com.flow.minesweeper.GameRunningState.{Finished, Running}
+import ar.com.flow.minesweeper.GamePauseResume.{Paused, Resumed}
 import ar.com.flow.minesweeper.GameResult.{Lost, Won}
-import ar.com.flow.minesweeper.{Board, CartesianCoordinates, Cell, CellContent, CellMark, Cells, Dimensions, Game, GamePlayState, GameResult, Visibility}
+import ar.com.flow.minesweeper._
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
 object GameResource {
-  implicit val gamePlayStatusToString: GamePlayState => String = {
-    case Running => "playing"
+  implicit val gamePauseResumeToString: GamePauseResume => String = {
     case Paused => "paused"
+    case Resumed => "resumed"
+  }
+  implicit val gamePlayStatusToString: GameRunningState => String = {
+    case Running => "playing"
     case Finished => "finished"
   }
 
@@ -23,7 +27,7 @@ object GameResource {
   }
 
   def from(game: Game): GameResource = {
-    GameResource(game.id, game.createdAt.format(DateTimeFormatter.ISO_DATE_TIME), BoardResource(game.board), game.playStatus, game.result)
+    GameResource(game.id, game.createdAt.format(DateTimeFormatter.ISO_DATE_TIME), BoardResource(game.board), game.runningState, game.result)
   }
 }
 
@@ -61,7 +65,6 @@ object CellResource {
 
 case class CellResource(coordinates: CartesianCoordinates, hasBomb: Boolean, visibility: Visibility, mark: Option[String] = None) extends Ordered[CellResource] {
   // https://stackoverflow.com/a/19348339/545273
-  import scala.math.Ordered.orderingToOrdered
 
   override def compare(that: CellResource): Int = {
     this.coordinates compare that.coordinates
