@@ -3,19 +3,13 @@ package ar.com.flow.minesweeper.rest
 import java.time.format.DateTimeFormatter
 
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
-import ar.com.flow.minesweeper.GameRunningState.{Finished, Running}
-import ar.com.flow.minesweeper.GamePauseResume.{Paused, Resumed}
 import ar.com.flow.minesweeper.GameResult.{Lost, Won}
+import ar.com.flow.minesweeper.GameRunningState.{Finished, Running}
 import ar.com.flow.minesweeper._
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
 object GameResource {
-  implicit val gamePauseResumeToString: GamePauseResume => String = {
-    case Paused => "paused"
-    case Resumed => "resumed"
-  }
-
   implicit val gamePlayStatusToString: GameRunningState => String = {
     case Running => "playing"
     case Finished => "finished"

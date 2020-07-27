@@ -1,12 +1,5 @@
 package ar.com.flow.minesweeper
 
-abstract sealed class GamePauseResume extends Product with Serializable
-
-object GamePauseResume {
-  final case object Paused extends GamePauseResume
-  final case object Resumed extends GamePauseResume
-}
-
 abstract sealed class GameRunningState extends Product with Serializable
 
 object GameRunningState {
