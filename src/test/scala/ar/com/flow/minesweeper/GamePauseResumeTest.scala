@@ -12,7 +12,7 @@ class GamePauseResumeTest extends AnyWordSpec with Matchers {
 
         val pausedGame = game.togglePauseResume
 
-        pausedGame.pauseResume shouldBe GamePauseResume.Paused
+        pausedGame.runningState shouldBe GameRunningState.Paused
       }
     }
   }
@@ -24,7 +24,7 @@ class GamePauseResumeTest extends AnyWordSpec with Matchers {
         val pausedGame = game.togglePauseResume
         val resumedGame = pausedGame.togglePauseResume
 
-        resumedGame.pauseResume shouldBe GamePauseResume.Resumed
+        resumedGame.runningState shouldBe GameRunningState.Running
       }
     }
     "toggle cell mark" should {

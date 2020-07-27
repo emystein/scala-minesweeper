@@ -1,29 +1,18 @@
 package ar.com.flow.minesweeper
 
-abstract sealed class GamePauseResume extends Product with Serializable {
-  def toggle(): GamePauseResume
-}
+abstract sealed class GamePauseResume extends Product with Serializable
 
 object GamePauseResume {
-  final case object Paused extends GamePauseResume {
-    override def toggle(): GamePauseResume = GamePauseResume.Resumed
-  }
-  final case object Resumed extends GamePauseResume {
-    override def toggle(): GamePauseResume = GamePauseResume.Paused
-  }
+  final case object Paused extends GamePauseResume
+  final case object Resumed extends GamePauseResume
 }
 
-abstract sealed class GameRunningState extends Product with Serializable {
-  def next(): GameRunningState
-}
+abstract sealed class GameRunningState extends Product with Serializable
 
 object GameRunningState {
-  final case object Running extends GameRunningState {
-    override def next(): GameRunningState = GameRunningState.Finished
-  }
-  final case object Finished extends GameRunningState {
-    override def next(): GameRunningState = GameRunningState.Finished
-  }
+  final case object Running extends GameRunningState
+  final case object Paused extends GameRunningState
+  final case object Finished extends GameRunningState
 }
 
 abstract sealed class GameResult extends Product with Serializable

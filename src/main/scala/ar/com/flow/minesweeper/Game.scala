@@ -14,7 +14,7 @@ object Game {
 abstract class Game(val id: String,
                     val createdAt: LocalDateTime,
                     val board: Board,
-                    val pauseResume: GamePauseResume = GamePauseResume.Resumed) {
+                    val runningState: GameRunningState) {
 
   def toggleCellMark(coordinates: CartesianCoordinates): Game
 
@@ -22,28 +22,12 @@ abstract class Game(val id: String,
 
   def togglePauseResume: Game
 
-  def runningState: GameRunningState = {
-    if (board.cells.hidden.empty.isEmpty || board.cells.revealed.withBomb.nonEmpty) {
-      GameRunningState.Finished
-    } else {
-      GameRunningState.Running
-    }
-  }
-
-  def result: Option[GameResult] = {
-    if (board.cells.hidden.empty.isEmpty) {
-      Some(GameResult.Won)
-    } else if (board.cells.revealed.withBomb.nonEmpty) {
-      Some(GameResult.Lost)
-    } else {
-      None
-    }
-  }
+  def result: Option[GameResult]
 }
 
 case class RunningGame(override val id: String,
                        override val createdAt: LocalDateTime,
-                       override val board: Board) extends Game(id, createdAt, board, GamePauseResume.Resumed) {
+                       override val board: Board) extends Game(id, createdAt, board, GameRunningState.Running) {
 
   def toggleCellMark(coordinates: CartesianCoordinates): Game = copy(board = board.toggleMarkAt(coordinates))
 
@@ -53,19 +37,43 @@ case class RunningGame(override val id: String,
       case _ => board.revealCellAndAdjacentAt(coordinates)
     }
 
-    copy(board = updatedBoard)
+    if (updatedBoard.cells.hidden.empty.isEmpty || updatedBoard.cells.revealed.withBomb.nonEmpty) {
+      FinishedGame(id, createdAt, updatedBoard)
+    } else {
+      copy(board = updatedBoard)
+    }
   }
 
   def togglePauseResume: Game = PausedGame(id, createdAt, board)
+
+  def result: Option[GameResult] = None
 }
 
-case class PausedGame(override val id: String,
-                      override val createdAt: LocalDateTime,
-                      override val board: Board) extends Game(id, createdAt, board, GamePauseResume.Paused) {
+abstract class FrozenCellsGame(id: String, createdAt: LocalDateTime, board: Board, pauseResume: GameRunningState)
+  extends Game(id, createdAt, board, pauseResume) {
 
   def toggleCellMark(coordinates: CartesianCoordinates): Game = this
-
   def revealCell(coordinates: CartesianCoordinates): Game = this
+}
+
+case class PausedGame(override val id: String, override val createdAt: LocalDateTime, override val board: Board)
+  extends FrozenCellsGame(id, createdAt, board, GameRunningState.Paused) {
 
   def togglePauseResume: Game = RunningGame(id, createdAt, board)
+
+  def result: Option[GameResult] = None
+}
+
+case class FinishedGame(override val id: String, override val createdAt: LocalDateTime, override val board: Board)
+  extends FrozenCellsGame(id, createdAt, board, GameRunningState.Finished) {
+
+  def togglePauseResume: Game = this
+
+  def result: Option[GameResult] = {
+    if (board.cells.hidden.empty.isEmpty) {
+      Some(GameResult.Won)
+    } else {
+      Some(GameResult.Lost)
+    }
+  }
 }
