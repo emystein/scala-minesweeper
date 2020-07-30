@@ -1,5 +1,8 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellContent.Bomb
+import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
+
 import scala.util.Random
 
 object Board {
@@ -40,9 +43,23 @@ case class Board(dimensions: Dimensions,
                  markByCoordinates: Map[CartesianCoordinates, Option[CellMark]],
                 ) extends RectangleCoordinates {
 
-  val cells: Cells = Cells(contentByCoordinates, visibilityByCoordinates, markByCoordinates, this)
+  val allCells: Iterable[Cell] = for {
+    (coordinates, content) <- contentByCoordinates
+    visibility = visibilityByCoordinates(coordinates)
+    mark = markByCoordinates(coordinates)
+  } yield {
+    Cell(coordinates, content, visibility, mark, board = Some(this))
+  }
+  val emptyCells: Iterable[Cell] = allCells.filter(_.isEmpty)
+  val cellsWithBomb: Iterable[Cell] = allCells.filter(_.content == CellContent.Bomb)
+  val hiddenCells = allCells.filter(_.isHidden)
+  val revealedCells = allCells.filter(_.isRevealed)
 
-  def cellAt(coordinates: CartesianCoordinates): Cell = cells.all.filter(_.coordinates == coordinates).head
+  val hasAllEmptyCellsRevealed: Boolean = revealedCells.toSet == emptyCells.toSet
+
+  val hasACellWithBombRevealed: Boolean = revealedCells.exists(_.content == Bomb)
+
+  def cellAt(coordinates: CartesianCoordinates): Cell = allCells.filter(_.coordinates == coordinates).head
 
   def toggleMarkAt(coordinates: CartesianCoordinates): Board =
     copy(markByCoordinates = markByCoordinates + (coordinates -> cellAt(coordinates).advanceMark.mark))

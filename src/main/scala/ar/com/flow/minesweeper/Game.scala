@@ -37,7 +37,7 @@ case class RunningGame(override val id: String,
       case _ => board.revealCellAndAdjacentAt(coordinates)
     }
 
-    if (updatedBoard.cells.hidden.empty.isEmpty || updatedBoard.cells.revealed.withBomb.nonEmpty) {
+    if (updatedBoard.hasAllEmptyCellsRevealed || updatedBoard.hasACellWithBombRevealed) {
       FinishedGame(id, createdAt, updatedBoard)
     } else {
       copy(board = updatedBoard)
@@ -70,7 +70,7 @@ case class FinishedGame(override val id: String, override val createdAt: LocalDa
   def togglePauseResume: Game = this
 
   def result: Option[GameResult] = {
-    if (board.cells.hidden.empty.isEmpty) {
+    if (board.hasAllEmptyCellsRevealed) {
       Some(GameResult.Won)
     } else {
       Some(GameResult.Lost)

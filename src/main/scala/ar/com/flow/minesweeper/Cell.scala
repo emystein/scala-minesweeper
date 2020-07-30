@@ -9,18 +9,19 @@ case class Cell(coordinates: CartesianCoordinates,
                 visibility: Visibility = Hidden,
                 mark: Option[CellMark] = None,
                 board: Option[Board] = None) {
+  val isEmpty: Boolean = content == Empty
+  val isHidden: Boolean = visibility == Hidden
+  val isRevealed: Boolean = visibility == Shown
 
   def adjacentCells: Set[Cell] = board.map(b => b.adjacentOf(coordinates).map(b.cellAt)).getOrElse(Set())
 
   def adjacentEmptySpace(previouslyTraversed: Set[Cell] = Set()): Set[Cell] = {
     (adjacentCells -- previouslyTraversed)
-      .filter(_.content == Empty)
+      .filter(_.isEmpty)
       .foldLeft(previouslyTraversed + this)((traversed, adjacent) => adjacent.adjacentEmptySpace(traversed))
   }
 
-  def reveal: Cell = {
-    copy(visibility = Shown)
-  }
+  def reveal: Cell = copy(visibility = Shown)
 
   def advanceMark: Cell = {
     val newMark: Option[CellMark] = mark match {

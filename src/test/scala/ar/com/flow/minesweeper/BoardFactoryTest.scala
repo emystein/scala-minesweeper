@@ -9,9 +9,9 @@ class BoardFactoryTest extends AnyFunSuite with Matchers {
 
     board.dimensions shouldBe Dimensions(3, 3)
     board.contentByCoordinates should have size 9
-    board.cells.withBomb should have size 2
-    board.cells.hidden.empty shouldBe board.cells.empty
-    board.cells.revealed.all shouldBe Seq.empty
+    board.cellsWithBomb should have size 2
+    board.hiddenCells.filter(_.isEmpty) shouldBe board.emptyCells
+    board.revealedCells shouldBe Seq.empty
   }
 
   test("New board should not have negative bombs") {

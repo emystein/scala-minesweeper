@@ -3,6 +3,7 @@ package ar.com.flow.minesweeper
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
+
 class BoardRevealCellsTest extends AnyFunSpec with Matchers {
   describe("Revealed cells") {
     describe("when revealing a cell") {
@@ -12,7 +13,7 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
 
           val updatedBoard = board.revealCellAt(CartesianCoordinates(1, 1))
 
-          updatedBoard.cells.revealed.all shouldBe Seq(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
+          updatedBoard.revealedCells shouldBe Seq(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
         }
       }
       describe("already revealed") {
@@ -21,7 +22,7 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
 
           val updatedBoard = board.revealCellAt(CartesianCoordinates(1, 1))
 
-          updatedBoard.cells.revealed.all shouldBe Seq(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
+          updatedBoard.revealedCells shouldBe Seq(updatedBoard.cellAt(CartesianCoordinates(1, 1)))
         }
       }
     }
@@ -32,30 +33,30 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
       it("should contain empty cell") {
         val board = Board(Dimensions(2, 2), 2)
 
-        board.cells.revealed.empty shouldBe Seq.empty
+        board.revealedCells.filter(_.isEmpty) shouldBe Seq.empty
 
-        val emptyCell = board.cells.empty.head
+        val emptyCell = board.emptyCells.head
 
         val updatedBoard = board.revealCellAt(emptyCell.coordinates)
 
         val revealedEmptyCell = emptyCell.copy(visibility = Visibility.Shown, board = Some(updatedBoard))
 
-        updatedBoard.cells.revealed.empty shouldBe Seq(revealedEmptyCell)
+        updatedBoard.revealedCells.filter(_.isEmpty) shouldBe Seq(revealedEmptyCell)
       }
     }
     describe("when revealed bomb cell") {
       it("should not contain bomb cell") {
         val board = Board(Dimensions(3, 3), 2)
 
-        board.cells.revealed.empty shouldBe Seq.empty
+        board.revealedCells.filter(_.isEmpty) shouldBe Seq.empty
 
-        val bombCell = board.cells.withBomb.head
+        val bombCell = board.cellsWithBomb.head
 
         val updatedBoard = board.revealCellAt(bombCell.coordinates)
 
         val revealedBombCell = bombCell.copy(visibility = Visibility.Shown, board = Some(updatedBoard))
 
-        updatedBoard.cells.revealed.empty should not contain revealedBombCell
+        updatedBoard.revealedCells.filter(_.isEmpty) should not contain revealedBombCell
       }
     }
   }
@@ -65,11 +66,11 @@ class BoardRevealCellsTest extends AnyFunSpec with Matchers {
       it("should be removed from remaining empty cells") {
         val board = Board(Dimensions(3, 3), 2)
 
-        val emptyCell = board.cells.empty.head
+        val emptyCell = board.emptyCells.head
 
         val updatedBoard = board.revealCellAt(emptyCell.coordinates)
 
-        updatedBoard.cells.hidden.empty shouldNot contain(emptyCell)
+        updatedBoard.hiddenCells.filter(_.isEmpty) shouldNot contain(emptyCell)
       }
     }
   }

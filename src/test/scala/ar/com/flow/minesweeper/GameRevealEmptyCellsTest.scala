@@ -19,7 +19,7 @@ class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyCheck
     forAll(data)((rows: Int, columns: Int, bombs: Int) => {
       implicit var game = Game(rows, columns, bombs)
 
-      val emptyCell = game.board.cells.empty.head
+      val emptyCell = game.board.emptyCells.head
 
       val adjacentEmptyCells = emptyCell.adjacentEmptySpace()
 
@@ -33,7 +33,7 @@ class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyCheck
     forAll(data.filter(_._3 > 0))((rows: Int, columns: Int, bombs: Int) => {
       implicit var game = Game(rows, columns, bombs)
 
-      val bombCell = game.board.cells.withBomb.head
+      val bombCell = game.board.cellsWithBomb.head
 
       val adjacent = bombCell.adjacentCells
 
@@ -46,11 +46,11 @@ class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyCheck
   test("Revealing an empty cell and having remaining empty cells should keep the game playing") {
     val game = Game(2, 2, 2)
 
-    val emptyCell = game.board.cells.empty.head
+    val emptyCell = game.board.emptyCells.head
 
     val updatedGame = game.revealCell(emptyCell.coordinates)
 
-    if (updatedGame.board.cells.hidden.empty.isEmpty) {
+    if (updatedGame.board.hiddenCells.empty.isEmpty) {
       // if recursive cell reveal won the game
       updatedGame.runningState shouldBe GameRunningState.Finished
       updatedGame.result shouldBe Some(GameResult.Won)

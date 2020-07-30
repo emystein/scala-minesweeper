@@ -9,7 +9,7 @@ class GameTest extends AnyFunSuite with Matchers {
   test("New Game should have all Cells hidden") {
     val game = Game(totalRows = 3, totalColumns = 3, totalBombs = 2)
 
-    game.board.cells.all.foreach(cell => cell.visibility shouldBe Hidden)
+    game.board.allCells.foreach(cell => cell.visibility shouldBe Hidden)
   }
 
   test("Toggle Cell mark") {
