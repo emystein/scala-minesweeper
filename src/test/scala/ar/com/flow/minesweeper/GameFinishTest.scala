@@ -1,26 +1,29 @@
 package ar.com.flow.minesweeper
 
-import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class GameFinishTest extends AnyFunSuite with Matchers {
-  test("Revealing a cell containing a bomb should finish the game as lost") {
-    val game = Game(2, 2, 2)
+import GameMatchers._
 
-    val bombCell = game.board.cellsWithBomb.head
+class GameFinishTest extends AnyWordSpec with TestObjects with Matchers {
+  "Running Game" when {
+    "Reveal a Cell containing a Bomb" should {
+      "Loose the Game" in {
+        val bombCell = game.board.cellsWithBomb.head
 
-    val updatedGame = game.revealCell(bombCell.coordinates)
+        val updatedGame = game.revealCell(bombCell.coordinates)
 
-    updatedGame.runningState shouldBe GameRunningState.Finished
-    updatedGame.result shouldBe Some(GameResult.Lost)
-  }
+        updatedGame should beLost
+      }
+    }
+    "Reveal all empty Cells" should {
+      "Win the Game" in {
+        val updatedGame = game.board.emptyCells.foldLeft(game) {
+          (game, emptyCell) => game.revealCell(emptyCell.coordinates)
+        }
 
-  test("Revealing last empty cell should finish the game as won") {
-    val game = Game(2, 2, 2)
-
-    val updatedGame = game.board.emptyCells.foldLeft(game)((game, emptyCell) => game.revealCell(emptyCell.coordinates))
-
-    updatedGame.runningState shouldBe GameRunningState.Finished
-    updatedGame.result shouldBe Some(GameResult.Won)
+        updatedGame should beWon
+      }
+    }
   }
 }

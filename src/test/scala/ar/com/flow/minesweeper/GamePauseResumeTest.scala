@@ -4,49 +4,38 @@ import ar.com.flow.minesweeper.Visibility.Hidden
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class GamePauseResumeTest extends AnyWordSpec with Matchers {
+import GameMatchers._
+
+class GamePauseResumeTest extends AnyWordSpec with TestObjects with Matchers {
   "Running Game" when {
     "toggle play/pause" should {
-      "should pause the game" in {
-        val game = Game(2, 2, 2)
-
+      "pause the Game" in {
         val pausedGame = game.togglePauseResume
 
-        pausedGame.runningState shouldBe GameRunningState.Paused
+        pausedGame should bePaused
       }
     }
   }
   "Paused Game" when {
-    "toggle play/pause" should {
-      "should resume the game" in {
-        val game = Game(2, 2, 2)
+    val pausedGame = game.togglePauseResume
 
-        val pausedGame = game.togglePauseResume
+    "toggle play/pause" should {
+      "resume the Game" in {
         val resumedGame = pausedGame.togglePauseResume
 
-        resumedGame.runningState shouldBe GameRunningState.Running
+        resumedGame should beRunning
       }
     }
-    "toggle cell mark" should {
+    "toggle Cell mark" should {
       "ignore the mark" in {
-        val game = Game(2, 2, 2)
-
-        val pausedGame = game.togglePauseResume
-
-        val gameWithIgnoredAction = pausedGame.toggleCellMark(CartesianCoordinates(1, 1))
-
-        gameWithIgnoredAction.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe None
+        pausedGame.toggleCellMark(coordinatesX1Y1) shouldBe theSameInstanceAs(pausedGame)
       }
     }
-    "reveal cell" should {
-      "keep cell hidden" in {
-        val game = Game(2, 2, 2)
+    "reveal Cell" should {
+      "keep Cell hidden" in {
+        val gameWithIgnoredAction = pausedGame.revealCell(coordinatesX1Y1)
 
-        val pausedGame = game.togglePauseResume
-
-        val gameWithIgnoredAction = pausedGame.revealCell(CartesianCoordinates(1, 1))
-
-        gameWithIgnoredAction.board.cellAt(CartesianCoordinates(1, 1)).visibility shouldBe Hidden
+        gameWithIgnoredAction should haveCellHiddenAt(coordinatesX1Y1)
       }
     }
   }
