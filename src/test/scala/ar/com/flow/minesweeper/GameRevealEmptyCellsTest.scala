@@ -1,10 +1,12 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellsMatchers._
+import ar.com.flow.minesweeper.GameMatchers._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 
-class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers with CellsAssertions {
+class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyChecks with TestObjects with Matchers {
   val data = Table(
     ("rows", "columns", "bombs"),
     (1, 1, 0),
@@ -17,45 +19,37 @@ class GameRevealEmptyCellsTest extends AnyFunSuite with TableDrivenPropertyCheck
 
   test("Revealing empty cell with adjacent empty cells should reveal the adjacent empty cells as well") {
     forAll(data)((rows: Int, columns: Int, bombs: Int) => {
-      implicit var game = Game(rows, columns, bombs)
+      val game = Game(rows, columns, bombs)
 
       val emptyCell = game.board.emptyCells.head
 
-      val adjacentEmptyCells = emptyCell.adjacentEmptySpace()
+      val updatedGame = game.revealCell(emptyCell.coordinates)
 
-      game = game.revealCell(emptyCell.coordinates)
-
-      allCellsShouldBeRevealed(adjacentEmptyCells)
+      updatedGame.board.cellAt(emptyCell.coordinates).adjacentEmptySpace() should allBeRevealed
     })
   }
 
   test("Revealing bomb cell should not reveal adjacent cells") {
     forAll(data.filter(_._3 > 0))((rows: Int, columns: Int, bombs: Int) => {
-      implicit var game = Game(rows, columns, bombs)
+      val game = Game(rows, columns, bombs)
 
       val bombCell = game.board.cellsWithBomb.head
 
-      val adjacent = bombCell.adjacentCells
+      val updatedGame = game.revealCell(bombCell.coordinates)
 
-      game = game.revealCell(bombCell.coordinates)
-
-      allCellsShouldBeHidden(adjacent)
+      updatedGame.board.cellAt(bombCell.coordinates).adjacentCells should allBeHidden
     })
   }
 
   test("Revealing an empty cell and having remaining empty cells should keep the game playing") {
-    val game = Game(2, 2, 2)
-
     val emptyCell = game.board.emptyCells.head
 
     val updatedGame = game.revealCell(emptyCell.coordinates)
 
     if (updatedGame.board.hiddenCells.empty.isEmpty) {
-      // if recursive cell reveal won the game
-      updatedGame.runningState shouldBe GameRunningState.Finished
-      updatedGame.result shouldBe Some(GameResult.Won)
+      updatedGame should beWon
     } else {
-      updatedGame.runningState shouldBe GameRunningState.Running
+      updatedGame should beRunning
       updatedGame.result shouldBe None
     }
   }
