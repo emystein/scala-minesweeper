@@ -9,8 +9,8 @@ trait GameMatchers {
     def apply(game: Game) = {
       MatchResult(
         game.board.cellAt(coordinates).visibility == Hidden,
-        s"""Game doesn't have hidden cell at $coordinates""",
-        s"""Game has hidden cell at $coordinates"""
+        s"""Cell at $coordinates is not hidden""",
+        s"""Cell at $coordinates is hidden"""
       )
     }
   }

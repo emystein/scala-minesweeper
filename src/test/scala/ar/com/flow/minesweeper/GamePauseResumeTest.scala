@@ -1,10 +1,8 @@
 package ar.com.flow.minesweeper
 
-import ar.com.flow.minesweeper.Visibility.Hidden
+import ar.com.flow.minesweeper.GameMatchers._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
-import GameMatchers._
 
 class GamePauseResumeTest extends AnyWordSpec with TestObjects with Matchers {
   "Running Game" when {

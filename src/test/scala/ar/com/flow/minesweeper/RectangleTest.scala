@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
 
-class AdjacentCellsTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers {
+class RectangleTest extends AnyFunSuite with TableDrivenPropertyChecks with Matchers {
   val data = Table(
     ("rows", "columns", "row", "column", "adjacent"),
     (3, 3, 1, 1, Set((1, 2), (2, 1), (2, 2))),
@@ -17,7 +17,10 @@ class AdjacentCellsTest extends AnyFunSuite with TableDrivenPropertyChecks with 
       val rectangle = new RectangleCoordinates {
         val dimensions = Dimensions(rows, columns)
       }
-      rectangle.adjacentOf(CartesianCoordinates(row, column)) shouldBe adjacent.map(n => CartesianCoordinates(n._1, n._2))
+
+      val allAdjacent = adjacent.map(n => CartesianCoordinates(n._1, n._2))
+
+      rectangle.adjacentOf(CartesianCoordinates(row, column)) shouldBe allAdjacent
     })
   }
 }

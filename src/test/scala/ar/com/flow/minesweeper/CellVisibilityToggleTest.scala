@@ -4,22 +4,24 @@ import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class CellVisibilityToggleTest extends AnyWordSpec with Matchers {
-  "Hidden Cell" when {
-    "toggle visibility" should {
-      "be shown" in {
-        val hiddenCell = Cell(CartesianCoordinates(1, 1), visibility = Hidden)
+import CellsMatchers._
 
-        hiddenCell.reveal.visibility shouldBe Shown
+class CellVisibilityToggleTest extends AnyWordSpec with TestObjects with Matchers {
+  "Hidden Cell" when {
+    "reveal" should {
+      "be revealed" in {
+        val hiddenCell = Cell(coordinatesX1Y1, visibility = Hidden)
+
+        hiddenCell.reveal should beRevealed
       }
     }
   }
-  "Shown Cell" when {
-    "toggle visibility" should {
-      "be shown" in {
-        val shownCell = Cell(CartesianCoordinates(1, 1), visibility = Shown)
+  "Revealed Cell" when {
+    "reveal" should {
+      "keep revealed" in {
+        val shownCell = Cell(coordinatesX1Y1, visibility = Shown)
 
-        shownCell.reveal.visibility shouldBe Shown
+        shownCell.reveal should beRevealed
       }
     }
   }
