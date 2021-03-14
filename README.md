@@ -2,7 +2,7 @@
 
 Minesweeper model implemented in Scala.
 
-The model is hybrid object-oriented and functional. For a more functional model see: https://github.com/scala-minesweeper 
+This is an hybrid object-oriented and functional model. For a more functional model see: https://github.com/scala-minesweeper 
 
 RESTful API implemented in [Scalatra](https://scalatra.org//).
 
@@ -18,5 +18,8 @@ $ sbt run
 App root is http://localhost:8080
 
 Swagger docs at http://localhost:8080/api-docs/swagger.json
+
+
+## Implementation ##
 
 Endpoints are defined in `ar.com.flow.minesweeper.rest.MinesweeperServlet`

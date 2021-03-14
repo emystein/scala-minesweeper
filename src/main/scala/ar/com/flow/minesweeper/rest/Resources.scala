@@ -1,11 +1,12 @@
 package ar.com.flow.minesweeper.rest
 
 import java.time.format.DateTimeFormatter
-
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
 import ar.com.flow.minesweeper.GameResult.{Lost, Won}
 import ar.com.flow.minesweeper.GameRunningState.{Finished, Running}
+import ar.com.flow.minesweeper.Visibility.{Hidden, Revealed}
 import ar.com.flow.minesweeper._
+import CellResource._
 
 case class NewGameRequestBody(rows: Int, columns: Int, bombs: Int)
 
@@ -53,15 +54,22 @@ object CellResource {
     case Question => "?"
   }
 
+  implicit val cellVisibilityToString: Visibility => String = {
+    case Hidden => "hidden"
+    case Revealed => "revealed"
+  }
+
   def from(cell: Cell): CellResource = {
     new CellResource(cell.coordinates, cell.content, cell.visibility, cell.mark.map(cellMarkToString))
   }
 }
 
-case class CellResource(coordinates: CartesianCoordinates, hasBomb: Boolean, visibility: Visibility, mark: Option[String] = None) extends Ordered[CellResource] {
+case class CellResource(coordinates: CartesianCoordinates, hasBomb: Boolean, visibility: String, mark: Option[String] = None) extends Ordered[CellResource] {
   // https://stackoverflow.com/a/19348339/545273
 
   override def compare(that: CellResource): Int = {
     this.coordinates compare that.coordinates
   }
+
+  def hasVisibility(expected: Visibility): Boolean = cellVisibilityToString(expected) == visibility
 }

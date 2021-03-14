@@ -25,6 +25,10 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
 
   val getGames = (apiOperation[List[GameResource]]("getGames") summary "Show all games")
 
+  override def readJsonFromBody(bd : _root_.scala.Predef.String) : org.json4s.JValue = {
+    super.readJsonFromBody(bd)
+  }
+
   get("/games", operation(getGames)) {
     gameRepository.findAll.map(f => f.map(GameResource.from(_)))
   }
@@ -32,6 +36,7 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
   post("/games") {
     val parameters = parsedBody.extract[NewGameRequestBody]
     val game = Game(parameters.rows, parameters.columns, parameters.bombs)
+    response.setStatus(201)
     save(game)
   }
 
