@@ -6,9 +6,12 @@ import org.json4s.{DefaultFormats, Formats}
 import org.scalatra._
 import org.scalatra.json.NativeJsonSupport
 import org.scalatra.swagger._
+import org.slf4j.LoggerFactory
 import slick.jdbc.H2Profile.api._
 
 class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extends SwaggerUiRoute with NativeJsonSupport with SwaggerSupport with FutureSupport with DbRoutes {
+  val logger = LoggerFactory.getLogger(getClass)
+
   val gameRepository = new GameRepository(db)
 
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
@@ -25,7 +28,7 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
 
   val getGames = (apiOperation[List[GameResource]]("getGames") summary "Show all games")
 
-  override def readJsonFromBody(bd : _root_.scala.Predef.String) : org.json4s.JValue = {
+  override def readJsonFromBody(bd: _root_.scala.Predef.String): org.json4s.JValue = {
     super.readJsonFromBody(bd)
   }
 
@@ -41,23 +44,28 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
   }
 
   post("/games/:gameId/cell/:row/:column/toggle-mark") {
-    gameRepository.findById(params("gameId")).map{game =>
-      game.toggleCellMark(cellCoordinates)
-      save(game)
+    val coordinates = cellCoordinates()
+
+    logger.debug("Toggling Cell ({}, {}) in Game {}", coordinates.x, coordinates.y, params("gameId"))
+
+    gameRepository.findById(params("gameId")).map { game =>
+      save(game.toggleCellMark(coordinates))
     }
   }
 
   post("/games/:gameId/cell/:row/:column/reveal") {
-    gameRepository.findById(params("gameId")).map{game =>
-      game.revealCell(cellCoordinates)
-      save(game)
+    val coordinates = cellCoordinates()
+
+    logger.debug("Revealing Cell ({}, {}) in Game {}", coordinates.x, coordinates.y, params("gameId"))
+
+    gameRepository.findById(params("gameId")).map { game =>
+      save(game.revealCell(coordinates))
     }
   }
 
   post("/games/:gameId/pause-resume") {
-    gameRepository.findById(params("gameId")).map{game =>
-      game.togglePauseResume
-      save(game)
+    gameRepository.findById(params("gameId")).map { game =>
+      save(game.togglePauseResume)
     }
   }
 

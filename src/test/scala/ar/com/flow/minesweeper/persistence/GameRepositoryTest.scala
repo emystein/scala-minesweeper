@@ -27,6 +27,7 @@ class GameRepositoryTest extends AnyFunSuite with DbSchemaSetup with Persistence
     retrievedGame shouldBe game
     retrievedGame.createdAt.isEqual(dateTime) || retrievedGame.createdAt.isAfter(dateTime) shouldBe true
   }
+
   test("Not marked Cell") {
     val game: Game = Game(2, 2, 2)
 
@@ -37,6 +38,7 @@ class GameRepositoryTest extends AnyFunSuite with DbSchemaSetup with Persistence
     val retrievedGame = Await.result(gameFuture, Duration.Inf)
     retrievedGame.board.cellAt(CartesianCoordinates(1, 1)).mark shouldBe None
   }
+
   test("Toggle Cell mark") {
     val game: Game = Game(2, 2, 2)
 

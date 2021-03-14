@@ -1,9 +1,9 @@
 package ar.com.flow.minesweeper
 
+import ar.com.flow.minesweeper.CellContent.Bomb
+
 import java.time.LocalDateTime
 import java.util.UUID
-
-import ar.com.flow.minesweeper.CellContent.Bomb
 
 object Game {
   def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Game = {

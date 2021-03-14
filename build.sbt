@@ -30,3 +30,6 @@ libraryDependencies ++= Seq(
 )
 
 enablePlugins(ScalatraPlugin)
+
+// Tests fails with DB if run in parallel
+Test / parallelExecution := false
