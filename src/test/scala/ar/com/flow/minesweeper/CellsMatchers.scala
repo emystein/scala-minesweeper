@@ -53,10 +53,10 @@ trait CellsMatchers {
     }
   }
 
-  def haveAdjacentEmptySpaceRevealed = new AdjacentVisibilityMatcher(Visibility.Shown)
+  def haveAdjacentEmptySpaceRevealed = new AdjacentVisibilityMatcher(Visibility.Revealed)
   def allBeHidden = new AllCellsHaveVisibilityMatcher(Visibility.Hidden)
-  def allBeRevealed = new AllCellsHaveVisibilityMatcher(Visibility.Shown)
-  def beRevealed = new CellVisibilityMatcher(Visibility.Shown)
+  def allBeRevealed = new AllCellsHaveVisibilityMatcher(Visibility.Revealed)
+  def beRevealed = new CellVisibilityMatcher(Visibility.Revealed)
   def beMarked = new CellAnyMarkMatcher()
   def notBeMarked = new CellMarkMatcher(None)
   def beMarkedWithFlag = new CellMarkMatcher(Some(CellMark.Flag))

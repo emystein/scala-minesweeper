@@ -1,7 +1,7 @@
 package ar.com.flow.minesweeper
 
 import ar.com.flow.minesweeper.CellContent.Bomb
-import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
+import ar.com.flow.minesweeper.Visibility.{Hidden, Revealed}
 
 import scala.util.Random
 
@@ -65,7 +65,7 @@ case class Board(dimensions: Dimensions,
     copy(markByCoordinates = markByCoordinates + (coordinates -> cellAt(coordinates).advanceMark.mark))
 
   def revealCellAt(coordinates: CartesianCoordinates): Board =
-    copy(visibilityByCoordinates = visibilityByCoordinates + (coordinates -> Visibility.Shown))
+    copy(visibilityByCoordinates = visibilityByCoordinates + (coordinates -> Visibility.Revealed))
 
   def revealCellAndAdjacentAt(coordinates: CartesianCoordinates): Board = {
     val revealedCellBoard = revealCellAt(coordinates)

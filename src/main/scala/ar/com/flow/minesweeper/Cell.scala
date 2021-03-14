@@ -2,7 +2,7 @@ package ar.com.flow.minesweeper
 
 import ar.com.flow.minesweeper.CellContent.Empty
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
-import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
+import ar.com.flow.minesweeper.Visibility.{Hidden, Revealed}
 
 case class Cell(coordinates: CartesianCoordinates,
                 content: CellContent = Empty,
@@ -11,7 +11,7 @@ case class Cell(coordinates: CartesianCoordinates,
                 board: Option[Board] = None) {
   val isEmpty: Boolean = content == Empty
   val isHidden: Boolean = visibility == Hidden
-  val isRevealed: Boolean = visibility == Shown
+  val isRevealed: Boolean = visibility == Revealed
 
   def adjacentCells: Set[Cell] = board.map(b => b.adjacentOf(coordinates).map(b.cellAt)).getOrElse(Set())
 
@@ -21,7 +21,7 @@ case class Cell(coordinates: CartesianCoordinates,
       .foldLeft(previouslyTraversed + this)((traversed, adjacent) => adjacent.adjacentEmptySpace(traversed))
   }
 
-  def reveal: Cell = copy(visibility = Shown)
+  def reveal: Cell = copy(visibility = Revealed)
 
   def advanceMark: Cell = {
     val newMark: Option[CellMark] = mark match {
@@ -47,7 +47,7 @@ sealed abstract class Visibility extends Product with Serializable
 
 object Visibility {
   final case object Hidden extends Visibility
-  final case object Shown extends Visibility
+  final case object Revealed extends Visibility
 }
 
 sealed abstract class CellMark extends Product with Serializable

@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 import ar.com.flow.minesweeper.CellContent.{Bomb, Empty}
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
-import ar.com.flow.minesweeper.Visibility.{Hidden, Shown}
+import ar.com.flow.minesweeper.Visibility.{Hidden, Revealed}
 import ar.com.flow.minesweeper._
 import slick.jdbc.H2Profile.api._
 import slick.lifted.Tag
@@ -48,11 +48,11 @@ object Tables {
 
   implicit val visibilityColumnType = MappedColumnType.base[Visibility, Boolean](
     {
-      case Shown => true
+      case Revealed => true
       case Hidden => false
     },
     {
-      case true => Shown
+      case true => Revealed
       case false => Hidden
     }
   )

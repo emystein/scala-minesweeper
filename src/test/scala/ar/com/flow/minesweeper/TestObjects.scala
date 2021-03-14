@@ -8,8 +8,8 @@ trait TestObjects {
 
   val notRevealedEmptyCell = Cell(coordinatesX1Y1, CellContent.Empty, Visibility.Hidden, mark = None)
   val notRevealedCellWithBomb = Cell(coordinatesX1Y1, CellContent.Bomb, Visibility.Hidden, mark = None)
-  val revealedEmptyCell = Cell(coordinatesX1Y1, CellContent.Empty, Visibility.Shown, mark = None)
-  val revealedCellWithBomb = Cell(coordinatesX1Y1, CellContent.Bomb, Visibility.Shown, mark = None)
+  val revealedEmptyCell = Cell(coordinatesX1Y1, CellContent.Empty, Visibility.Revealed, mark = None)
+  val revealedCellWithBomb = Cell(coordinatesX1Y1, CellContent.Bomb, Visibility.Revealed, mark = None)
 
   val allCells = Set(notRevealedEmptyCell, notRevealedCellWithBomb, revealedEmptyCell, revealedCellWithBomb)
 
