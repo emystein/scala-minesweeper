@@ -1,6 +1,8 @@
 package ar.com.flow.minesweeper
 
 object CartesianCoordinates {
+  def apply(x: String, y: String): CartesianCoordinates = CartesianCoordinates(x.toInt, y.toInt)
+
   def all(totalInXAxis: Int, totalInYAxis: Int): Seq[CartesianCoordinates] = {
     for {
       x <- 1 to totalInXAxis
