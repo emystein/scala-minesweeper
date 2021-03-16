@@ -2,9 +2,9 @@ package ar.com.flow.minesweeper.persistence
 
 import java.sql.Timestamp
 import java.time.LocalDateTime
-
 import ar.com.flow.minesweeper.CellContent.{Bomb, Empty}
 import ar.com.flow.minesweeper.CellMark.{Flag, Question}
+import ar.com.flow.minesweeper.GameRunningState.{Finished, Paused, Running}
 import ar.com.flow.minesweeper.Visibility.{Hidden, Revealed}
 import ar.com.flow.minesweeper._
 import slick.jdbc.H2Profile.api._
@@ -16,13 +16,27 @@ object Tables {
     sqlTimestamp => sqlTimestamp.toLocalDateTime
   )
 
-  type GameTuple = (String, LocalDateTime)
+  type GameTuple = (String, LocalDateTime, GameRunningState)
+
+  implicit val gameRunningStatusColumnType = MappedColumnType.base[GameRunningState, String](
+    {
+      case Running => "running"
+      case Paused => "paused"
+      case Finished => "finished"
+    },
+    {
+      case "running" => Running
+      case "paused" => Paused
+      case "finished" => Finished
+    }
+  )
 
   class Games(tag: Tag) extends Table[GameTuple](tag, "game") {
     def id = column[String]("id", O.PrimaryKey)
     def createdAt = column[LocalDateTime]("created_at")
+    def runningState = column[GameRunningState]("running_state")
     // Every table needs a * projection with the same type as the table's type parameter
-    def * = (id, createdAt)
+    def * = (id, createdAt, runningState)
     def board = foreignKey("board", id, boards)(_.id)
   }
 

@@ -8,6 +8,8 @@ import org.scalatra.test.scalatest._
 
 
 class MinesweeperServletTests extends ScalatraFunSuite with DbSchemaSetup with Persistence {
+  val gameRepository = new GameRepository(database)
+
   implicit val formats = DefaultFormats
   implicit val swagger = new MinesweeperSwagger
 
@@ -65,6 +67,23 @@ class MinesweeperServletTests extends ScalatraFunSuite with DbSchemaSetup with P
       val updatedGame = read[GameResource](body)
 
       updatedGame.board.cells.find(c => c.coordinates == CartesianCoordinates(1, 1)).head.mark shouldBe Some("?")
+    }
+  }
+
+  test("Toggle Pause on Game") {
+    val game: Game = Game(2, 2, 2)
+    gameRepository.save(game)
+    togglePauseResume(game.id, expectedState = "paused")
+    togglePauseResume(game.id, expectedState = "playing")
+  }
+
+  def togglePauseResume(gameId: String, expectedState: String): Unit = {
+    post(s"/games/${gameId}/pause-resume") {
+      status should equal(200)
+
+      val updatedGame = read[GameResource](body)
+
+      updatedGame.state shouldBe expectedState
     }
   }
 

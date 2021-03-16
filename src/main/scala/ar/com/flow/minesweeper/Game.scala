@@ -1,13 +1,22 @@
 package ar.com.flow.minesweeper
 
 import ar.com.flow.minesweeper.CellContent.Bomb
+import ar.com.flow.minesweeper.GameRunningState.{Finished, Paused, Running}
 
 import java.time.LocalDateTime
 import java.util.UUID
 
 object Game {
-  def apply(totalRows: Int, totalColumns: Int, totalBombs: Int): Game = {
-    RunningGame(id = UUID.randomUUID().toString, createdAt = LocalDateTime.now, Board(Dimensions(totalRows, totalColumns), totalBombs))
+  def apply(totalRows: Int, totalColumns: Int, totalBombs: Int, runningState: GameRunningState = Running): Game = {
+     RunningGame(id = UUID.randomUUID().toString, createdAt = LocalDateTime.now, Board(Dimensions(totalRows, totalColumns), totalBombs))
+  }
+
+  def hidrate(id: String, createdAt: LocalDateTime, runningState: GameRunningState, board: Board): Game = {
+    runningState match {
+      case Running => RunningGame(id, createdAt, board)
+      case Paused => PausedGame(id, createdAt, board)
+      case Finished => FinishedGame(id, createdAt, board)
+    }
   }
 }
 
@@ -53,6 +62,7 @@ abstract class FrozenCellsGame(id: String, createdAt: LocalDateTime, board: Boar
   extends Game(id, createdAt, board, pauseResume) {
 
   def toggleCellMark(coordinates: CartesianCoordinates): Game = this
+
   def revealCell(coordinates: CartesianCoordinates): Game = this
 }
 
