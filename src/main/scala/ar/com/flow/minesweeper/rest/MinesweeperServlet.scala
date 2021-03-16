@@ -32,28 +32,53 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
     gameRepository.findAll.map(f => f.map(GameResource.from))
   }
 
-  val postGame = (apiOperation[GameResource]("postGame")
+  val createGame = (apiOperation[GameResource]("createGame")
     summary ("Create a Game")
     consumes ("application/json")
     produces ("application/json")
     parameter bodyParam[NewGameRequestBody]
     )
 
-  post("/games", operation(postGame)) {
+  post("/games", operation(createGame)) {
     response.setStatus(201)
     val parameters = parsedBody.extract[NewGameRequestBody]
     save(Game(parameters.rows, parameters.columns, parameters.bombs))
   }
 
-  post("/games/:gameId/cell/:row/:column/toggle-mark") {
+  val markCell = (apiOperation[GameResource]("markCell")
+    summary ("Every subsequent request toggles a mark in a Cell in cyclic order: Flag, Question, Clear mark.")
+    produces ("application/json")
+    parameters(
+    pathParam[String]("gameId"),
+    pathParam[Int]("row"),
+    pathParam[Int]("column")
+  ))
+
+  post("/games/:gameId/cell/:row/:column/toggle-mark", operation(markCell)) {
     persistOnCell((game, cellCoordinates) => game.toggleCellMark(cellCoordinates))
   }
 
-  post("/games/:gameId/cell/:row/:column/reveal") {
+  val revealCell = (apiOperation[GameResource]("revealCell")
+    summary ("Reveal a Cell")
+    produces ("application/json")
+    parameters(
+    pathParam[String]("gameId"),
+    pathParam[Int]("row"),
+    pathParam[Int]("column")
+  ))
+
+  post("/games/:gameId/cell/:row/:column/reveal", operation(revealCell)) {
     persistOnCell((game, cellCoordinates) => game.revealCell(cellCoordinates))
   }
 
-  post("/games/:gameId/pause-resume") {
+  val pauseResumeGame = (apiOperation[GameResource]("pauseResumeGame")
+    summary ("Pause/Resume a Game")
+    produces ("application/json")
+    parameters(
+    pathParam[String]("gameId")
+    ))
+
+  post("/games/:gameId/pause-resume", operation(pauseResumeGame)) {
     gameRepository.findById(params("gameId")).map { game =>
       save(game.togglePauseResume)
     }
