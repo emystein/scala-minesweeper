@@ -6,6 +6,7 @@ import org.json4s.{DefaultFormats, Formats}
 import org.scalatra._
 import org.scalatra.json.NativeJsonSupport
 import org.scalatra.swagger._
+import org.scalatra.util.MimeTypes
 import slick.jdbc.H2Profile.api._
 
 import scala.concurrent.Future
@@ -31,7 +32,14 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
     gameRepository.findAll.map(f => f.map(GameResource.from))
   }
 
-  post("/games") {
+  val postGame = (apiOperation[GameResource]("postGame")
+    summary ("Create a Game")
+    consumes ("application/json")
+    produces ("application/json")
+    parameter bodyParam[NewGameRequestBody]
+    )
+
+  post("/games", operation(postGame)) {
     response.setStatus(201)
     val parameters = parsedBody.extract[NewGameRequestBody]
     save(Game(parameters.rows, parameters.columns, parameters.bombs))

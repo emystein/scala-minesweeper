@@ -75,11 +75,11 @@ class GameRepositoryTest extends AnyFunSuite with DbSchemaSetup with Persistence
   test("Toggle Pause/Resume") {
     val game: Game = Game(2, 2, 2)
     val pausedGame = game.togglePauseResume
-    val savedPausedGame = Await.result(gameRepository.save(pausedGame), Duration.Inf)
+    Await.result(gameRepository.save(pausedGame), Duration.Inf)
     val retrievedPausedGame = Await.result(gameRepository.findById(game.id), Duration.Inf)
     retrievedPausedGame should bePaused
     val resumedGame = pausedGame.togglePauseResume
-    val savedResumedGame = Await.result(gameRepository.save(resumedGame), Duration.Inf)
+    Await.result(gameRepository.save(resumedGame), Duration.Inf)
     val retrievedResumedGame = Await.result(gameRepository.findById(game.id), Duration.Inf)
     retrievedResumedGame should beRunning
   }
