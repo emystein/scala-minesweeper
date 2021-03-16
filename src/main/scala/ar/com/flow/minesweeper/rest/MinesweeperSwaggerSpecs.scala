@@ -3,6 +3,8 @@ package ar.com.flow.minesweeper.rest
 import org.scalatra.swagger._
 
 trait MinesweeperSwaggerSpecs extends SwaggerSupport {
+  protected val applicationDescription = "The Minesweeper API"
+
   val getGamesSpec = operation((apiOperation[List[GameResource]]("getGames") summary "Show all games"))
 
   val startNewGameSpec = operation((apiOperation[GameResource]("startNewGame")

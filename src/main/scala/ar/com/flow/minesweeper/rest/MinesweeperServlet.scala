@@ -18,8 +18,6 @@ class MinesweeperServlet(val db: Database, implicit val swagger: Swagger) extend
   // Sets up automatic case class to JSON output serialization, required by the JValueResult trait.
   protected implicit lazy val jsonFormats: Formats = DefaultFormats
 
-  protected val applicationDescription = "The Minesweeper API"
-
   // Before every action runs, set the content type to be in JSON format.
   before() {
     contentType = formats("json")
