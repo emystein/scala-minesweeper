@@ -43,5 +43,4 @@ trait MinesweeperSwaggerSpecs extends SwaggerSupport {
       ))
     )
   }
-
 }
